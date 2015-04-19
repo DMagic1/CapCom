@@ -1,0 +1,30 @@
+{
+     "NAME":"CapCom Mission Control On The Go",
+	 "URL":"https://raw.githubusercontent.com/DMagic1/CapCom/master/GameData/CapCom/CapCom.version",
+     "GITHUB":{
+         "USERNAME":"DMagic1",
+         "REPOSITORY":"CapCom",
+         "ALLOW_PRE_RELEASE":false,
+     },
+     "VERSION":{
+         "MAJOR":1,
+         "MINOR":0,
+         "PATCH":1,
+         "BUILD":0
+     },
+     "KSP_VERSION":{
+         "MAJOR":0,
+         "MINOR":90,
+         "PATCH":0
+     },
+     "KSP_VERSION_MIN":{
+         "MAJOR":0,
+         "MINOR":90,
+         "PATCH":0
+     },
+     "KSP_VERSION_MAX":{
+         "MAJOR":0,
+         "MINOR":90,
+         "PATCH":0
+     }
+ } 
