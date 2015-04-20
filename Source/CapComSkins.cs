@@ -17,22 +17,27 @@ namespace CapCom
 
 		//Button styles
 		internal static GUIStyle titleButton;
+		internal static GUIStyle titleButtonBehind;
 		internal static GUIStyle textureButton;
 		internal static GUIStyle tabButton;
 
 		//Text label styles
-		internal static GUIStyle missionText;
 		internal static GUIStyle headerText;
 		internal static GUIStyle titleText;
 		internal static GUIStyle briefingText;
 		internal static GUIStyle synopsisText;
 		internal static GUIStyle parameterText;
+		internal static GUIStyle subParameterText;
 		internal static GUIStyle noteText;
+		internal static GUIStyle smallText;
 
 		//Reward styles
 		internal static GUIStyle advance;
-		internal static GUIStyle reward;
-		internal static GUIStyle penalty;
+		internal static GUIStyle completion;
+		internal static GUIStyle failure;
+		internal static GUIStyle funds;
+		internal static GUIStyle rep;
+		internal static GUIStyle sci;
 
 		internal static Texture2D toolbarIcon;
 		internal static Texture2D dropDownTex;
@@ -107,24 +112,85 @@ namespace CapCom
 			titleButton.fontStyle = FontStyle.Bold;
 			titleButton.normal.textColor = XKCDColors.FadedYellow;
 
+			titleButtonBehind = new GUIStyle(titleButton);
+			titleButtonBehind.hover.background = titleButtonBehind.normal.background;
+			titleButtonBehind.hover.textColor = titleButtonBehind.normal.textColor;
+
 			tabButton = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.button);
-			tabButton.name = "TabButton";
 			tabButton.fontSize = 12 + fontSize;
 			tabButton.normal.textColor = XKCDColors.FadedRed;
 
-			missionText = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.label);
-			missionText.name = "MissionText";
-			missionText.richText = true;
+			textureButton = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.button);
+			textureButton.fontSize = 13;
+			textureButton.normal.background = CC_SkinsLibrary.DefUnitySkin.label.normal.background;
+			textureButton.hover.background = buttonHover;
+			textureButton.padding = new RectOffset(1, 1, 2, 2);
 
+			//Label Styles
+			headerText = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.label);
+			headerText.fontSize = 13 + fontSize;
+			headerText.fontStyle = FontStyle.Bold;
+			headerText.alignment = TextAnchor.MiddleLeft;
+			headerText.normal.textColor = XKCDColors.FadedOrange;
+
+			titleText = new GUIStyle(headerText);
+			titleText.normal.textColor = XKCDColors.White;
+
+			briefingText = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.label);
+			briefingText.fontSize = 11 + fontSize;
+			briefingText.alignment = TextAnchor.MiddleLeft;
+			briefingText.normal.textColor = XKCDColors.OffWhite;
+
+			synopsisText = new GUIStyle(briefingText);
+			synopsisText.fontSize = 12 + fontSize;
+			synopsisText.fontStyle = FontStyle.Bold;
+
+			parameterText = new GUIStyle(synopsisText);
+			parameterText.normal.textColor = XKCDColors.PaleGrey;
+
+			subParameterText = new GUIStyle(parameterText);
+			subParameterText.normal.textColor = XKCDColors.LightGrey;
+
+			noteText = new GUIStyle(synopsisText);
+			noteText.fontStyle = FontStyle.Normal;
+			noteText.normal.textColor = XKCDColors.AquaBlue;
+
+			smallText = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.label);
+			smallText.fontSize = 10 + fontSize;
+			smallText.alignment = TextAnchor.MiddleLeft;
+
+			//Reward and Penalty Styles
+			advance = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.label);
+			advance.fontSize = 12 + fontSize;
+			advance.fontStyle = FontStyle.Bold;
+			advance.alignment = TextAnchor.MiddleLeft;
+			advance.wordWrap = false;
+			advance.normal.textColor = XKCDColors.DullYellow;
+
+			completion = new GUIStyle(advance);
+			completion.normal.textColor = XKCDColors.DustyGreen;
+
+			failure = new GUIStyle(advance);
+			failure.normal.textColor = XKCDColors.DustyRed;
+
+			funds = new GUIStyle(advance);
+			funds.fontStyle = FontStyle.Normal;
+			funds.normal.textColor = XKCDColors.FreshGreen;
+
+			rep = new GUIStyle(funds);
+			rep.normal.textColor = XKCDColors.BrownishYellow;
+
+			sci = new GUIStyle(funds);
+			sci.normal.textColor = XKCDColors.AquaBlue;
+
+			//Add Default Styles
 			CC_SkinsLibrary.List["CCUnitySkin"].window = new GUIStyle(newWindowStyle);
 			CC_SkinsLibrary.List["CCUnitySkin"].box = new GUIStyle(dropDown);
 			CC_SkinsLibrary.List["CCUnitySkin"].button = new GUIStyle(titleButton);
-			CC_SkinsLibrary.List["CCUnitySkin"].label = new GUIStyle(missionText);
 
 			CC_SkinsLibrary.AddStyle("CCUnitySkin", newWindowStyle);
 			CC_SkinsLibrary.AddStyle("CCUnitySkin", dropDown);
 			CC_SkinsLibrary.AddStyle("CCUnitySkin", titleButton);
-			CC_SkinsLibrary.AddStyle("CCUnitySkin", missionText);
 		}
 	}
 }
