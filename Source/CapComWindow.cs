@@ -20,6 +20,7 @@ namespace CapCom
 		private int currentList;
 		private bool controlLock;
 		private bool showBriefing = true;
+		private bool showAgency;
 		private const string lockID = "CapCom_LockID";
 
 		protected override void Awake()
@@ -185,7 +186,10 @@ namespace CapCom
 				GUILayout.BeginVertical();
 					currentContractControls(id);
 					currentContractHeader(id);
-					currentContractInfo(id);
+					if (showAgency)
+						currentAgentInfo(id);
+					else
+						currentContractInfo(id);
 				GUILayout.EndVertical();
 			GUILayout.EndHorizontal();
 
@@ -200,7 +204,7 @@ namespace CapCom
 		private void drawVersion(int id)
 		{
 			Rect r = new Rect(6, 0, 50, 18);
-			GUI.Label(r, CapCom.version, CapComSkins.smallText);
+			GUI.Label(r, CapCom.Version, CapComSkins.smallText);
 		}
 
 		private void closeButton(int id)
@@ -298,24 +302,27 @@ namespace CapCom
 			GUILayout.BeginHorizontal();
 			if (currentContract.Root.ContractState == Contract.State.Offered)
 			{
-				if (GUILayout.Button("Accept"))
+				if (GUILayout.Button("Accept", GUILayout.Width(90)))
 				{
 					currentContract.Root.Accept();
 				}
 
-				if (GUILayout.Button("Decline"))
+				GUILayout.FlexibleSpace();
+
+				if (GUILayout.Button("Decline", GUILayout.Width(90)))
 				{
 					currentContract.Root.Decline();
 				}
 			}
 			else if (currentContract.Root.ContractState == Contract.State.Active)
 			{
-				if (GUILayout.Button("Cancel"))
+				GUILayout.FlexibleSpace();
+
+				if (GUILayout.Button("Cancel", GUILayout.Width(90)))
 				{
 					currentContract.Root.Cancel();
 				}
 			}
-
 			GUILayout.EndHorizontal();
 		}
 
@@ -358,17 +365,27 @@ namespace CapCom
 			if (currentContract.Root.ContractState == Contract.State.Offered)
 			{
 				GUILayout.BeginHorizontal();
-					GUILayout.Label("Offer Expires: " + KSPUtil.PrintDateDeltaCompact((int)(currentContract.Root.DateExpire - Planetarium.fetch.time), true, true), CapComSkins.headerText);
+					GUILayout.Label("Offer Expires: ", CapComSkins.headerText);
+					GUILayout.Label(KSPUtil.PrintDateDeltaCompact((int)(currentContract.Root.DateExpire - Planetarium.fetch.time), true, true), CapComSkins.parameterText);
 					if (currentContract.Root.DateDeadline != 0)
-						GUILayout.Label("Mission Deadline: " + KSPUtil.PrintDateDeltaCompact((int)(currentContract.Root.DateDeadline - Planetarium.fetch.time), true, true), CapComSkins.headerText);
+					{
+						GUILayout.Label("Mission Deadline: ", CapComSkins.headerText);
+						GUILayout.Label(KSPUtil.PrintDateDeltaCompact((int)(currentContract.Root.DateDeadline - Planetarium.fetch.time), true, true), CapComSkins.parameterText);
+					}
 					else if (currentContract.Root.TimeDeadline != 0)
-						GUILayout.Label("Mission Duration: " + KSPUtil.PrintDateDeltaCompact((int)currentContract.Root.TimeDeadline, true, true), CapComSkins.headerText);
+					{
+						GUILayout.Label("Mission Duration: ", CapComSkins.headerText);
+						GUILayout.Label(KSPUtil.PrintDateDeltaCompact((int)currentContract.Root.TimeDeadline, true, true), CapComSkins.parameterText);
+					}
 				GUILayout.EndHorizontal();
 			}
 			else if (currentContract.Root.ContractState == Contract.State.Active)
 			{
 				if (currentContract.Root.DateDeadline != 0)
-					GUILayout.Label("Mission Deadline: " + KSPUtil.PrintDateDeltaCompact((int)(currentContract.Root.DateDeadline - Planetarium.fetch.time), true, true), CapComSkins.headerText);
+				{
+					GUILayout.Label("Mission Deadline: ", CapComSkins.headerText);
+					GUILayout.Label(KSPUtil.PrintDateDeltaCompact((int)(currentContract.Root.DateDeadline - Planetarium.fetch.time), true, true), CapComSkins.parameterText);
+				}
 			}
 
 			if (!string.IsNullOrEmpty(currentContract.Notes))
@@ -470,6 +487,11 @@ namespace CapCom
 					}
 				GUILayout.EndVertical();
 			GUILayout.EndHorizontal();
+		}
+
+		private void currentAgentInfo(int id)
+		{
+
 		}
 
 		private void rescaleHandle(int id)
