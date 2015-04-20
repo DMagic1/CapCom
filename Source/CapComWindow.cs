@@ -16,6 +16,7 @@ namespace CapCom
 		private List<CapComContract> currentContracts = new List<CapComContract>();
 		private CapComContract currentContract;
 
+		private Vector2 cScroll, infoScroll;
 		private int currentList;
 		private bool controlLock;
 		private bool showBriefing = true;
@@ -25,7 +26,7 @@ namespace CapCom
 		{
 			LogFormatted_DebugOnly("Starting CapCom Window");
 			WindowCaption = "";
-			WindowOptions = new GUILayoutOption[2] { GUILayout.Width(800), GUILayout.Height(600) };
+			WindowOptions = new GUILayoutOption[2] { GUILayout.Width(800), GUILayout.Height(500) };
 			WindowStyle = CapComSkins.newWindowStyle;
 			Visible = false;
 			DragEnabled = true;
@@ -199,20 +200,20 @@ namespace CapCom
 		private void drawVersion(int id)
 		{
 			Rect r = new Rect(6, 0, 50, 18);
-			GUI.Label(r, CapCom.version);
+			GUI.Label(r, CapCom.version, CapComSkins.smallText);
 		}
 
 		private void closeButton(int id)
 		{
 			Rect r = new Rect(WindowRect.width - 50, 1, 18, 18);
-			if (GUI.Button(r, CapComSkins.settingsIcon))
+			if (GUI.Button(r, CapComSkins.settingsIcon, CapComSkins.textureButton))
 			{
 				//Settings Window
 			}
 
 			r.x += 28;
 
-			if (GUI.Button(r, "✖"))
+			if (GUI.Button(r, "✖", CapComSkins.textureButton))
 			{
 				unlockControls();
 				Visible = false;
@@ -263,6 +264,9 @@ namespace CapCom
 		private void contractList(int id)
 		{
 			//Display sorted contract list
+
+			cScroll = GUILayout.BeginScrollView(cScroll);
+
 			foreach (CapComContract cc in currentContracts)
 			{
 				if (GUILayout.Button(cc.Name, GUILayout.Width(250)))
@@ -270,6 +274,8 @@ namespace CapCom
 					currentContract = cc;
 				}
 			}
+
+			GUILayout.EndScrollView();
 		}
 
 		private void currentContractControls(int id)
@@ -313,10 +319,10 @@ namespace CapCom
 			GUILayout.BeginHorizontal();
 				GUILayout.Space(200);
 				GUILayout.BeginVertical();
-					GUILayout.Label("Contract:");
-					GUILayout.Label(currentContract.Name);
-					GUILayout.Label("Agent:");
-					GUILayout.Label(currentContract.Root.Agent.Name);
+					GUILayout.Label("Contract:", CapComSkins.headerText);
+					GUILayout.Label(currentContract.Name, CapComSkins.titleText);
+					GUILayout.Label("Agent:", CapComSkins.headerText);
+					GUILayout.Label(currentContract.Root.Agent.Name, CapComSkins.titleText);
 				GUILayout.EndVertical();
 			GUILayout.EndHorizontal();
 		}
@@ -326,36 +332,41 @@ namespace CapCom
 			if (currentContract == null)
 				return;
 
+			infoScroll = GUILayout.BeginScrollView(infoScroll);
+
 			//Display current contract info
 			if (showBriefing)
 			{
-				GUILayout.Label("Briefing:");
-				GUILayout.Label(currentContract.Root.Description);
+				GUILayout.Label("Briefing:", CapComSkins.headerText);
+				GUILayout.Label(currentContract.Root.Description, CapComSkins.briefingText);
 			}
-			GUILayout.Label(currentContract.Root.Synopsys);
+			GUILayout.Label(currentContract.Root.Synopsys, CapComSkins.synopsisText);
 
 			if (currentContract.Root.ContractState == Contract.State.Offered)
 			{
 				GUILayout.BeginHorizontal();
-					GUILayout.Label("Offer Expires: " + KSPUtil.PrintDateDeltaCompact((int)(currentContract.Root.DateExpire - Planetarium.fetch.time), true, true));
+					GUILayout.Label("Offer Expires: " + KSPUtil.PrintDateDeltaCompact((int)(currentContract.Root.DateExpire - Planetarium.fetch.time), true, true), CapComSkins.headerText);
 					if (currentContract.Root.DateDeadline != 0)
-						GUILayout.Label("Mission Deadline: " + KSPUtil.PrintDateDeltaCompact((int)(currentContract.Root.DateDeadline - Planetarium.fetch.time), true, true));
+						GUILayout.Label("Mission Deadline: " + KSPUtil.PrintDateDeltaCompact((int)(currentContract.Root.DateDeadline - Planetarium.fetch.time), true, true), CapComSkins.headerText);
 					else if (currentContract.Root.TimeDeadline != 0)
-						GUILayout.Label("Mission Duration: " + KSPUtil.PrintDateDeltaCompact((int)currentContract.Root.TimeDeadline, true, true));
+						GUILayout.Label("Mission Duration: " + KSPUtil.PrintDateDeltaCompact((int)currentContract.Root.TimeDeadline, true, true), CapComSkins.headerText);
 				GUILayout.EndHorizontal();
 			}
 			else if (currentContract.Root.ContractState == Contract.State.Active)
 			{
 				if (currentContract.Root.DateDeadline != 0)
-					GUILayout.Label("Mission Deadline: " + KSPUtil.PrintDateDeltaCompact((int)(currentContract.Root.DateDeadline - Planetarium.fetch.time), true, true));
+					GUILayout.Label("Mission Deadline: " + KSPUtil.PrintDateDeltaCompact((int)(currentContract.Root.DateDeadline - Planetarium.fetch.time), true, true), CapComSkins.headerText);
 			}
 
 			if (!string.IsNullOrEmpty(currentContract.Notes))
-				GUILayout.Label("Mission Notes: " + currentContract.Notes);
+			{
+				GUILayout.Label("Mission Notes: ", CapComSkins.headerText);
+				GUILayout.Label(currentContract.Notes, CapComSkins.noteText);
+			}
 
 			if (currentContract.ParameterCount > 0)
 			{
-				GUILayout.Label("Objectives: ");
+				GUILayout.Label("Objectives: ", CapComSkins.headerText);
 
 				for (int i = 0; i < currentContract.ParameterCount; i++)
 				{
@@ -380,31 +391,39 @@ namespace CapCom
 				}
 			}
 
-			GUILayout.Label("Rewards: ");
+			GUILayout.Label("Rewards: ", CapComSkins.headerText);
 			if (currentContract.Root.FundsAdvance > 0)
 			{
 				GUILayout.BeginHorizontal();
-					GUILayout.Label("Advance: ");
-					GUILayout.Label(currentContract.FundsAdv);
+					GUILayout.Label("Advance: ", CapComSkins.advance);
+					Rect r = GUILayoutUtility.GetLastRect();
+					r.x += 62;
+					sizedContent(ref r, currentContract.FundsAdv, Currency.Funds);
 				GUILayout.EndHorizontal();
 			}
 			if (currentContract.Root.FundsCompletion > 0 || currentContract.Root.ReputationCompletion > 0 || currentContract.Root.ScienceCompletion > 0)
 			{
 				GUILayout.BeginHorizontal();
-					GUILayout.Label("Completion: ");
-					GUILayout.Label(currentContract.FundsRew);
-					GUILayout.Label(currentContract.RepRew);
-					GUILayout.Label(currentContract.SciRew);
+					GUILayout.Label("Completion: ", CapComSkins.completion);
+					Rect r = GUILayoutUtility.GetLastRect();
+					r.x += 76;
+					sizedContent(ref r, currentContract.FundsRew, Currency.Funds);
+					sizedContent(ref r, currentContract.RepRew, Currency.Reputation);
+					sizedContent(ref r, currentContract.SciRew, Currency.Science);
 				GUILayout.EndHorizontal();
 			}
 			if (currentContract.Root.FundsFailure > 0 || currentContract.Root.ReputationFailure > 0)
 			{
 				GUILayout.BeginHorizontal();
-					GUILayout.Label("Failure: ");
-					GUILayout.Label(currentContract.FundsPen);
-					GUILayout.Label(currentContract.RepPen);
+					GUILayout.Label("Failure: ", CapComSkins.failure);
+					Rect r = GUILayoutUtility.GetLastRect();
+					r.x += 50;
+					sizedContent(ref r, currentContract.FundsPen, Currency.Funds);
+					sizedContent(ref r, currentContract.RepPen, Currency.Reputation);
 				GUILayout.EndHorizontal();
 			}
+
+			GUILayout.EndScrollView();
 		}
 
 		private void drawParameter(CapComParameter cp)
@@ -412,24 +431,28 @@ namespace CapCom
 			GUILayout.BeginHorizontal();
 				GUILayout.Space(1 + cp.Level * 3);
 				GUILayout.BeginVertical();
-					GUILayout.Label(cp.Name);
+					GUILayout.Label(cp.Name, CapComSkins.parameterText);
 					if (!string.IsNullOrEmpty(cp.Notes))
-						GUILayout.Label(cp.Notes);
+						GUILayout.Label(cp.Notes, CapComSkins.noteText);
 					if (cp.Param.FundsCompletion > 0 || cp.Param.ReputationCompletion > 0 || cp.Param.ScienceCompletion > 0)
 					{
 						GUILayout.BeginHorizontal();
-							GUILayout.Label("Completion: ");
-							GUILayout.Label(cp.FundsRew);
-							GUILayout.Label(cp.RepRew);
-							GUILayout.Label(cp.SciRew);
+							GUILayout.Label("Completion: ", CapComSkins.completion);
+							Rect r = GUILayoutUtility.GetLastRect();
+							r.x += 76;
+							sizedContent(ref r, cp.FundsRew, Currency.Funds);
+							sizedContent(ref r, cp.RepRew, Currency.Reputation);
+							sizedContent(ref r, cp.SciRew, Currency.Science);
 						GUILayout.EndHorizontal();
 					}
 					if (cp.Param.FundsFailure > 0 || cp.Param.ReputationFailure > 0)
 					{
 						GUILayout.BeginHorizontal();
-							GUILayout.Label("Failure: ");
-							GUILayout.Label(cp.FundsPen);
-							GUILayout.Label(cp.RepPen);
+							GUILayout.Label("Failure: ", CapComSkins.failure);
+							Rect r = GUILayoutUtility.GetLastRect();
+							r.x += 50;
+							sizedContent(ref r, cp.FundsPen, Currency.Funds);
+							sizedContent(ref r, cp.RepPen, Currency.Reputation);
 						GUILayout.EndHorizontal();
 					}
 				GUILayout.EndVertical();
@@ -439,6 +462,57 @@ namespace CapCom
 		private void rescaleHandle(int id)
 		{
 
+		}
+
+		private void sizedContent(ref Rect r, string t, Currency type)
+		{
+			if (string.IsNullOrEmpty(t))
+				return;
+			GUIStyle s = currencyStyle(type);
+			Vector2 sz = s.CalcSize(new GUIContent(t));
+
+			if (type == Currency.Funds)
+				r.width = 10;
+			else
+				r.width = 16;
+			r.height = 16;
+
+			GUI.DrawTexture(r, currencyIcon(type));
+
+			r.x += r.width + 4;
+
+			r.width = sz.x;
+			r.height = sz.y;
+
+			GUI.Label(r, t, s);
+
+			r.x += sz.x + 16;
+		}
+
+		private GUIStyle currencyStyle(Currency t)
+		{
+			switch (t)
+			{
+				case Currency.Funds:
+					return CapComSkins.funds;
+				case Currency.Reputation:
+					return CapComSkins.rep;
+				default:
+					return CapComSkins.sci;
+			}
+		}
+
+		private Texture2D currencyIcon(Currency t)
+		{
+			switch (t)
+			{
+				case Currency.Funds:
+					return CapComSkins.fundsGreen;
+				case Currency.Reputation:
+					return CapComSkins.repRed;
+				default:
+					return CapComSkins.science;
+			}
 		}
 	}
 }
