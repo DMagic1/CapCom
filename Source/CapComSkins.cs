@@ -20,6 +20,7 @@ namespace CapCom
 		internal static GUIStyle titleButtonBehind;
 		internal static GUIStyle textureButton;
 		internal static GUIStyle tabButton;
+		internal static GUIStyle flagButton;
 
 		//Text label styles
 		internal static GUIStyle headerText;
@@ -58,6 +59,7 @@ namespace CapCom
 		internal static Texture2D goldStarTwoVertical;
 		internal static Texture2D goldStarThreeVertical;
 		internal static Texture2D settingsIcon;
+		internal static Texture2D flagBackDrop;
 
 		internal static int fontSize = 0;
 
@@ -82,6 +84,7 @@ namespace CapCom
 			goldStarTwoVertical = GameDatabase.Instance.GetTexture("CapCom/Textures/GoldStarTwoVertical", false);
 			goldStarThreeVertical = GameDatabase.Instance.GetTexture("CapCom/Textures/GoldStarThreeVertical", false);
 			settingsIcon = GameDatabase.Instance.GetTexture("CapCom/Textures/ToolbarSettingsIcon", false);
+			flagBackDrop = GameDatabase.Instance.GetTexture("CapCom/Textures/FlagBackDrop", false);
 
 			initializeSkins();
 		}
@@ -107,7 +110,7 @@ namespace CapCom
 			//Button Styles
 			titleButton = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.button);
 			titleButton.name = "TitleButton";
-			titleButton.fontSize = 14 + fontSize;
+			titleButton.fontSize = 13 + fontSize;
 			titleButton.wordWrap = true;
 			titleButton.fontStyle = FontStyle.Bold;
 			titleButton.normal.textColor = XKCDColors.FadedYellow;
@@ -125,6 +128,10 @@ namespace CapCom
 			textureButton.normal.background = CC_SkinsLibrary.DefUnitySkin.label.normal.background;
 			textureButton.hover.background = buttonHover;
 			textureButton.padding = new RectOffset(1, 1, 2, 2);
+
+			flagButton = new GUIStyle(textureButton);
+			flagButton.normal.background = flagBackDrop;
+			flagButton.hover.background = flagBackDrop;
 
 			//Label Styles
 			headerText = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.label);
@@ -156,7 +163,7 @@ namespace CapCom
 			noteText.normal.textColor = XKCDColors.AquaBlue;
 
 			smallText = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.label);
-			smallText.fontSize = 10 + fontSize;
+			smallText.fontSize = 11 + fontSize;
 			smallText.alignment = TextAnchor.MiddleLeft;
 
 			//Reward and Penalty Styles
