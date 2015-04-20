@@ -431,14 +431,11 @@ namespace CapCom
 
 		private void updateWaypoints(CapComContract c)
 		{
-			LogFormatted_DebugOnly("Checking For Waypoints To Update");
 			if (!HighLogic.LoadedSceneIsFlight)
 				return;
 
 			if (WaypointManager.Instance() == null)
 				return;
-
-			LogFormatted_DebugOnly("Systems Check Complete...");
 
 			for (int i = 0; i < c.ParameterCount; i++)
 			{
@@ -458,8 +455,6 @@ namespace CapCom
 					continue;
 
 				WaypointManager.AddWaypoint(p.Way);
-
-				//WaypointManager.Instance().UpdateWaypoint(p.Way);
 
 				LogFormatted_DebugOnly("Waypoint Added To System");
 			}
