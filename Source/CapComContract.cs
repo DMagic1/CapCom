@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Contracts;
+using Contracts.Agents;
 
 using CapCom.Framework;
 
@@ -16,6 +17,7 @@ namespace CapCom
 		private string notes;
 		private string fundsRew, fundsAdv, fundsPen, repRew, repPen, sciRew;
 		private float fundsRewStrat, fundsAdvStrat, fundsPenStrat, repRewStrat, repPenStrat, sciRewStrat;
+		private Agent agent;
 		private List<CapComParameter> parameters = new List<CapComParameter>();
 		private List<CapComParameter> allParameters = new List<CapComParameter>();
 
@@ -25,6 +27,9 @@ namespace CapCom
 			id = root.ContractGuid;
 			name = root.Title;
 			notes = root.Notes;
+
+			if (root.Agent != null)
+				agent = root.Agent;
 
 			for (int i = 0; i < root.ParameterCount; i++)
 			{
