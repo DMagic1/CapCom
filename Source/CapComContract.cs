@@ -30,6 +30,8 @@ namespace CapCom
 
 			if (root.Agent != null)
 				agent = root.Agent;
+			else
+				agent = AgentList.Instance.GetAgentRandom();
 
 			for (int i = 0; i < root.ParameterCount; i++)
 			{
@@ -191,6 +193,11 @@ namespace CapCom
 		public Contract Root
 		{
 			get { return root; }
+		}
+
+		public Agent RootAgent
+		{
+			get { return agent; }
 		}
 
 		public int ParameterCount
