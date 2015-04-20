@@ -234,25 +234,25 @@ namespace CapCom
 			//Tabs for different contract lists
 			GUILayout.BeginHorizontal();
 
-			if (GUILayout.Button("Offered", CapComSkins.tabButton, GUILayout.Width(60)))
+			if (GUILayout.Button("Offered", CapComSkins.tabButton, GUILayout.Width(62)))
 			{
 				currentList = 0;
 				sortContracts();
 			}
 
-			if (GUILayout.Button("Active", CapComSkins.tabButton, GUILayout.Width(55)))
+			if (GUILayout.Button("Active", CapComSkins.tabButton, GUILayout.Width(57)))
 			{
 				currentList = 1;
 				sortContracts();
 			}
 
-			if (GUILayout.Button("Completed", CapComSkins.tabButton, GUILayout.Width(80)))
+			if (GUILayout.Button("Completed", CapComSkins.tabButton, GUILayout.Width(82)))
 			{
 				currentList = 2;
 				sortContracts();
 			}
 
-			if (GUILayout.Button("Failed", CapComSkins.tabButton, GUILayout.Width(55)))
+			if (GUILayout.Button("Failed", CapComSkins.tabButton, GUILayout.Width(57)))
 			{
 				currentList = 3;
 				sortContracts();
@@ -269,10 +269,22 @@ namespace CapCom
 
 			foreach (CapComContract cc in currentContracts)
 			{
-				if (GUILayout.Button(cc.Name, GUILayout.Width(250)))
+				GUILayout.BeginHorizontal();
+				GUILayout.Space(63);
+				if (GUILayout.Button(cc.Name, GUILayout.Width(200), GUILayout.Height(46)))
 				{
 					currentContract = cc;
 				}
+				Rect r = GUILayoutUtility.GetLastRect();
+				r.width = 60;
+				r.x -= 60;
+				r.y += 3;
+				r.height = 40;
+				if (GUI.Button(r, "", CapComSkins.flagButton))
+					currentContract = cc;
+				GUI.DrawTexture(r, cc.RootAgent.LogoScaled);
+				GUILayout.EndHorizontal();
+				GUILayout.Space(-4);
 			}
 
 			GUILayout.EndScrollView();
@@ -314,7 +326,8 @@ namespace CapCom
 
 			Rect r = new Rect(280, 50, 160, 100);
 
-			GUI.DrawTexture(r, currentContract.Root.Agent.Logo);
+			GUI.DrawTexture(r, CapComSkins.flagBackDrop);
+			GUI.DrawTexture(r, currentContract.RootAgent.Logo);
 
 			GUILayout.BeginHorizontal();
 				GUILayout.Space(200);
@@ -322,7 +335,7 @@ namespace CapCom
 					GUILayout.Label("Contract:", CapComSkins.headerText);
 					GUILayout.Label(currentContract.Name, CapComSkins.titleText);
 					GUILayout.Label("Agent:", CapComSkins.headerText);
-					GUILayout.Label(currentContract.Root.Agent.Name, CapComSkins.titleText);
+					GUILayout.Label(currentContract.RootAgent.Name, CapComSkins.titleText);
 				GUILayout.EndVertical();
 			GUILayout.EndHorizontal();
 		}
