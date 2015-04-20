@@ -60,6 +60,9 @@ namespace CapCom
 		internal static Texture2D goldStarThreeVertical;
 		internal static Texture2D settingsIcon;
 		internal static Texture2D flagBackDrop;
+		internal static Texture2D resizeHandle;
+		internal static Texture2D checkBox;
+		internal static Texture2D failBox;
 
 		internal static int fontSize = 0;
 
@@ -85,6 +88,9 @@ namespace CapCom
 			goldStarThreeVertical = GameDatabase.Instance.GetTexture("CapCom/Textures/GoldStarThreeVertical", false);
 			settingsIcon = GameDatabase.Instance.GetTexture("CapCom/Textures/ToolbarSettingsIcon", false);
 			flagBackDrop = GameDatabase.Instance.GetTexture("CapCom/Textures/FlagBackDrop", false);
+			resizeHandle = GameDatabase.Instance.GetTexture("CapCom/Textures/ResizeIcon", false);
+			checkBox = GameDatabase.Instance.GetTexture("CapCom/Textures/CheckBoxIcon", false);
+			failBox = GameDatabase.Instance.GetTexture("CapCom/Textures/FailBoxIcon", false);
 
 			initializeSkins();
 		}
