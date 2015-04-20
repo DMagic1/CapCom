@@ -15,15 +15,15 @@ namespace CapCom
 	public class CapCom : CC_MBE
 	{
 		private static CapCom instance;
+		private static string version;
 		private CapComWindow window;
 		private CC_StockToolbar appButton;
+		private CC_Toolbar toolbar;
 		private bool loaded;
 		private Dictionary<Guid, CapComContract> activeContracts = new Dictionary<Guid, CapComContract>();
 		private Dictionary<Guid, CapComContract> offeredContracts = new Dictionary<Guid, CapComContract>();
 		private Dictionary<Guid, CapComContract> completedContracts = new Dictionary<Guid, CapComContract>();
 		private Dictionary<Guid, CapComContract> failedContracts = new Dictionary<Guid, CapComContract>();
-
-		internal static string version;
 
 		protected override void Awake()
 		{
@@ -42,8 +42,6 @@ namespace CapCom
 		{
 			if (HighLogic.CurrentGame.Mode != Game.Modes.CAREER)
 				Destroy(this);
-
-			LogFormatted_DebugOnly("Registering CapCom Events");
 
 			window = gameObject.AddComponent<CapComWindow>();
 
@@ -92,6 +90,11 @@ namespace CapCom
 		public bool Loaded
 		{
 			get { return loaded; }
+		}
+
+		public static string Version
+		{
+			get { return version; }
 		}
 
 		public CapComContract getActiveContract(Guid id)
