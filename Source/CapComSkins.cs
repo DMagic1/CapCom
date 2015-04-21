@@ -128,6 +128,7 @@ namespace CapCom
 
 			tabButton = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.button);
 			tabButton.fontSize = 12 + fontSize;
+			tabButton.fontStyle = FontStyle.Bold;
 			tabButton.normal.textColor = XKCDColors.FadedRed;
 
 			textureButton = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.button);
