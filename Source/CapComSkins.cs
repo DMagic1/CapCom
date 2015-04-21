@@ -120,6 +120,7 @@ namespace CapCom
 			titleButton.wordWrap = true;
 			titleButton.fontStyle = FontStyle.Bold;
 			titleButton.normal.textColor = XKCDColors.FadedYellow;
+			titleButton.padding = new RectOffset(2, 14, 2, 2);
 
 			titleButtonBehind = new GUIStyle(titleButton);
 			titleButtonBehind.hover.background = titleButtonBehind.normal.background;
