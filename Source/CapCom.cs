@@ -8,6 +8,8 @@ using CapCom.Toolbar;
 using Contracts;
 using Contracts.Parameters;
 using FinePrint;
+using FinePrint.Contracts.Parameters;
+using FinePrint.Utilities;
 
 namespace CapCom
 {
@@ -281,6 +283,7 @@ namespace CapCom
 			refreshList();
 
 			updateWaypoints(cc);
+			updateOrbits(cc);
 		}
 
 		private void onCompleted(Contract c)
@@ -430,6 +433,43 @@ namespace CapCom
 		private void refreshList()
 		{
 			window.refreshContracts();
+		}
+
+		private void updateOrbits(CapComContract c)
+		{
+			LogFormatted_DebugOnly("Trying to activate orbit parameter");
+			if (!HighLogic.LoadedSceneIsFlight)
+				return;
+
+			for (int i = 0; i < c.ParameterCount; i++)
+			{
+				CapComParameter p = c.getParameter(i);
+
+				if (p == null)
+					continue;
+
+				if (p.Param.GetType() != typeof(SpecificOrbitParameter))
+					continue;
+
+				SpecificOrbitParameter s = (SpecificOrbitParameter)p.Param;
+
+				LogFormatted_DebugOnly("Orbit Parameter identified; activating...");
+
+				MethodInfo orbitSetup = (typeof(SpecificOrbitParameter)).GetMethod("setup", BindingFlags.NonPublic | BindingFlags.Instance);
+
+				if (orbitSetup == null)
+					return;
+
+				try
+				{
+					orbitSetup.Invoke(s, null);
+					LogFormatted_DebugOnly("Activating Orbit...");
+				}
+				catch (Exception e)
+				{
+					LogFormatted("Error while activating FinePrint Specific Orbit Parameter: {0}", e);
+				}
+			}
 		}
 
 		private void updateWaypoints(CapComContract c)
