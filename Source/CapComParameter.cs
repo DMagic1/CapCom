@@ -48,30 +48,52 @@ namespace CapCom
 
 		private void checkForWaypoints()
 		{
-			waypoint = null;
-
 			CC_MBE.LogFormatted_DebugOnly("Checking Parameter For FinePrint Waypoints");
 
-			if (param.GetType() != typeof(SurveyWaypointParameter))
-				return;
+			waypoint = getWaypoint(param);
+		}
 
-			SurveyWaypointParameter s = (SurveyWaypointParameter)param;
-			if (s.State != ParameterState.Incomplete)
-				return;
+		private Waypoint getWaypoint(ContractParameter cp)
+		{
+			Waypoint p = null;
 
-			CC_MBE.LogFormatted_DebugOnly("Parameter Of Correct Waypoint Type");
-
-			try
+			if (cp.GetType() == typeof(SurveyWaypointParameter))
 			{
-				var field = (typeof(SurveyWaypointParameter)).GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[0];
-				waypoint = (Waypoint)field.GetValue(s);
-				CC_MBE.LogFormatted_DebugOnly("Waypoint Assigned");
+				SurveyWaypointParameter s = (SurveyWaypointParameter)param;
+				if (s.State != ParameterState.Incomplete)
+					return p;
+
+				try
+				{
+					var field = (typeof(SurveyWaypointParameter)).GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[0];
+					CC_MBE.LogFormatted_DebugOnly("Survey Waypoint Assigned");
+					p = (Waypoint)field.GetValue(s);
+				}
+				catch (Exception e)
+				{
+					CC_MBE.LogFormatted("Error While Assigning FinePrint Survey Waypoint Object... {0}", e);
+				}
 			}
-			catch (Exception e)
+
+			else if (cp.GetType() == typeof(StationaryPointParameter))
 			{
-				waypoint = null;
-				CC_MBE.LogFormatted("Error While Assigning FinePrint Waypoint Object... {0}", e);
+				StationaryPointParameter s = (StationaryPointParameter)param;
+				if (s.State != ParameterState.Incomplete)
+					return p;
+
+				try
+				{
+					var field = (typeof(StationaryPointParameter)).GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[0];
+					CC_MBE.LogFormatted_DebugOnly("Stationary Waypoint Assigned");
+					p = (Waypoint)field.GetValue(s);
+				}
+				catch (Exception e)
+				{
+					CC_MBE.LogFormatted("Error While Assigning FinePrint Stationary Waypoint Object... {0}", e);
+				}
 			}
+
+			return p;
 		}
 
 		private void addToParams(ContractParameter p, int Level)
