@@ -65,19 +65,20 @@ namespace CapCom
 			CurrencyModifierQuery currencyQuery = CurrencyModifierQuery.RunQuery(TransactionReasons.ContractReward, (float)root.FundsCompletion, root.ScienceCompletion, root.ReputationCompletion);
 			fundsRew = "+ " + root.FundsCompletion.ToString("N0");
 			fundsRewStrat = currencyQuery.GetEffectDelta(Currency.Funds);
-			if (fundsRewStrat > 0f)
+			CC_MBE.LogFormatted_DebugOnly("CAPCOM Funds Query: Add [{0}] Funds To Base Level: [{1}]", fundsRewStrat, fundsRew);
+			if (fundsRewStrat != 0f)
 			{
 				fundsRew = string.Format("+ {0:N0} ({1:N0})", root.FundsCompletion + fundsRewStrat, fundsRewStrat);
 			}
 			repRew = "+ " + root.ReputationCompletion.ToString("N0");
 			repRewStrat = currencyQuery.GetEffectDelta(Currency.Reputation);
-			if (repRewStrat > 0f)
+			if (repRewStrat != 0f)
 			{
 				repRew = string.Format("+ {0:N0} ({1:N0})", root.ReputationCompletion + repRewStrat, repRewStrat);
 			}
 			sciRew = "+ " + root.ScienceCompletion.ToString("N0");
 			sciRewStrat = currencyQuery.GetEffectDelta(Currency.Science);
-			if (sciRewStrat > 0f)
+			if (sciRewStrat != 0f)
 			{
 				sciRew = string.Format("+ {0:N0} ({1:N0})", root.ScienceCompletion + sciRewStrat, sciRewStrat);
 			}
@@ -85,10 +86,10 @@ namespace CapCom
 
 		private void contractAdvance()
 		{
-			CurrencyModifierQuery currencyQuery = CurrencyModifierQuery.RunQuery(TransactionReasons.ContractAdvance, (float)root.FundsCompletion, root.ScienceCompletion, root.ReputationCompletion);
+			CurrencyModifierQuery currencyQuery = CurrencyModifierQuery.RunQuery(TransactionReasons.ContractAdvance, (float)root.FundsAdvance, 0, 0);
 			fundsAdv = "+ " + root.FundsAdvance.ToString("N0");
 			fundsAdvStrat = currencyQuery.GetEffectDelta(Currency.Funds);
-			if (fundsAdvStrat > 0f)
+			if (fundsAdvStrat != 0f)
 			{
 				fundsAdv = string.Format("+ {0:N0} ({1:N0})", root.FundsAdvance + fundsAdvStrat, fundsAdvStrat);
 			}
@@ -99,13 +100,13 @@ namespace CapCom
 			CurrencyModifierQuery currencyQuery = CurrencyModifierQuery.RunQuery(TransactionReasons.ContractPenalty, (float)root.FundsFailure, 0f, root.ReputationFailure);
 			fundsPen = "- " + root.FundsFailure.ToString("N0");
 			fundsPenStrat = currencyQuery.GetEffectDelta(Currency.Funds);
-			if (fundsPenStrat > 0f)
+			if (fundsPenStrat != 0f)
 			{
 				fundsPen = string.Format("- {0:N0} ({1:N0})", root.FundsFailure + fundsPenStrat, fundsPenStrat);
 			}
 			repPen = "- " + root.ReputationFailure.ToString("N0");
 			repPenStrat = currencyQuery.GetEffectDelta(Currency.Reputation);
-			if (repPenStrat > 0f)
+			if (repPenStrat != 0f)
 			{
 				repPen = string.Format("- {0:N0} ({1:N0})", root.ReputationFailure + repPenStrat, repPenStrat);
 			}
