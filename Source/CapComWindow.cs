@@ -25,8 +25,9 @@ namespace CapCom
 
 		protected override void Awake()
 		{
+			WindowRect = new Rect(70, 200, 840, 500);
 			WindowCaption = "CapCom";
-			WindowOptions = new GUILayoutOption[2] { GUILayout.Width(800), GUILayout.Height(500) };
+			WindowOptions = new GUILayoutOption[2] { GUILayout.Width(840), GUILayout.Height(500) };
 			WindowStyle = CapComSkins.newWindowStyle;
 			Visible = false;
 			DragEnabled = true;
@@ -237,13 +238,13 @@ namespace CapCom
 			//Tabs for different contract lists
 			GUILayout.BeginHorizontal();
 
-			if (GUILayout.Button("Offered", CapComSkins.tabButton, GUILayout.Width(80)))
+			if (GUILayout.Button("Offered", CapComSkins.tabButton, GUILayout.Width(100)))
 			{
 				currentList = 0;
 				sortContracts();
 			}
 
-			if (GUILayout.Button("Active", CapComSkins.tabButton, GUILayout.Width(70)))
+			if (GUILayout.Button("Active", CapComSkins.tabButton, GUILayout.Width(100)))
 			{
 				currentList = 1;
 				sortContracts();
@@ -268,13 +269,13 @@ namespace CapCom
 		{
 			//Display sorted contract list
 
-			cScroll = GUILayout.BeginScrollView(cScroll, false, true, GUILayout.Width(284));
+			cScroll = GUILayout.BeginScrollView(cScroll, false, true, GUILayout.Width(324));
 
 			foreach (CapComContract cc in currentContracts)
 			{
 				GUILayout.BeginHorizontal();
 				GUILayout.Space(63);
-				if (GUILayout.Button(cc.Name, GUILayout.Width(200), GUILayout.Height(46)))
+				if (GUILayout.Button(cc.Name, GUILayout.Width(240), GUILayout.Height(46)))
 				{
 					currentContract = cc;
 				}
@@ -291,7 +292,7 @@ namespace CapCom
 				GUI.DrawTexture(r, cc.RootAgent.LogoScaled);
 				r.width = 11;
 				r.height = 40;
-				r.x += 248;
+				r.x += 288;
 				GUI.DrawTexture(r, contractPrestigeIcon(cc.Root.Prestige));
 			}
 
@@ -303,31 +304,32 @@ namespace CapCom
 			if (currentContract == null)
 				return;
 
-			GUILayout.BeginHorizontal();
 			if (currentContract.Root.ContractState == Contract.State.Offered)
 			{
+				GUILayout.BeginHorizontal();
 				if (GUILayout.Button("Accept", CapComSkins.tabButton, GUILayout.Width(90)))
 				{
 					currentContract.Root.Accept();
 				}
-
 				GUILayout.FlexibleSpace();
-
 				if (GUILayout.Button("Decline", CapComSkins.tabButton, GUILayout.Width(90)))
 				{
 					currentContract.Root.Decline();
 				}
+				GUILayout.EndHorizontal();
 			}
 			else if (currentContract.Root.ContractState == Contract.State.Active)
 			{
+				GUILayout.BeginHorizontal();
 				GUILayout.FlexibleSpace();
-
 				if (GUILayout.Button("Cancel", CapComSkins.tabButton, GUILayout.Width(90)))
 				{
 					currentContract.Root.Cancel();
 				}
+				GUILayout.EndHorizontal();
 			}
-			GUILayout.EndHorizontal();
+			else
+				GUILayout.Space(28);
 		}
 
 		private void currentContractHeader(int id)
@@ -335,7 +337,7 @@ namespace CapCom
 			if (currentContract == null)
 				return;
 
-			Rect r = new Rect(300, 50, 160, 100);
+			Rect r = new Rect(340, 50, 160, 100);
 
 			GUI.DrawTexture(r, CapComSkins.flagBackDrop);
 			GUI.DrawTexture(r, currentContract.RootAgent.Logo);
@@ -369,7 +371,7 @@ namespace CapCom
 			if (showBriefing)
 			{
 				GUILayout.Label("Briefing:", CapComSkins.headerText, GUILayout.Width(80));
-				GUILayout.Label(currentContract.Root.Description, CapComSkins.briefingText);
+				GUILayout.Label(currentContract.Briefing, CapComSkins.briefingText);
 			}
 			GUILayout.Label(currentContract.Root.Synopsys, CapComSkins.synopsisText);
 
