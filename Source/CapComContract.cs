@@ -11,6 +11,7 @@ namespace CapCom
 	{
 		private Guid id;
 		private string name;
+		private string briefing;
 		private Contract root;
 		private float totalFundsReward, totalRepReward, totalSciReward;
 		private float totalFundsPenalty, totalRepPenalty;
@@ -27,6 +28,7 @@ namespace CapCom
 			id = root.ContractGuid;
 			name = root.Title;
 			notes = root.Notes;
+			briefing = root.Description;
 
 			if (root.Agent != null)
 				agent = root.Agent;
@@ -184,6 +186,11 @@ namespace CapCom
 		public string Name
 		{
 			get { return name; }
+		}
+
+		public string Briefing
+		{
+			get { return briefing; }
 		}
 
 		public string Notes
