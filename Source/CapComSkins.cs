@@ -116,7 +116,7 @@ namespace CapCom
 			//Button Styles
 			titleButton = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.button);
 			titleButton.name = "TitleButton";
-			titleButton.fontSize = 13 + fontSize;
+			titleButton.fontSize = 12 + fontSize;
 			titleButton.wordWrap = true;
 			titleButton.fontStyle = FontStyle.Bold;
 			titleButton.normal.textColor = XKCDColors.FadedYellow;
