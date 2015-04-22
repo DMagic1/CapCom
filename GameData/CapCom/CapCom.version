@@ -1,6 +1,7 @@
 {
      "NAME":"CapCom Mission Control On The Go",
 	 "URL":"https://raw.githubusercontent.com/DMagic1/CapCom/master/GameData/CapCom/CapCom.version",
+	 "DOWNLOAD":"https://github.com/DMagic1/CapCom/releases",
      "GITHUB":{
          "USERNAME":"DMagic1",
          "REPOSITORY":"CapCom",
