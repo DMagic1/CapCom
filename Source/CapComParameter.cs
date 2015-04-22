@@ -48,8 +48,6 @@ namespace CapCom
 
 		private void checkForWaypoints()
 		{
-			CC_MBE.LogFormatted_DebugOnly("Checking Parameter For FinePrint Waypoints");
-
 			waypoint = getWaypoint(param);
 		}
 
@@ -66,7 +64,6 @@ namespace CapCom
 				try
 				{
 					var field = (typeof(SurveyWaypointParameter)).GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[0];
-					CC_MBE.LogFormatted_DebugOnly("Survey Waypoint Assigned");
 					p = (Waypoint)field.GetValue(s);
 				}
 				catch (Exception e)
@@ -84,7 +81,6 @@ namespace CapCom
 				try
 				{
 					var field = (typeof(StationaryPointParameter)).GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[0];
-					CC_MBE.LogFormatted_DebugOnly("Stationary Waypoint Assigned");
 					p = (Waypoint)field.GetValue(s);
 				}
 				catch (Exception e)

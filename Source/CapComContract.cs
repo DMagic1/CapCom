@@ -67,7 +67,6 @@ namespace CapCom
 			CurrencyModifierQuery currencyQuery = CurrencyModifierQuery.RunQuery(TransactionReasons.ContractReward, (float)root.FundsCompletion, root.ScienceCompletion, root.ReputationCompletion);
 			fundsRew = "+ " + root.FundsCompletion.ToString("N0");
 			fundsRewStrat = currencyQuery.GetEffectDelta(Currency.Funds);
-			CC_MBE.LogFormatted_DebugOnly("CAPCOM Funds Query: Add [{0}] Funds To Base Level: [{1}]", fundsRewStrat, fundsRew);
 			if (fundsRewStrat != 0f)
 			{
 				fundsRew = string.Format("+ {0:N0} ({1:N0})", root.FundsCompletion + fundsRewStrat, fundsRewStrat);
