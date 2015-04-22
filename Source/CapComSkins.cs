@@ -132,9 +132,11 @@ namespace CapCom
 			tabButton.normal.textColor = XKCDColors.FadedRed;
 
 			textureButton = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.button);
-			textureButton.fontSize = 13;
+			textureButton.fontSize = 14;
+			textureButton.fontStyle = FontStyle.Bold;
 			textureButton.normal.background = CC_SkinsLibrary.DefUnitySkin.label.normal.background;
 			textureButton.hover.background = buttonHover;
+			textureButton.alignment = TextAnchor.MiddleLeft;
 			textureButton.padding = new RectOffset(1, 1, 2, 2);
 
 			flagButton = new GUIStyle(textureButton);
