@@ -13,7 +13,7 @@ using FinePrint.Utilities;
 
 namespace CapCom
 {
-	[CC_KSPAddonImproved(CC_KSPAddonImproved.Startup.TimeElapses | CC_KSPAddonImproved.Startup.Editor, false)]
+	[CC_KSPAddonImproved(CC_KSPAddonImproved.Startup.TimeElapses, false)]
 	public class CapCom : CC_MBE
 	{
 		private static CapCom instance;
@@ -374,8 +374,6 @@ namespace CapCom
 			while (ContractSystem.Instance == null)
 				yield return null;
 
-			LogFormatted_DebugOnly("Loading Contracts");
-
 			foreach(Contract c in ContractSystem.Instance.Contracts)
 			{
 				CapComContract cc = new CapComContract(c);
@@ -437,7 +435,6 @@ namespace CapCom
 
 		private void updateOrbits(CapComContract c)
 		{
-			LogFormatted_DebugOnly("Trying to activate orbit parameter");
 			if (!HighLogic.LoadedSceneIsFlight)
 				return;
 
@@ -453,8 +450,6 @@ namespace CapCom
 
 				SpecificOrbitParameter s = (SpecificOrbitParameter)p.Param;
 
-				LogFormatted_DebugOnly("Orbit Parameter identified; activating...");
-
 				MethodInfo orbitSetup = (typeof(SpecificOrbitParameter)).GetMethod("setup", BindingFlags.NonPublic | BindingFlags.Instance);
 
 				if (orbitSetup == null)
@@ -463,7 +458,6 @@ namespace CapCom
 				try
 				{
 					orbitSetup.Invoke(s, null);
-					LogFormatted_DebugOnly("Activating Orbit...");
 				}
 				catch (Exception e)
 				{
@@ -490,16 +484,12 @@ namespace CapCom
 				if (p.Way == null)
 					continue;
 
-				LogFormatted_DebugOnly("Trying To Add FinePrint Waypoint...");
-
 				var waypoints = WaypointManager.Instance().AllWaypoints();
 
 				if (waypoints.Contains(p.Way))
 					continue;
 
 				WaypointManager.AddWaypoint(p.Way);
-
-				LogFormatted_DebugOnly("Waypoint Added To System");
 			}
 		}
 

@@ -40,7 +40,6 @@ namespace CapCom.Toolbar
 
 		protected override void Start()
 		{
-			LogFormatted_DebugOnly("Adding App Launcher Button");
 			setupToolbar();
 		}
 
@@ -61,7 +60,7 @@ namespace CapCom.Toolbar
 			while (!ApplicationLauncher.Ready)
 				yield return null;
 
-			stockToolbarButton = ApplicationLauncher.Instance.AddModApplication(toggle, toggle, null, null, null, null, (ApplicationLauncher.AppScenes)63, CapComSkins.toolbarIcon);
+			stockToolbarButton = ApplicationLauncher.Instance.AddModApplication(toggle, toggle, null, null, null, null, (ApplicationLauncher.AppScenes)39, CapComSkins.toolbarIcon);
 
 			GameEvents.onGUIApplicationLauncherUnreadifying.Add(removeButton);
 		}
