@@ -15,6 +15,10 @@ namespace CapCom
 		[Persistent]
 		public bool hideNotes = false;
 		[Persistent]
+		public bool showDeclineWarning = true;
+		[Persistent]
+		public bool showCancelWarning = true;
+		[Persistent]
 		public int sortMode = 0;
 		[Persistent]
 		public float windowHeight = 600;

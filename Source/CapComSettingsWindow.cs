@@ -10,7 +10,7 @@ namespace CapCom
 	class CapComSettingsWindow : CC_MBW
 	{
 		private bool controlLock;
-		private bool hideBriefing, hideNotes, stockToolbar;
+		private bool hideBriefing, hideNotes, warnDecline, warnCancel, stockToolbar;
 		private bool oldToolbar;
 		private const string lockID = "CapCom_LockID";
 
@@ -42,6 +42,8 @@ namespace CapCom
 		{
 			hideBriefing = CapCom.Instance.Settings.hideBriefing;
 			hideNotes = CapCom.Instance.Settings.hideNotes;
+			warnDecline = CapCom.Instance.Settings.showDeclineWarning;
+			warnCancel = CapCom.Instance.Settings.showCancelWarning;
 			oldToolbar = stockToolbar = CapCom.Instance.Settings.stockToolbar;
 		}
 
@@ -127,6 +129,8 @@ namespace CapCom
 		{
 			CapCom.Instance.Settings.hideBriefing = GUILayout.Toggle(CapCom.Instance.Settings.hideBriefing, "Hide Mission Briefing Text");
 			CapCom.Instance.Settings.hideNotes = GUILayout.Toggle(CapCom.Instance.Settings.hideNotes, "Hide Mission Notes");
+			CapCom.Instance.Settings.showDeclineWarning = GUILayout.Toggle(CapCom.Instance.Settings.showDeclineWarning, "Warn on Decline");
+			CapCom.Instance.Settings.showCancelWarning = GUILayout.Toggle(CapCom.Instance.Settings.showCancelWarning, "Warn on Cancel");
 			if (ToolbarManager.ToolbarAvailable)
 				stockToolbar = GUILayout.Toggle(stockToolbar, "Use Stock App Launcher");
 
@@ -135,6 +139,8 @@ namespace CapCom
 			{
 				hideBriefing = CapCom.Instance.Settings.hideBriefing;
 				hideNotes = CapCom.Instance.Settings.hideNotes;
+				warnDecline = CapCom.Instance.Settings.showDeclineWarning;
+				warnCancel = CapCom.Instance.Settings.showCancelWarning;
 				CapCom.Instance.Settings.stockToolbar = stockToolbar;
 				CapCom.Instance.Settings.Save();
 				Visible = false;
@@ -144,6 +150,8 @@ namespace CapCom
 			{
 				CapCom.Instance.Settings.hideBriefing = hideBriefing;
 				CapCom.Instance.Settings.hideNotes = hideNotes;
+				CapCom.Instance.Settings.showDeclineWarning = warnDecline;
+				CapCom.Instance.Settings.showCancelWarning = warnCancel;
 				stockToolbar = CapCom.Instance.Settings.stockToolbar;
 				Visible = false;
 			}
