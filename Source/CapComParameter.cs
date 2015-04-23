@@ -14,6 +14,7 @@ namespace CapCom
 		private CapComContract root;
 		private ContractParameter param;
 		private string notes;
+		private bool showNotes;
 		private int level;
 		private Waypoint waypoint;
 		private string fundsRew, fundsPen, repRew, repPen, sciRew;
@@ -172,6 +173,12 @@ namespace CapCom
 		public ContractParameter Param
 		{
 			get { return param; }
+		}
+
+		public bool ShowNotes
+		{
+			get { return showNotes; }
+			set { showNotes = value; }
 		}
 
 		public int ParameterCount
