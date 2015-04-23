@@ -22,6 +22,8 @@ namespace CapCom
 		private bool controlLock;
 		private bool showAgency;
 		private bool resizing;
+		private bool dropdown, warnDecline, warnCancel;
+		private Rect ddRect;
 		private float dH, dragStart;
 
 		private const string lockID = "CapCom_LockID";
@@ -189,6 +191,12 @@ namespace CapCom
 				else if (!WindowRect.Contains(mousePos) && controlLock)
 					unlockControls();
 			}
+
+			if (!dropdown)
+			{
+				warnCancel = false;
+				warnDecline = false;
+			}
 		}
 
 		protected override void DrawWindow(int id)
@@ -213,12 +221,16 @@ namespace CapCom
 			GUILayout.EndVertical();
 			GUILayout.EndHorizontal();
 
+			dropDown(id);
 			rescaleHandle(id);
 		}
 
 		protected override void DrawWindowPost(int id)
 		{
-
+			if (dropdown && Event.current.type == EventType.mouseDown && !ddRect.Contains(Event.current.mousePosition))
+			{
+				dropdown = false;
+			}
 		}
 
 		private void drawVersion(int id)
@@ -336,7 +348,13 @@ namespace CapCom
 				GUILayout.FlexibleSpace();
 				if (GUILayout.Button("Decline", CapComSkins.tabButton, GUILayout.Width(90)))
 				{
-					currentContract.Root.Decline();
+					if (CapCom.Instance.Settings.showDeclineWarning)
+					{
+						dropdown = true;
+						warnDecline = true;
+					}
+					else
+						currentContract.Root.Decline();
 				}
 				GUILayout.EndHorizontal();
 			}
@@ -346,7 +364,13 @@ namespace CapCom
 				GUILayout.FlexibleSpace();
 				if (GUILayout.Button("Cancel", CapComSkins.tabButton, GUILayout.Width(90)))
 				{
-					currentContract.Root.Cancel();
+					if (CapCom.Instance.Settings.showCancelWarning)
+					{
+						dropdown = true;
+						warnCancel = true;
+					}
+					else
+						currentContract.Root.Cancel();
 				}
 				GUILayout.EndHorizontal();
 			}
@@ -429,7 +453,19 @@ namespace CapCom
 			if (!string.IsNullOrEmpty(currentContract.Notes))
 			{
 				GUILayout.Label("Mission Notes: ", CapComSkins.headerText, GUILayout.Width(100));
-				GUILayout.Label(currentContract.Notes, CapComSkins.noteText);
+
+				if (CapCom.Instance.Settings.hideNotes)
+				{
+					Rect r = GUILayoutUtility.GetLastRect();
+					r.x += 120;
+					r.width = 12;
+					r.height = 14;
+					if (GUI.Button(r, currentContract.ShowNotes ? CapComSkins.notesMinusIcon : CapComSkins.notesPlusIcon, CapComSkins.textureButton))
+						currentContract.ShowNotes = !currentContract.ShowNotes;
+				}
+
+				if (!CapCom.Instance.Settings.hideNotes || currentContract.ShowNotes)
+					GUILayout.Label(currentContract.Notes, CapComSkins.noteText);
 			}
 
 			if (currentContract.ParameterCount > 0)
@@ -613,6 +649,43 @@ namespace CapCom
 					if (dH < 300)
 						dH = 300;
 				}
+			}
+		}
+
+		private void dropDown(int id)
+		{
+			if (dropdown)
+			{
+				if (warnCancel)
+				{
+					ddRect = new Rect(WindowRect.width - 80, 2, 75, 50);
+					GUI.Box(ddRect, "");
+					Rect r = new Rect(ddRect.x + 10, ddRect.y + 5, 60, 30);
+					GUI.Label(r, "Cancel this contract?");
+					r = new Rect(ddRect.x + 15, ddRect.y + 25, 50, 30);
+					if (GUI.Button(r, "Confirm"))
+					{
+						currentContract.Root.Cancel();
+						warnCancel = false;
+						dropdown = false;
+					}
+				}
+				else if (warnDecline)
+				{
+					ddRect = new Rect(WindowRect.width - 80, 2, 75, 50);
+					GUI.Box(ddRect, "");
+					Rect r = new Rect(ddRect.x + 10, ddRect.y + 5, 60, 30);
+					GUI.Label(r, "Decline this contract?");
+					r = new Rect(ddRect.x + 15, ddRect.y + 25, 50, 30);
+					if (GUI.Button(r, "Confirm"))
+					{
+						currentContract.Root.Decline();
+						warnDecline = false;
+						dropdown = false;
+					}
+				}
+				else
+					dropdown = false;
 			}
 		}
 
