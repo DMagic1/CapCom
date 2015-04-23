@@ -19,6 +19,7 @@ namespace CapCom
 		private static CapCom instance;
 		private static string version;
 		private CapComWindow window;
+		private CapComSettings settings;
 		private CC_StockToolbar appButton;
 		private CC_Toolbar toolbar;
 		private bool loaded;
@@ -26,6 +27,8 @@ namespace CapCom
 		private Dictionary<Guid, CapComContract> offeredContracts = new Dictionary<Guid, CapComContract>();
 		private Dictionary<Guid, CapComContract> completedContracts = new Dictionary<Guid, CapComContract>();
 		private Dictionary<Guid, CapComContract> failedContracts = new Dictionary<Guid, CapComContract>();
+
+		private const string filePath = "Settings";
 
 		protected override void Awake()
 		{
@@ -38,6 +41,8 @@ namespace CapCom
 				case true: version = ""; break;
 				default: version = ainfoV.InformationalVersion; break;
 			}
+
+
 		}
 
 		protected override void Start()
@@ -45,9 +50,22 @@ namespace CapCom
 			if (HighLogic.CurrentGame.Mode != Game.Modes.CAREER)
 				Destroy(this);
 
+			settings = new CapComSettings(filePath);
+
 			window = gameObject.AddComponent<CapComWindow>();
 
-			appButton = gameObject.AddComponent<CC_StockToolbar>();
+			if (settings.stockToolbar || !ToolbarManager.ToolbarAvailable)
+			{
+				appButton = gameObject.AddComponent<CC_StockToolbar>();
+				if (toolbar != null)
+					Destroy(toolbar);
+			}
+			else if (ToolbarManager.ToolbarAvailable && settings.stockToolbar)
+			{
+				toolbar = gameObject.AddComponent<CC_Toolbar>();
+				if (appButton != null)
+					Destroy(appButton);
+			}
 
 			GameEvents.Contract.onAccepted.Add(onAccepted);
 			GameEvents.Contract.onCompleted.Add(onCompleted);
@@ -87,6 +105,23 @@ namespace CapCom
 		public CapComWindow Window
 		{
 			get { return window; }
+		}
+
+		public CapComSettings Settings
+		{
+			get { return settings; }
+		}
+
+		public CC_Toolbar Toolbar
+		{
+			get { return toolbar; }
+			set { toolbar = value; }
+		}
+
+		public CC_StockToolbar StockToolbar
+		{
+			get { return appButton; }
+			set { appButton = value; }
 		}
 
 		public bool Loaded
