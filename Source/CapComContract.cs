@@ -12,6 +12,7 @@ namespace CapCom
 		private Guid id;
 		private string name;
 		private string briefing;
+		private bool showNotes;
 		private Contract root;
 		private float totalFundsReward, totalRepReward, totalSciReward;
 		private float totalFundsPenalty, totalRepPenalty;
@@ -195,6 +196,12 @@ namespace CapCom
 		public string Notes
 		{
 			get { return notes; }
+		}
+
+		public bool ShowNotes
+		{
+			get { return showNotes; }
+			set { showNotes = value; }
 		}
 
 		public Contract Root
