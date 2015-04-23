@@ -63,6 +63,8 @@ namespace CapCom
 		internal static Texture2D resizeHandle;
 		internal static Texture2D checkBox;
 		internal static Texture2D failBox;
+		internal static Texture2D notesPlusIcon;
+		internal static Texture2D notesMinusIcon;
 
 		internal static int fontSize = 0;
 
@@ -91,6 +93,8 @@ namespace CapCom
 			resizeHandle = GameDatabase.Instance.GetTexture("CapCom/Textures/ResizeIcon", false);
 			checkBox = GameDatabase.Instance.GetTexture("CapCom/Textures/CheckBoxIcon", false);
 			failBox = GameDatabase.Instance.GetTexture("CapCom/Textures/FailBoxIcon", false);
+			notesPlusIcon = GameDatabase.Instance.GetTexture("CapCom/Textures/OpenNotesIcon", false);
+			notesMinusIcon = GameDatabase.Instance.GetTexture("CapCom/Textures/CloseNotesIcon", false);
 
 			initializeSkins();
 		}
