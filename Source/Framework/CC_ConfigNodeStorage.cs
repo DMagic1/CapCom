@@ -27,6 +27,7 @@ namespace CapCom.Framework
 
         #region Properties
         private String _FilePath;
+		private String _NodeName;
         /// <summary>
         /// Location of file for saving and loading methods
         /// 
@@ -38,7 +39,7 @@ namespace CapCom.Framework
             set
             {
                 //Combine the Location of the assembly and the provided string. This means we can use relative or absolute paths
-                _FilePath = System.IO.Path.Combine(_AssemblyFolder, value).Replace("\\","/");
+				_FilePath = System.IO.Path.Combine(_AssemblyFolder, value + ".cfg").Replace("\\", "/");
             }
         }
 
@@ -49,6 +50,12 @@ namespace CapCom.Framework
         {
             get { return System.IO.Path.GetFileName(FilePath); }
         }
+
+		public String NodeName
+		{
+			get { return _NodeName; }
+			set { _NodeName = value; }
+		}
         #endregion
 
         #region Interface Methods
@@ -110,11 +117,9 @@ namespace CapCom.Framework
                 if (FileExists)
                 {
                     //Load the file into a config node
-                    ConfigNode cnToLoad = ConfigNode.Load(fileFullName);
-                    //remove the wrapper node that names the class stored
-                    ConfigNode cnUnwrapped = cnToLoad.GetNode(this.GetType().Name);
+					ConfigNode cnToLoad = GameDatabase.Instance.GetConfigNode(_NodeName);
                     //plug it in to the object
-                    ConfigNode.LoadObjectFromConfig(this, cnUnwrapped);
+                    ConfigNode.LoadObjectFromConfig(this, cnToLoad);
                     blnReturn = true;
                 }
                 else
