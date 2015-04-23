@@ -35,7 +35,7 @@ using UnityEngine;
 namespace CapCom.Toolbar
 {
 
-	class CC_Toolbar : CC_MBE
+	public class CC_Toolbar : CC_MBE
 	{
 		private IButton contractButton;
 
