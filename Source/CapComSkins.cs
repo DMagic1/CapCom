@@ -21,6 +21,7 @@ namespace CapCom
 		internal static GUIStyle textureButton;
 		internal static GUIStyle tabButton;
 		internal static GUIStyle flagButton;
+		internal static GUIStyle menuButton;
 
 		//Text label styles
 		internal static GUIStyle headerText;
@@ -146,6 +147,17 @@ namespace CapCom
 			flagButton = new GUIStyle(textureButton);
 			flagButton.normal.background = flagBackDrop;
 			flagButton.hover.background = flagBackDrop;
+
+			menuButton = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.label);
+			menuButton.fontSize = 12 + fontSize;
+			menuButton.padding = new RectOffset(2, 2, 2, 2);
+			menuButton.normal.textColor = XKCDColors.White;
+			menuButton.hover.textColor = XKCDColors.AlmostBlack;
+			Texture2D sortBackground = new Texture2D(1, 1);
+			sortBackground.SetPixel(1, 1, XKCDColors.OffWhite);
+			sortBackground.Apply();
+			menuButton.hover.background = sortBackground;
+			menuButton.alignment = TextAnchor.MiddleLeft;
 
 			//Label Styles
 			headerText = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.label);
