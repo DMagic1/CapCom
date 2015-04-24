@@ -31,7 +31,6 @@ namespace CapCom
 			Visible = false;
 			DragEnabled = true;
 			ClampToScreen = false;
-			TooltipMouseOffset = new Vector2d(-10, -25);
 
 			CC_SkinsLibrary.SetCurrent("CCUnitySkin");
 
