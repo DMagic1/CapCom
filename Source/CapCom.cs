@@ -82,8 +82,14 @@ namespace CapCom
 			if (window != null)
 				Destroy(window);
 
+			if (settings != null)
+				settings.Save();
+
 			if (appButton != null)
 				Destroy(appButton);
+
+			if (toolbar != null)
+				Destroy(toolbar);
 
 			GameEvents.Contract.onAccepted.Remove(onAccepted);
 			GameEvents.Contract.onCompleted.Remove(onCompleted);
