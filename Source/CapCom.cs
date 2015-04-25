@@ -18,8 +18,8 @@ namespace CapCom
 	{
 		private static CapCom instance;
 		private static string version;
+		private static CapComSettings settings = null;
 		private CapComWindow window;
-		private CapComSettings settings;
 		private CC_StockToolbar appButton;
 		private CC_Toolbar toolbar;
 		private bool loaded;
@@ -47,8 +47,9 @@ namespace CapCom
 		{
 			if (HighLogic.CurrentGame.Mode != Game.Modes.CAREER)
 				Destroy(this);
-
-			settings = new CapComSettings(filePath);
+			
+			if (settings == null)
+				settings = new CapComSettings(filePath);
 
 			window = gameObject.AddComponent<CapComWindow>();
 
@@ -108,7 +109,7 @@ namespace CapCom
 			get { return window; }
 		}
 
-		public CapComSettings Settings
+		public static CapComSettings Settings
 		{
 			get { return settings; }
 		}
