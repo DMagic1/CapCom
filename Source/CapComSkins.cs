@@ -23,9 +23,13 @@ namespace CapCom
 		internal static GUIStyle flagButton;
 		internal static GUIStyle menuButton;
 		internal static GUIStyle keycodeButton;
+		internal static GUIStyle warningButton;
 
 		//Text label styles
 		internal static GUIStyle headerText;
+		internal static GUIStyle reassignText;
+		internal static GUIStyle reassignCurrentText;
+		internal static GUIStyle warningText;
 		internal static GUIStyle titleText;
 		internal static GUIStyle briefingText;
 		internal static GUIStyle synopsisText;
@@ -65,6 +69,7 @@ namespace CapCom
 		internal static Texture2D resizeHandle;
 		internal static Texture2D checkBox;
 		internal static Texture2D failBox;
+		internal static Texture2D emptyBox;
 		internal static Texture2D notesPlusIcon;
 		internal static Texture2D notesMinusIcon;
 
@@ -95,6 +100,7 @@ namespace CapCom
 			resizeHandle = GameDatabase.Instance.GetTexture("CapCom/Textures/ResizeIcon", false);
 			checkBox = GameDatabase.Instance.GetTexture("CapCom/Textures/CheckBoxIcon", false);
 			failBox = GameDatabase.Instance.GetTexture("CapCom/Textures/FailBoxIcon", false);
+			emptyBox = GameDatabase.Instance.GetTexture("CapCom/Textures/EmptyBoxIcon", false);
 			notesPlusIcon = GameDatabase.Instance.GetTexture("CapCom/Textures/OpenNotesIcon", false);
 			notesMinusIcon = GameDatabase.Instance.GetTexture("CapCom/Textures/CloseNotesIcon", false);
 
@@ -160,6 +166,12 @@ namespace CapCom
 			menuButton.hover.background = sortBackground;
 			menuButton.alignment = TextAnchor.MiddleLeft;
 
+			warningButton = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.button);
+			warningButton.fontSize = 13 + fontSize;
+			warningButton.fontStyle = FontStyle.Bold;
+			warningButton.normal.textColor = XKCDColors.KSPNotSoGoodOrange;
+			warningButton.alignment = TextAnchor.MiddleCenter;
+
 			keycodeButton = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.button);
 
 			//Label Styles
@@ -168,6 +180,16 @@ namespace CapCom
 			headerText.fontStyle = FontStyle.Bold;
 			headerText.alignment = TextAnchor.MiddleLeft;
 			headerText.normal.textColor = XKCDColors.FadedOrange;
+
+			warningText = new GUIStyle(headerText);
+			warningText.alignment = TextAnchor.MiddleCenter;
+			warningText.normal.textColor = XKCDColors.SunYellow;
+
+			reassignText = new GUIStyle(warningText);
+			reassignText.normal.textColor = Color.white;
+
+			reassignCurrentText = new GUIStyle(reassignText);
+			reassignCurrentText.fontStyle = FontStyle.Bold;
 
 			titleText = new GUIStyle(headerText);
 			titleText.normal.textColor = XKCDColors.White;
