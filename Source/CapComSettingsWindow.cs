@@ -61,6 +61,7 @@ namespace CapCom
 			{
 				case GameScenes.TRACKSTATION:
 				case GameScenes.SPACECENTER:
+				case GameScenes.FLIGHT:
 					InputLockManager.RemoveControlLock(lockID);
 					controlLock = false;
 					break;
@@ -88,6 +89,13 @@ namespace CapCom
 						window.displayDirty = true;
 					}
 				}
+				else if (WindowRect.Contains(mousePos) && dropdown && !controlLock)
+				{
+					InputLockManager.SetControlLock(ControlTypes.CAMERACONTROLS, lockID);
+					controlLock = true;
+				}
+				else if ((!WindowRect.Contains(mousePos) || !dropdown) && controlLock)
+					unlockControls();
 			}
 
 			//Lock space center click through
@@ -308,6 +316,7 @@ namespace CapCom
 
 			if (dropdown && Event.current.type == EventType.mouseDown && !ddRect.Contains(Event.current.mousePosition))
 			{
+				resetKey();
 				dropdown = false;
 			}
 		}
@@ -323,11 +332,18 @@ namespace CapCom
 				r.y += 30;
 				GUI.Label(r, reassigning(), CapComSkins.reassignCurrentText);
 				r.y += 30;
-				r.x += 70;
+				r.x += 20;
 				r.width = 80;
+				if (GUI.Button(r, "Accept", CapComSkins.warningButton))
+				{
+					dropdown = false;
+					return;
+				}
+				r.x += 120;
 				if (GUI.Button(r, "Cancel", CapComSkins.warningButton))
 				{
 					dropdown = false;
+					resetKey();
 					return;
 				}
 
@@ -335,44 +351,7 @@ namespace CapCom
 				if (k == KeyCode.None)
 					return;
 
-				if (dup)
-				{
-					up = k;
-					dropdown = false;
-					dup = false;
-				}
-				else if (ddown)
-				{
-					down = k;
-					dropdown = false;
-					ddown = false;
-				}
-				else if (dleft)
-				{
-					left = k;
-					dropdown = false;
-					dleft = false;
-				}
-				else if (dright)
-				{
-					right = k;
-					dropdown = false;
-					dright = false;
-				}
-				else if (daccept)
-				{
-					accept = k;
-					dropdown = false;
-					daccept = false;
-				}
-				else if (ddecline)
-				{
-					decline = k;
-					dropdown = false;
-					ddecline = false;
-				}
-				else
-					dropdown = false;
+				setKey(k);
 			}
 		}
 
@@ -401,6 +380,38 @@ namespace CapCom
 			else if (ddecline)
 				return decline.ToString();
 			return "";
+		}
+
+		private void setKey(KeyCode k)
+		{
+			if (dup)
+				up = k;
+			else if (ddown)
+				down = k;
+			else if (dleft)
+				left = k;
+			else if (dright)
+				right = k;
+			else if (daccept)
+				accept = k;
+			else if (ddecline)
+				decline = k;
+		}
+
+		private void resetKey()
+		{
+			if (dup)
+				up = CapCom.Settings.scrollUp;
+			else if (ddown)
+				down = CapCom.Settings.scrollDown;
+			else if (dleft)
+				left = CapCom.Settings.listLeft;
+			else if (dright)
+				right = CapCom.Settings.listRight;
+			else if (daccept)
+				accept = CapCom.Settings.accept;
+			else if (ddecline)
+				decline = CapCom.Settings.cancel;
 		}
 
 	}
