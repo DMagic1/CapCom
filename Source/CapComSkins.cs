@@ -22,6 +22,7 @@ namespace CapCom
 		internal static GUIStyle tabButton;
 		internal static GUIStyle flagButton;
 		internal static GUIStyle menuButton;
+		internal static GUIStyle keycodeButton;
 
 		//Text label styles
 		internal static GUIStyle headerText;
@@ -158,6 +159,8 @@ namespace CapCom
 			sortBackground.Apply();
 			menuButton.hover.background = sortBackground;
 			menuButton.alignment = TextAnchor.MiddleLeft;
+
+			keycodeButton = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.button);
 
 			//Label Styles
 			headerText = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.label);
