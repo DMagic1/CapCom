@@ -407,9 +407,13 @@ namespace CapCom
 
 		private IEnumerator loadContracts()
 		{
+			int i = 0;
 
-			while (ContractSystem.Instance == null)
+			while (i < 5)
+			{
+				i++;
 				yield return null;
+			}
 
 			foreach(Contract c in ContractSystem.Instance.Contracts)
 			{
