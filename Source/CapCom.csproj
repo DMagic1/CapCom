@@ -60,7 +60,6 @@
     <Compile Include="Toolbar\CC_StockToolbar.cs" />
     <Compile Include="Toolbar\CC_Toolbar.cs" />
     <Compile Include="Toolbar\CC_ToolbarWrapper.cs" />
-    <Compile Include="XKCDColorPrintout.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
