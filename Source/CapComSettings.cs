@@ -22,7 +22,9 @@ namespace CapCom
 		[Persistent]
 		public float windowHeight = 600;
 		[Persistent]
-		public Vector2 windowPosition = new Vector2(50, 50);
+		public float windowPosX = 50;
+		[Persistent]
+		public float windowPosY = 50;
 		[Persistent]
 		public float windowSize = 0;
 		[Persistent]
