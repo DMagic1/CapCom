@@ -66,7 +66,9 @@ namespace CapCom
 
 		protected override void Update()
 		{
-			if (WindowRect.Contains(Input.mousePosition))
+			Vector2 mousePos = Input.mousePosition;
+			mousePos.y = Screen.height - mousePos.y;
+			if (WindowRect.Contains(mousePos))
 			{
 				if (Input.GetKeyDown(CapCom.Settings.scrollUp))
 				{
@@ -243,7 +245,7 @@ namespace CapCom
 					ccList.Sort((a, b) => RUIutils.SortAscDescPrimarySecondary(CapCom.Settings.ascending, a.TotalRepReward.CompareTo(b.TotalRepReward), a.Name.CompareTo(b.Name)));
 					break;
 				case 4:
-					ccList.Sort((a, b) => RUIutils.SortAscDescPrimarySecondary(CapCom.Settings.ascending, a.TotalPenalty.CompareTo(b.TotalPenalty), a.Name.CompareTo(b.Name)));
+					ccList.Sort((a, b) => RUIutils.SortAscDescPrimarySecondary(CapCom.Settings.ascending, a.RootAgent.Name.CompareTo(b.RootAgent.Name), a.Name.CompareTo(b.Name)));
 					break;
 				default:
 					ccList.Sort((a, b) => RUIutils.SortAscDescPrimarySecondary(CapCom.Settings.ascending, a.Root.Prestige.CompareTo(b.Root.Prestige), a.Name.CompareTo(b.Name)));
@@ -259,6 +261,7 @@ namespace CapCom
 			{
 				case GameScenes.TRACKSTATION:
 				case GameScenes.SPACECENTER:
+				case GameScenes.FLIGHT:
 					InputLockManager.RemoveControlLock(lockID);
 					controlLock = false;
 					break;
@@ -286,6 +289,13 @@ namespace CapCom
 						window.displayDirty = true;
 					}
 				}
+				else if (WindowRect.Contains(mousePos) && !controlLock)
+				{
+					InputLockManager.SetControlLock(ControlTypes.CAMERACONTROLS, lockID);
+					controlLock = true;
+				}
+				else if (!WindowRect.Contains(mousePos) && controlLock)
+					unlockControls();
 			}
 
 			//Lock space center click through
@@ -399,7 +409,6 @@ namespace CapCom
 
 		private void menuBar(int id)
 		{
-			//Sorting options, etc...
 			GUILayout.BeginHorizontal();
 				if (GUILayout.Button("Sort", CapComSkins.tabButton, GUILayout.Width(60)))
 				{
@@ -618,7 +627,6 @@ namespace CapCom
 
 			GUILayout.Label("Briefing:", CapComSkins.headerText, GUILayout.Width(80));
 
-			//Display current contract info
 			if (!CapCom.Settings.hideBriefing)
 			{
 				GUILayout.Label(currentContract.Briefing, CapComSkins.briefingText);
@@ -916,11 +924,11 @@ namespace CapCom
 			{
 				if (sortMenu)
 				{
-					ddRect = new Rect(15, 40, 100, 120);
+					ddRect = new Rect(15, 40, 100, 144);
 					GUI.Box(ddRect, "");
 					Rect r = new Rect(ddRect.x + 5, ddRect.y + 5, 90, 20);
 					GUI.Label(r, "Sort Options:");
-					for (int i = 0; i < 4; i++)
+					for (int i = 0; i < 5; i++)
 					{
 						r.y += 22;
 						if (GUI.Button(r, sortName(i), CapComSkins.menuButton))
@@ -1057,7 +1065,7 @@ namespace CapCom
 				case 3:
 					return "Reputation";
 				case 4:
-					return "Penalty";
+					return "Agency";
 				default:
 					return "";
 			}
