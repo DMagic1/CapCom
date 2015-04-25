@@ -13,7 +13,7 @@ namespace CapCom
 		private bool hideBriefing, hideNotes, warnDecline, warnCancel, stockToolbar;
 		private bool oldToolbar;
 		private bool dropdown, dup, ddown, dleft, dright, daccept, ddecline;
-		private string up, down, left, right, accept, decline;
+		private KeyCode up, down, left, right, accept, decline;
 		private Rect ddRect = new Rect();
 		private const string lockID = "CapCom_LockID";
 
@@ -42,17 +42,17 @@ namespace CapCom
 
 		protected override void Start()
 		{
-			hideBriefing = CapCom.Instance.Settings.hideBriefing;
-			hideNotes = CapCom.Instance.Settings.hideNotes;
-			warnDecline = CapCom.Instance.Settings.showDeclineWarning;
-			warnCancel = CapCom.Instance.Settings.showCancelWarning;
-			oldToolbar = stockToolbar = CapCom.Instance.Settings.stockToolbar;
-			up = CapCom.Instance.Settings.scrollUp.ToString();
-			down = CapCom.Instance.Settings.scrollDown.ToString();
-			left = CapCom.Instance.Settings.listLeft.ToString();
-			right = CapCom.Instance.Settings.listRight.ToString();
-			accept = CapCom.Instance.Settings.accept.ToString();
-			decline = CapCom.Instance.Settings.cancel.ToString();
+			hideBriefing = CapCom.Settings.hideBriefing;
+			hideNotes = CapCom.Settings.hideNotes;
+			warnDecline = CapCom.Settings.showDeclineWarning;
+			warnCancel = CapCom.Settings.showCancelWarning;
+			oldToolbar = stockToolbar = CapCom.Settings.stockToolbar;
+			up = CapCom.Settings.scrollUp;
+			down = CapCom.Settings.scrollDown;
+			left = CapCom.Settings.listLeft;
+			right = CapCom.Settings.listRight;
+			accept = CapCom.Settings.accept;
+			decline = CapCom.Settings.cancel;
 		}
 
 		private void unlockControls()
@@ -145,135 +145,136 @@ namespace CapCom
 
 		protected override void DrawWindow(int id)
 		{
-			CapCom.Instance.Settings.hideBriefing = GUILayout.Toggle(CapCom.Instance.Settings.hideBriefing, "Hide Mission Briefing Text", GUILayout.Width(170));
-			CapCom.Instance.Settings.hideNotes = GUILayout.Toggle(CapCom.Instance.Settings.hideNotes, "Hide Mission Notes", GUILayout.Width(140));
-			CapCom.Instance.Settings.showDeclineWarning = GUILayout.Toggle(CapCom.Instance.Settings.showDeclineWarning, "Warn on Decline", GUILayout.Width(125));
-			CapCom.Instance.Settings.showCancelWarning = GUILayout.Toggle(CapCom.Instance.Settings.showCancelWarning, "Warn on Cancel", GUILayout.Width(125));
+			CapCom.Settings.hideBriefing = GUILayout.Toggle(CapCom.Settings.hideBriefing, "Hide Mission Briefing Text", GUILayout.Width(170));
+			CapCom.Settings.hideNotes = GUILayout.Toggle(CapCom.Settings.hideNotes, "Hide Mission Notes", GUILayout.Width(140));
+			CapCom.Settings.showDeclineWarning = GUILayout.Toggle(CapCom.Settings.showDeclineWarning, "Warn on Decline", GUILayout.Width(125));
+			CapCom.Settings.showCancelWarning = GUILayout.Toggle(CapCom.Settings.showCancelWarning, "Warn on Cancel", GUILayout.Width(125));
 			if (ToolbarManager.ToolbarAvailable)
 				stockToolbar = GUILayout.Toggle(stockToolbar, "Use Stock App Launcher", GUILayout.Width(160));
 
 			GUILayout.BeginHorizontal();
 			GUILayout.Label("Scroll Up:", GUILayout.Width(100));
-			GUILayout.Label(CapCom.Instance.Settings.scrollUp.ToString(), GUILayout.Width(100));
+			GUILayout.Label(up.ToString(), GUILayout.Width(100));
 			if (!dropdown)
 			{
-				if (GUILayout.Button(CapCom.Instance.Settings.scrollUp.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100)))
+				if (GUILayout.Button(up.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100)))
 				{
 					dropdown = true;
 					dup = true;
 				}
 			}
 			else
-				GUILayout.Label(CapCom.Instance.Settings.scrollUp.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100));
+				GUILayout.Label(up.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100));
 			GUILayout.EndHorizontal();
 
 			GUILayout.BeginHorizontal();
 			GUILayout.Label("Scroll Down:", GUILayout.Width(100));
-			GUILayout.Label(CapCom.Instance.Settings.scrollDown.ToString(), GUILayout.Width(100));
+			GUILayout.Label(down.ToString(), GUILayout.Width(100));
 			if (!dropdown)
 			{
-				if (GUILayout.Button(CapCom.Instance.Settings.scrollDown.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100)))
+				if (GUILayout.Button(down.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100)))
 				{
 					dropdown = true;
 					ddown = true;
 				}
 			}
 			else
-				GUILayout.Label(CapCom.Instance.Settings.scrollDown.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100));
+				GUILayout.Label(down.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100));
 			GUILayout.EndHorizontal();
 
 			GUILayout.BeginHorizontal();
 			GUILayout.Label("Scroll Left:", GUILayout.Width(100));
-			GUILayout.Label(CapCom.Instance.Settings.listLeft.ToString(), GUILayout.Width(100));
+			GUILayout.Label(left.ToString(), GUILayout.Width(100));
 			if (!dropdown)
 			{
-				if (GUILayout.Button(CapCom.Instance.Settings.listLeft.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100)))
+				if (GUILayout.Button(left.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100)))
 				{
 					dropdown = true;
 					dleft = true;
 				}
 			}
 			else
-				GUILayout.Label(CapCom.Instance.Settings.listLeft.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100));
+				GUILayout.Label(left.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100));
 			GUILayout.EndHorizontal();
 
 			GUILayout.BeginHorizontal();
 			GUILayout.Label("Scroll Right:", GUILayout.Width(100));
-			GUILayout.Label(CapCom.Instance.Settings.listRight.ToString(), GUILayout.Width(100));
+			GUILayout.Label(right.ToString(), GUILayout.Width(100));
 			if (!dropdown)
 			{
-				if (GUILayout.Button(CapCom.Instance.Settings.listRight.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100)))
+				if (GUILayout.Button(right.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100)))
 				{
 					dropdown = true;
 					dright = true;
 				}
 			}
 			else
-				GUILayout.Label(CapCom.Instance.Settings.listRight.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100));
+				GUILayout.Label(right.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100));
 			GUILayout.EndHorizontal();
 
 			GUILayout.BeginHorizontal();
 			GUILayout.Label("Accept:", GUILayout.Width(100));
-			GUILayout.Label(CapCom.Instance.Settings.accept.ToString(), GUILayout.Width(100));
+			GUILayout.Label(accept.ToString(), GUILayout.Width(100));
 			if (!dropdown)
 			{
-				if (GUILayout.Button(CapCom.Instance.Settings.accept.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100)))
+				if (GUILayout.Button(accept.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100)))
 				{
 					dropdown = true;
 					daccept = true;
 				}
 			}
 			else
-				GUILayout.Label(CapCom.Instance.Settings.accept.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100));
+				GUILayout.Label(accept.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100));
 			GUILayout.EndHorizontal();
 
 			GUILayout.BeginHorizontal();
 			GUILayout.Label("Cancel/Decline:", GUILayout.Width(100));
-			GUILayout.Label(CapCom.Instance.Settings.cancel.ToString(), GUILayout.Width(100));
+			GUILayout.Label(decline.ToString(), GUILayout.Width(100));
 			if (!dropdown)
 			{
-				if (GUILayout.Button(CapCom.Instance.Settings.cancel.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100)))
+				if (GUILayout.Button(decline.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100)))
 				{
 					dropdown = true;
 					ddecline = true;
 				}
 			}
 			else
-				GUILayout.Label(CapCom.Instance.Settings.cancel.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100));
+				GUILayout.Label(decline.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100));
 			GUILayout.EndHorizontal();
 
 			GUILayout.BeginHorizontal();
 			GUILayout.FlexibleSpace();
-			if (GUILayout.Button("Save", GUILayout.Width(60)))
+			if (GUILayout.Button("Save", CapComSkins.tabButton, GUILayout.Width(60)))
 			{
-				hideBriefing = CapCom.Instance.Settings.hideBriefing;
-				hideNotes = CapCom.Instance.Settings.hideNotes;
-				warnDecline = CapCom.Instance.Settings.showDeclineWarning;
-				warnCancel = CapCom.Instance.Settings.showCancelWarning;
-				CapCom.Instance.Settings.stockToolbar = stockToolbar;
-				CapCom.Instance.Settings.Save();
-				up = CapCom.Instance.Settings.scrollUp.ToString();
-				down = CapCom.Instance.Settings.scrollDown.ToString();
-				left = CapCom.Instance.Settings.listLeft.ToString();
-				right = CapCom.Instance.Settings.listRight.ToString();
-				accept = CapCom.Instance.Settings.accept.ToString();
-				decline = CapCom.Instance.Settings.cancel.ToString();
+				hideBriefing = CapCom.Settings.hideBriefing;
+				hideNotes = CapCom.Settings.hideNotes;
+				warnDecline = CapCom.Settings.showDeclineWarning;
+				warnCancel = CapCom.Settings.showCancelWarning;
+				CapCom.Settings.stockToolbar = stockToolbar;
+				CapCom.Settings.Save();
+				CapCom.Settings.scrollUp = up;
+				CapCom.Settings.scrollDown = down;
+				CapCom.Settings.listLeft = left;
+				CapCom.Settings.listRight = right;
+				CapCom.Settings.accept = accept;
+				CapCom.Settings.cancel = decline;
 				Visible = false;
 			}
 			GUILayout.FlexibleSpace();
-			if (GUILayout.Button("Cancel", GUILayout.Width(60)))
+			if (GUILayout.Button("Cancel", CapComSkins.tabButton, GUILayout.Width(60)))
 			{
-				CapCom.Instance.Settings.hideBriefing = hideBriefing;
-				CapCom.Instance.Settings.hideNotes = hideNotes;
-				CapCom.Instance.Settings.showDeclineWarning = warnDecline;
-				CapCom.Instance.Settings.showCancelWarning = warnCancel;
-				CapCom.Instance.Settings.scrollUp = (KeyCode)System.Enum.Parse(typeof(KeyCode), up);
-				CapCom.Instance.Settings.scrollDown = (KeyCode)System.Enum.Parse(typeof(KeyCode), down);
-				CapCom.Instance.Settings.listLeft = (KeyCode)System.Enum.Parse(typeof(KeyCode), left);
-				CapCom.Instance.Settings.listRight = (KeyCode)System.Enum.Parse(typeof(KeyCode), right);
-				CapCom.Instance.Settings.accept = (KeyCode)System.Enum.Parse(typeof(KeyCode), accept);
-				CapCom.Instance.Settings.cancel = (KeyCode)System.Enum.Parse(typeof(KeyCode), decline);
-				stockToolbar = CapCom.Instance.Settings.stockToolbar;
+				CapCom.Settings.hideBriefing = hideBriefing;
+				CapCom.Settings.hideNotes = hideNotes;
+				CapCom.Settings.showDeclineWarning = warnDecline;
+				CapCom.Settings.showCancelWarning = warnCancel;
+				up = CapCom.Settings.scrollUp;
+				down = CapCom.Settings.scrollDown;
+				left = CapCom.Settings.listLeft;
+				right = CapCom.Settings.listRight;
+				accept = CapCom.Settings.accept;
+				decline = CapCom.Settings.cancel;
+
+				stockToolbar = CapCom.Settings.stockToolbar;
 				Visible = false;
 			}
 			GUILayout.FlexibleSpace();
@@ -315,8 +316,20 @@ namespace CapCom
 		{
 			if (dropdown)
 			{
-				ddRect = new Rect(20, 150, 100, 80);
+				ddRect = new Rect(20, 150, 260, 100);
 				GUI.Box(ddRect, "", CapComSkins.dropDown);
+				Rect r = new Rect(ddRect.x + 10, ddRect.y + 5, 240, 25);
+				GUI.Label(r, "Press any key to reassign:", CapComSkins.reassignText);
+				r.y += 30;
+				GUI.Label(r, reassigning(), CapComSkins.reassignCurrentText);
+				r.y += 30;
+				r.x += 70;
+				r.width = 80;
+				if (GUI.Button(r, "Cancel", CapComSkins.warningButton))
+				{
+					dropdown = false;
+					return;
+				}
 
 				KeyCode k = getKey();
 				if (k == KeyCode.None)
@@ -324,37 +337,37 @@ namespace CapCom
 
 				if (dup)
 				{
-					CapCom.Instance.Settings.scrollUp = k;
+					up = k;
 					dropdown = false;
 					dup = false;
 				}
 				else if (ddown)
 				{
-					CapCom.Instance.Settings.scrollDown = k;
+					down = k;
 					dropdown = false;
 					ddown = false;
 				}
 				else if (dleft)
 				{
-					CapCom.Instance.Settings.listLeft = k;
+					left = k;
 					dropdown = false;
 					dleft = false;
 				}
 				else if (dright)
 				{
-					CapCom.Instance.Settings.listRight = k;
+					right = k;
 					dropdown = false;
 					dright = false;
 				}
 				else if (daccept)
 				{
-					CapCom.Instance.Settings.accept = k;
+					accept = k;
 					dropdown = false;
 					daccept = false;
 				}
 				else if (ddecline)
 				{
-					CapCom.Instance.Settings.cancel = k;
+					decline = k;
 					dropdown = false;
 					ddecline = false;
 				}
@@ -371,6 +384,23 @@ namespace CapCom
 				return e.keyCode;
 
 			return KeyCode.None;
+		}
+
+		private string reassigning()
+		{
+			if (dup)
+				return up.ToString();
+			else if (ddown)
+				return down.ToString();
+			else if (dleft)
+				return left.ToString();
+			else if (dright)
+				return right.ToString();
+			else if (daccept)
+				return accept.ToString();
+			else if (ddecline)
+				return decline.ToString();
+			return "";
 		}
 
 	}
