@@ -52,22 +52,23 @@ namespace CapCom
 
 		protected override void Start()
 		{
-			WindowRect.x = CapCom.Instance.Settings.windowPosX;
-			WindowRect.y = CapCom.Instance.Settings.windowPosY;
+			WindowRect.x = CapCom.Settings.windowPosX;
+			WindowRect.y = CapCom.Settings.windowPosY;
+			WindowRect.yMax = WindowRect.y + CapCom.Settings.windowHeight;
 		}
 
 		protected override void OnDestroy()
 		{
-			CapCom.Instance.Settings.windowPosX = WindowRect.x;
-			CapCom.Instance.Settings.windowPosY = WindowRect.y;
-			CapCom.Instance.Settings.Save();
+			CapCom.Settings.windowPosX = WindowRect.x;
+			CapCom.Settings.windowPosY = WindowRect.y;
+			CapCom.Settings.Save();
 		}
 
 		protected override void Update()
 		{
 			if (WindowRect.Contains(Input.mousePosition))
 			{
-				if (Input.GetKeyDown(CapCom.Instance.Settings.scrollUp))
+				if (Input.GetKeyDown(CapCom.Settings.scrollUp))
 				{
 					if (currentContracts.Count > 0)
 					{
@@ -89,7 +90,7 @@ namespace CapCom
 						showAgency = false;
 					}
 				}
-				if (Input.GetKeyDown(CapCom.Instance.Settings.scrollDown))
+				if (Input.GetKeyDown(CapCom.Settings.scrollDown))
 				{
 					if (currentContracts.Count > 0)
 					{
@@ -111,7 +112,7 @@ namespace CapCom
 						showAgency = false;
 					}
 				}
-				if (Input.GetKeyDown(CapCom.Instance.Settings.listRight))
+				if (Input.GetKeyDown(CapCom.Settings.listRight))
 				{
 					if (currentList < 2)
 						currentList += 1;
@@ -133,7 +134,7 @@ namespace CapCom
 						showAgency = false;
 					}
 				}
-				if (Input.GetKeyDown(CapCom.Instance.Settings.listLeft))
+				if (Input.GetKeyDown(CapCom.Settings.listLeft))
 				{
 					if (currentList > 0)
 						currentList -= 1;
@@ -155,7 +156,7 @@ namespace CapCom
 						showAgency = false;
 					}
 				}
-				if (Input.GetKeyDown(CapCom.Instance.Settings.accept))
+				if (Input.GetKeyDown(CapCom.Settings.accept))
 				{
 					if (currentContract == null)
 						return;
@@ -165,14 +166,14 @@ namespace CapCom
 
 					currentContract.Root.Accept();
 				}
-				if (Input.GetKeyDown(CapCom.Instance.Settings.cancel))
+				if (Input.GetKeyDown(CapCom.Settings.cancel))
 				{
 					if (currentContract == null)
 						return;
 
 					if (currentContract.Root.ContractState == Contract.State.Offered)
 					{
-						if (CapCom.Instance.Settings.showDeclineWarning)
+						if (CapCom.Settings.showDeclineWarning)
 						{
 							dropdown = true;
 							warnDecline = true;
@@ -182,7 +183,7 @@ namespace CapCom
 					}
 					else if (currentContract.Root.ContractState == Contract.State.Active)
 					{
-						if (CapCom.Instance.Settings.showCancelWarning)
+						if (CapCom.Settings.showCancelWarning)
 						{
 							dropdown = true;
 							warnCancel = true;
@@ -227,25 +228,25 @@ namespace CapCom
 
 		private void sortContracts(List<CapComContract> ccList)
 		{
-			switch (CapCom.Instance.Settings.sortMode)
+			switch (CapCom.Settings.sortMode)
 			{
 				case 0:
-					ccList.Sort((a, b) => RUIutils.SortAscDescPrimarySecondary(CapCom.Instance.Settings.ascending, a.Root.Prestige.CompareTo(b.Root.Prestige), a.Name.CompareTo(b.Name)));
+					ccList.Sort((a, b) => RUIutils.SortAscDescPrimarySecondary(CapCom.Settings.ascending, a.Root.Prestige.CompareTo(b.Root.Prestige), a.Name.CompareTo(b.Name)));
 					break;
 				case 1:
-					ccList.Sort((a, b) => RUIutils.SortAscDescPrimarySecondary(CapCom.Instance.Settings.ascending, a.TotalReward.CompareTo(b.TotalReward), a.Name.CompareTo(b.Name)));
+					ccList.Sort((a, b) => RUIutils.SortAscDescPrimarySecondary(CapCom.Settings.ascending, a.TotalReward.CompareTo(b.TotalReward), a.Name.CompareTo(b.Name)));
 					break;
 				case 2:
-					ccList.Sort((a, b) => RUIutils.SortAscDescPrimarySecondary(CapCom.Instance.Settings.ascending, a.TotalSciReward.CompareTo(b.TotalSciReward), a.Name.CompareTo(b.Name)));
+					ccList.Sort((a, b) => RUIutils.SortAscDescPrimarySecondary(CapCom.Settings.ascending, a.TotalSciReward.CompareTo(b.TotalSciReward), a.Name.CompareTo(b.Name)));
 					break;
 				case 3:
-					ccList.Sort((a, b) => RUIutils.SortAscDescPrimarySecondary(CapCom.Instance.Settings.ascending, a.TotalRepReward.CompareTo(b.TotalRepReward), a.Name.CompareTo(b.Name)));
+					ccList.Sort((a, b) => RUIutils.SortAscDescPrimarySecondary(CapCom.Settings.ascending, a.TotalRepReward.CompareTo(b.TotalRepReward), a.Name.CompareTo(b.Name)));
 					break;
 				case 4:
-					ccList.Sort((a, b) => RUIutils.SortAscDescPrimarySecondary(CapCom.Instance.Settings.ascending, a.TotalPenalty.CompareTo(b.TotalPenalty), a.Name.CompareTo(b.Name)));
+					ccList.Sort((a, b) => RUIutils.SortAscDescPrimarySecondary(CapCom.Settings.ascending, a.TotalPenalty.CompareTo(b.TotalPenalty), a.Name.CompareTo(b.Name)));
 					break;
 				default:
-					ccList.Sort((a, b) => RUIutils.SortAscDescPrimarySecondary(CapCom.Instance.Settings.ascending, a.Root.Prestige.CompareTo(b.Root.Prestige), a.Name.CompareTo(b.Name)));
+					ccList.Sort((a, b) => RUIutils.SortAscDescPrimarySecondary(CapCom.Settings.ascending, a.Root.Prestige.CompareTo(b.Root.Prestige), a.Name.CompareTo(b.Name)));
 					break;
 			}
 
@@ -379,7 +380,7 @@ namespace CapCom
 
 		private void closeButton(int id)
 		{
-			Rect r = new Rect(WindowRect.width - 50, 1, 18, 18);
+			Rect r = new Rect(WindowRect.width - 50, 1, 20, 20);
 			if (GUI.Button(r, CapComSkins.settingsIcon, CapComSkins.textureButton))
 			{
 				if (settings == null)
@@ -408,8 +409,8 @@ namespace CapCom
 				GUILayout.Space(10);
 				if (GUILayout.Button("Asc/Desc", CapComSkins.tabButton, GUILayout.Width(70)))
 				{
-					CapCom.Instance.Settings.ascending = !CapCom.Instance.Settings.ascending;
-					CapCom.Instance.Settings.Save();
+					CapCom.Settings.ascending = !CapCom.Settings.ascending;
+					CapCom.Settings.Save();
 					sortContracts();
 				}
 				GUILayout.FlexibleSpace();
@@ -517,7 +518,7 @@ namespace CapCom
 					GUILayout.FlexibleSpace();
 					if (GUILayout.Button("Decline", CapComSkins.tabButton, GUILayout.Width(90)))
 					{
-						if (CapCom.Instance.Settings.showDeclineWarning)
+						if (CapCom.Settings.showDeclineWarning)
 						{
 							dropdown = true;
 							warnDecline = true;
@@ -535,7 +536,7 @@ namespace CapCom
 					GUILayout.FlexibleSpace();
 					if (GUILayout.Button("Cancel", CapComSkins.tabButton, GUILayout.Width(90)))
 					{
-						if (CapCom.Instance.Settings.showCancelWarning)
+						if (CapCom.Settings.showCancelWarning)
 						{
 							dropdown = true;
 							warnCancel = true;
@@ -618,7 +619,7 @@ namespace CapCom
 			GUILayout.Label("Briefing:", CapComSkins.headerText, GUILayout.Width(80));
 
 			//Display current contract info
-			if (!CapCom.Instance.Settings.hideBriefing)
+			if (!CapCom.Settings.hideBriefing)
 			{
 				GUILayout.Label(currentContract.Briefing, CapComSkins.briefingText);
 			}
@@ -657,17 +658,17 @@ namespace CapCom
 			{
 				GUILayout.Label("Mission Notes: ", CapComSkins.headerText, GUILayout.Width(100));
 
-				if (CapCom.Instance.Settings.hideNotes)
+				if (CapCom.Settings.hideNotes)
 				{
 					Rect r = GUILayoutUtility.GetLastRect();
 					r.x += 120;
-					r.width = 12;
-					r.height = 14;
+					r.width = 13;
+					r.height = 16;
 					if (GUI.Button(r, currentContract.ShowNotes ? CapComSkins.notesMinusIcon : CapComSkins.notesPlusIcon, CapComSkins.textureButton))
 						currentContract.ShowNotes = !currentContract.ShowNotes;
 				}
 
-				if (!CapCom.Instance.Settings.hideNotes || currentContract.ShowNotes)
+				if (!CapCom.Settings.hideNotes || currentContract.ShowNotes)
 					GUILayout.Label(currentContract.Notes, CapComSkins.noteText);
 			}
 
@@ -743,37 +744,41 @@ namespace CapCom
 			bool notes = !string.IsNullOrEmpty(cp.Notes);
 
 			GUILayout.BeginHorizontal();
-				if (notes && CapCom.Instance.Settings.hideNotes)
-					GUILayout.Space(28 + cp.Level * 3);
+				if (notes && CapCom.Settings.hideNotes)
+					GUILayout.Space(30 + cp.Level * 3);
 				else
 					GUILayout.Space(16 + cp.Level * 3);
 
 				GUILayout.BeginVertical();
 					GUILayout.Label(cp.Name, CapComSkins.parameterText);
 					Rect b = GUILayoutUtility.GetLastRect();
-					b.y += 4;
-					b.height = 10;
-					if (notes && CapCom.Instance.Settings.hideNotes)
+
+					if (notes && CapCom.Settings.hideNotes)
 					{
-						b.x -= 26;
-						b.width = 8;
+						b.x -= 28;
+						b.height = 16;
+						b.width = 13;
 						if (GUI.Button(b, cp.ShowNotes ? CapComSkins.notesMinusIcon :CapComSkins.notesPlusIcon, CapComSkins.textureButton))
 							cp.ShowNotes = !cp.ShowNotes;
 
-						b.x += 14;
+						b.y += 4;
+						b.x += 16;
+						b.height = 10;
 						b.width = 10;
 						GUI.DrawTexture(b, parameterStateIcon(cp.Param));
 					}
 					else
 					{
 						b.x -= 14;
+						b.y += 4;
+						b.height = 10;
 						b.width = 10;
 						GUI.DrawTexture(b, parameterStateIcon(cp.Param));
 					}
 
 					if (notes)
 					{
-						if (!CapCom.Instance.Settings.hideNotes || cp.ShowNotes)
+						if (!CapCom.Settings.hideNotes || cp.ShowNotes)
 							GUILayout.Label(cp.Notes, CapComSkins.noteText);
 					}
 
@@ -883,8 +888,8 @@ namespace CapCom
 				{
 					resizing = false;
 					WindowRect.yMax = WindowRect.y + dH;
-					CapCom.Instance.Settings.windowHeight = WindowRect.height;
-					CapCom.Instance.Settings.Save();
+					CapCom.Settings.windowHeight = WindowRect.height;
+					CapCom.Settings.Save();
 				}
 				else
 				{
@@ -920,8 +925,8 @@ namespace CapCom
 						r.y += 22;
 						if (GUI.Button(r, sortName(i), CapComSkins.menuButton))
 						{
-							CapCom.Instance.Settings.sortMode = i;
-							CapCom.Instance.Settings.Save();
+							CapCom.Settings.sortMode = i;
+							CapCom.Settings.Save();
 							sortContracts();
 							sortMenu = false;
 							dropdown = false;
@@ -931,12 +936,12 @@ namespace CapCom
 				}
 				else if (warnCancel)
 				{
-					ddRect = new Rect(WindowRect.width - 155, 45, 150, 70);
+					ddRect = new Rect(WindowRect.width - 165, 45, 160, 70);
 					GUI.Box(ddRect, "");
-					Rect r = new Rect(ddRect.x + 10, ddRect.y + 5, 130, 30);
-					GUI.Label(r, "Cancel this contract?");
-					r = new Rect(ddRect.x + 35, ddRect.y + 30, 80, 30);
-					if (GUI.Button(r, "Confirm"))
+					Rect r = new Rect(ddRect.x + 10, ddRect.y + 5, 140, 30);
+					GUI.Label(r, "Cancel this contract?", CapComSkins.warningText);
+					r = new Rect(ddRect.x + 40, ddRect.y + 30, 80, 30);
+					if (GUI.Button(r, "Confirm", CapComSkins.warningButton))
 					{
 						currentContract.Root.Cancel();
 						warnCancel = false;
@@ -945,12 +950,12 @@ namespace CapCom
 				}
 				else if (warnDecline)
 				{
-					ddRect = new Rect(WindowRect.width - 155, 45, 150, 70);
+					ddRect = new Rect(WindowRect.width - 165, 45, 160, 70);
 					GUI.Box(ddRect, "");
-					Rect r = new Rect(ddRect.x + 10, ddRect.y + 5, 130, 30);
-					GUI.Label(r, "Decline this contract?");
-					r = new Rect(ddRect.x + 35, ddRect.y + 30, 80, 30);
-					if (GUI.Button(r, "Confirm"))
+					Rect r = new Rect(ddRect.x + 10, ddRect.y + 5, 140, 30);
+					GUI.Label(r, "Decline this contract?", CapComSkins.warningText);
+					r = new Rect(ddRect.x + 40, ddRect.y + 30, 80, 30);
+					if (GUI.Button(r, "Confirm", CapComSkins.warningButton))
 					{
 						currentContract.Root.Decline();
 						warnDecline = false;
@@ -1033,7 +1038,7 @@ namespace CapCom
 				case ParameterState.Complete:
 					return CapComSkins.checkBox;
 				case ParameterState.Incomplete:
-					return CapComSkins.checkBox;
+					return CapComSkins.emptyBox;
 				default:
 					return CapComSkins.failBox;
 			}
