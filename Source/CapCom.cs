@@ -41,8 +41,6 @@ namespace CapCom
 				case true: version = ""; break;
 				default: version = ainfoV.InformationalVersion; break;
 			}
-
-
 		}
 
 		protected override void Start()
@@ -81,9 +79,6 @@ namespace CapCom
 		{
 			if (window != null)
 				Destroy(window);
-
-			if (settings != null)
-				settings.Save();
 
 			if (appButton != null)
 				Destroy(appButton);
