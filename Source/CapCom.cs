@@ -10,6 +10,7 @@ using Contracts.Parameters;
 using FinePrint;
 using FinePrint.Contracts.Parameters;
 using FinePrint.Utilities;
+using UnityEngine;
 
 namespace CapCom
 {
@@ -32,6 +33,18 @@ namespace CapCom
 
 		protected override void Awake()
 		{
+			if (CapComSkins.missionControlTexture == null)
+			{
+				foreach (Texture2D t in Resources.FindObjectsOfTypeAll<Texture2D>())
+				{
+					if (t.name == "MissionControl")
+					{
+						CapComSkins.missionControlTexture = t;
+						break;
+					}
+				}
+			}
+
 			instance = this;
 
 			Assembly assembly = AssemblyLoader.loadedAssemblies.GetByAssembly(Assembly.GetExecutingAssembly()).assembly;
