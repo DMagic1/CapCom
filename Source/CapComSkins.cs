@@ -20,10 +20,17 @@ namespace CapCom
 		internal static GUIStyle titleButtonBehind;
 		internal static GUIStyle textureButton;
 		internal static GUIStyle tabButton;
-		internal static GUIStyle flagButton;
 		internal static GUIStyle menuButton;
 		internal static GUIStyle keycodeButton;
 		internal static GUIStyle warningButton;
+
+		//Icon Button styles
+		internal static GUIStyle iconButton;
+		internal static GUIStyle acceptButton;
+		internal static GUIStyle declineButton;
+		internal static GUIStyle cancelButton;
+		internal static GUIStyle tabButtonKSP;
+		internal static GUIStyle titleButtonKSP;
 
 		//Text label styles
 		internal static GUIStyle headerText;
@@ -37,6 +44,8 @@ namespace CapCom
 		internal static GUIStyle subParameterText;
 		internal static GUIStyle noteText;
 		internal static GUIStyle smallText;
+		internal static GUIStyle timerText;
+		internal static GUIStyle agencyContractText;
 
 		//Reward styles
 		internal static GUIStyle advance;
@@ -65,13 +74,28 @@ namespace CapCom
 		internal static Texture2D goldStarTwoVertical;
 		internal static Texture2D goldStarThreeVertical;
 		internal static Texture2D settingsIcon;
-		internal static Texture2D flagBackDrop;
 		internal static Texture2D resizeHandle;
 		internal static Texture2D checkBox;
 		internal static Texture2D failBox;
 		internal static Texture2D emptyBox;
 		internal static Texture2D notesPlusIcon;
 		internal static Texture2D notesMinusIcon;
+
+		internal static Texture2D missionControlTexture;
+
+		internal static Rect acceptButtonNormal = new Rect(0, 0.3671875f, 0.04296875f, 0.0439456125f);
+		internal static Rect acceptButtonHover = new Rect(0.0478515625f, 0.3671875f, 0.04296875f, 0.0439456125f);
+		internal static Rect acceptButtonActive = new Rect(0.095703125f, 0.3671875f, 0.04296875f, 0.0439456125f);
+
+		internal static Rect declineButtonNormal = new Rect(0.0478515625f, 0.4169921875f, 0.04296875f, 0.0439456125f);
+		internal static Rect declineButtonHover = new Rect(0.095703125f, 0.4169921875f, 0.04296875f, 0.0439456125f);
+		internal static Rect declineButtonActive = new Rect(0, 0.466796875f, 0.04296875f, 0.0439456125f);
+
+		internal static Rect cancelButtonNormal = new Rect(0.095703125f, 0.466796875f, 0.04296875f, 0.0439456125f);
+		internal static Rect cancelButtonHover = new Rect(0, 0.5166015625f, 0.04296875f, 0.0439456125f);
+		internal static Rect cancelButtonActive = new Rect(0.0478515625f, 0.5166015625f, 0.04296875f, 0.0439456125f);
+
+		internal static Rect flagRect = new Rect(0, 0.1513671875f, 0.16796875f, 0.1103515625f);
 
 		internal static int fontSize = 0;
 
@@ -96,7 +120,6 @@ namespace CapCom
 			goldStarTwoVertical = GameDatabase.Instance.GetTexture("CapCom/Textures/GoldStarTwoVertical", false);
 			goldStarThreeVertical = GameDatabase.Instance.GetTexture("CapCom/Textures/GoldStarThreeVertical", false);
 			settingsIcon = GameDatabase.Instance.GetTexture("CapCom/Textures/ToolbarSettingsIcon", false);
-			flagBackDrop = GameDatabase.Instance.GetTexture("CapCom/Textures/FlagBackDrop", false);
 			resizeHandle = GameDatabase.Instance.GetTexture("CapCom/Textures/ResizeIcon", false);
 			checkBox = GameDatabase.Instance.GetTexture("CapCom/Textures/CheckBoxIcon", false);
 			failBox = GameDatabase.Instance.GetTexture("CapCom/Textures/FailBoxIcon", false);
@@ -131,7 +154,7 @@ namespace CapCom
 			titleButton.fontSize = 12 + fontSize;
 			titleButton.wordWrap = true;
 			titleButton.fontStyle = FontStyle.Bold;
-			titleButton.normal.textColor = XKCDColors.FadedYellow;
+			titleButton.normal.textColor = XKCDColors.ButterYellow;
 			titleButton.padding = new RectOffset(2, 14, 2, 2);
 
 			titleButtonBehind = new GUIStyle(titleButton);
@@ -148,12 +171,8 @@ namespace CapCom
 			textureButton.fontStyle = FontStyle.Bold;
 			textureButton.normal.background = CC_SkinsLibrary.DefUnitySkin.label.normal.background;
 			textureButton.hover.background = buttonHover;
-			textureButton.alignment = TextAnchor.MiddleLeft;
+			textureButton.alignment = TextAnchor.MiddleCenter;
 			textureButton.padding = new RectOffset(1, 1, 2, 2);
-
-			flagButton = new GUIStyle(textureButton);
-			flagButton.normal.background = flagBackDrop;
-			flagButton.hover.background = flagBackDrop;
 
 			menuButton = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.label);
 			menuButton.fontSize = 12 + fontSize;
@@ -169,8 +188,9 @@ namespace CapCom
 			warningButton = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.button);
 			warningButton.fontSize = 13 + fontSize;
 			warningButton.fontStyle = FontStyle.Bold;
-			warningButton.normal.textColor = XKCDColors.KSPNotSoGoodOrange;
 			warningButton.alignment = TextAnchor.MiddleCenter;
+
+			iconButton = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.label);
 
 			keycodeButton = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.button);
 
@@ -183,7 +203,7 @@ namespace CapCom
 
 			warningText = new GUIStyle(headerText);
 			warningText.alignment = TextAnchor.MiddleCenter;
-			warningText.normal.textColor = XKCDColors.SunYellow;
+			warningText.normal.textColor = XKCDColors.VomitYellow;
 
 			reassignText = new GUIStyle(warningText);
 			reassignText.normal.textColor = Color.white;
@@ -197,21 +217,27 @@ namespace CapCom
 			briefingText = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.label);
 			briefingText.fontSize = 11 + fontSize;
 			briefingText.alignment = TextAnchor.MiddleLeft;
-			briefingText.normal.textColor = XKCDColors.OffWhite;
+			briefingText.normal.textColor = XKCDColors.KSPNeutralUIGrey;
 
 			synopsisText = new GUIStyle(briefingText);
 			synopsisText.fontSize = 12 + fontSize;
 			synopsisText.fontStyle = FontStyle.Bold;
 
 			parameterText = new GUIStyle(synopsisText);
-			parameterText.normal.textColor = XKCDColors.PaleGrey;
+			parameterText.normal.textColor = XKCDColors.Beige;
 
 			subParameterText = new GUIStyle(parameterText);
-			subParameterText.normal.textColor = XKCDColors.LightGrey;
+			subParameterText.normal.textColor = XKCDColors.DarkBeige;
+
+			timerText = new GUIStyle(synopsisText);
+			timerText.normal.textColor = XKCDColors.OffWhite;
 
 			noteText = new GUIStyle(synopsisText);
 			noteText.fontStyle = FontStyle.Normal;
-			noteText.normal.textColor = XKCDColors.AquaBlue;
+			noteText.normal.textColor = XKCDColors.TiffanyBlue;
+
+			agencyContractText = new GUIStyle(synopsisText);
+			agencyContractText.normal.textColor = XKCDColors.ButterYellow;
 
 			smallText = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.label);
 			smallText.fontSize = 11 + fontSize;
@@ -233,7 +259,7 @@ namespace CapCom
 
 			funds = new GUIStyle(advance);
 			funds.fontStyle = FontStyle.Normal;
-			funds.normal.textColor = XKCDColors.FreshGreen;
+			funds.normal.textColor = XKCDColors.PaleOliveGreen;
 
 			rep = new GUIStyle(funds);
 			rep.normal.textColor = XKCDColors.BrownishYellow;
