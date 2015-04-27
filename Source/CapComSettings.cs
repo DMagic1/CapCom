@@ -38,7 +38,7 @@ namespace CapCom
 		[Persistent]
 		public KeyCode accept = KeyCode.Return;
 		[Persistent]
-		public KeyCode cancel = KeyCode.Backspace;
+		public KeyCode cancel = KeyCode.Delete;
 
 		public CapComSettings (string file)
 		{
