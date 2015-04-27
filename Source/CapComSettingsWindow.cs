@@ -252,7 +252,7 @@ namespace CapCom
 
 			GUILayout.BeginHorizontal();
 			GUILayout.FlexibleSpace();
-			if (GUILayout.Button("Save", CapComSkins.tabButton, GUILayout.Width(60)))
+			if (GUILayout.Button("Save", CapComSkins.warningButton, GUILayout.Width(60)))
 			{
 				hideBriefing = CapCom.Settings.hideBriefing;
 				hideNotes = CapCom.Settings.hideNotes;
@@ -269,7 +269,7 @@ namespace CapCom
 				Visible = false;
 			}
 			GUILayout.FlexibleSpace();
-			if (GUILayout.Button("Cancel", CapComSkins.tabButton, GUILayout.Width(60)))
+			if (GUILayout.Button("Cancel", CapComSkins.warningButton, GUILayout.Width(60)))
 			{
 				CapCom.Settings.hideBriefing = hideBriefing;
 				CapCom.Settings.hideNotes = hideNotes;
