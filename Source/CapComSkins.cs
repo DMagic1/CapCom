@@ -81,8 +81,10 @@ namespace CapCom
 		internal static Texture2D notesPlusIcon;
 		internal static Texture2D notesMinusIcon;
 
+		//Mission Control Center texture map
 		internal static Texture2D missionControlTexture;
 
+		//Texture element locations on the mission control center texture map; values are normalized
 		internal static Rect acceptButtonNormal = new Rect(0, 0.3671875f, 0.04296875f, 0.0439456125f);
 		internal static Rect acceptButtonHover = new Rect(0.0478515625f, 0.3671875f, 0.04296875f, 0.0439456125f);
 		internal static Rect acceptButtonActive = new Rect(0.095703125f, 0.3671875f, 0.04296875f, 0.0439456125f);
@@ -94,6 +96,24 @@ namespace CapCom
 		internal static Rect cancelButtonNormal = new Rect(0.095703125f, 0.466796875f, 0.04296875f, 0.0439456125f);
 		internal static Rect cancelButtonHover = new Rect(0, 0.5166015625f, 0.04296875f, 0.0439456125f);
 		internal static Rect cancelButtonActive = new Rect(0.0478515625f, 0.5166015625f, 0.04296875f, 0.0439456125f);
+
+		internal static Rect titleButtonFlagNormal = new Rect(0, 0.3125f, 0.0751953125f, 0.0498046875f);
+		internal static Rect titleButtonFlagActive = new Rect(0, 0.2626953125f, 0.0751953125f, 0.0498046875f);
+
+		internal static Rect titleButtonNormal = new Rect(0.0751953125f, 0.3125f, 0.0244140625f, 0.0498046875f);
+		internal static Rect titleButtonActive = new Rect(0.0751953125f, 0.2626953125f, 0.0244140625f, 0.0498046875f);
+
+		internal static Rect tabButtonNormalLeft = new Rect(0, 0.560546875f, 0.017578125f, 0.0224609375f);
+		internal static Rect tabButtonNormalMiddle = new Rect(0.017578125f, 0.560546875f, 0.009765625f, 0.0224609375f);
+		internal static Rect tabButtonNormalRight = new Rect(0.02734375f, 0.560546875f, 0.02734375f, 0.0224609375f);
+
+		internal static Rect tabButtonHoverLeft = new Rect(0.0546875f, 0.560546875f, 0.017578125f, 0.0224609375f);
+		internal static Rect tabButtonHoverMiddle = new Rect(0.0712890625f, 0.560546875f, 0.009765625f, 0.0224609375f);
+		internal static Rect tabButtonHoverRight = new Rect(0.0810546875f, 0.560546875f, 0.0263671875f, 0.0224609375f);
+
+		internal static Rect tabButtonActiveLeft = new Rect(0.9462890625f, 0.099609375f, 0.017578125f, 0.0224609375f);
+		internal static Rect tabButtonActiveMiddle = new Rect(0.962890625f, 0.099609375f, 0.009765625f, 0.0224609375f);
+		internal static Rect tabButtonActiveRight = new Rect(0.9736328125f, 0.099609375f, 0.0263671875f, 0.0224609375f);
 
 		internal static Rect flagRect = new Rect(0, 0.1513671875f, 0.16796875f, 0.1103515625f);
 
