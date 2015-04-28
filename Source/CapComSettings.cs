@@ -20,6 +20,8 @@ namespace CapCom
 		[Persistent]
 		public bool ascending = true;
 		[Persistent]
+		public bool activeLimit = true;
+		[Persistent]
 		public float windowHeight = 600;
 		[Persistent]
 		public float windowPosX = 50;

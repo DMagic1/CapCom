@@ -10,7 +10,7 @@ namespace CapCom
 	class CapComSettingsWindow : CC_MBW
 	{
 		private bool controlLock;
-		private bool hideBriefing, hideNotes, warnDecline, warnCancel, stockToolbar;
+		private bool hideBriefing, hideNotes, warnDecline, warnCancel, stockToolbar, activeLimit;
 		private bool oldToolbar;
 		private bool dropdown, dup, ddown, dleft, dright, daccept, ddecline;
 		private KeyCode up, down, left, right, accept, decline;
@@ -47,6 +47,7 @@ namespace CapCom
 			warnDecline = CapCom.Settings.showDeclineWarning;
 			warnCancel = CapCom.Settings.showCancelWarning;
 			oldToolbar = stockToolbar = CapCom.Settings.stockToolbar;
+			activeLimit = CapCom.Settings.activeLimit;
 			up = CapCom.Settings.scrollUp;
 			down = CapCom.Settings.scrollDown;
 			left = CapCom.Settings.listLeft;
@@ -157,6 +158,7 @@ namespace CapCom
 			CapCom.Settings.hideNotes = GUILayout.Toggle(CapCom.Settings.hideNotes, "Hide Mission Notes", GUILayout.Width(140));
 			CapCom.Settings.showDeclineWarning = GUILayout.Toggle(CapCom.Settings.showDeclineWarning, "Warn on Decline", GUILayout.Width(125));
 			CapCom.Settings.showCancelWarning = GUILayout.Toggle(CapCom.Settings.showCancelWarning, "Warn on Cancel", GUILayout.Width(125));
+			CapCom.Settings.activeLimit = GUILayout.Toggle(CapCom.Settings.activeLimit, "Limit number of active contracts", GUILayout.Width(160));
 			if (ToolbarManager.ToolbarAvailable)
 				stockToolbar = GUILayout.Toggle(stockToolbar, "Use Stock App Launcher", GUILayout.Width(160));
 
@@ -258,6 +260,7 @@ namespace CapCom
 				hideNotes = CapCom.Settings.hideNotes;
 				warnDecline = CapCom.Settings.showDeclineWarning;
 				warnCancel = CapCom.Settings.showCancelWarning;
+				activeLimit = CapCom.Settings.activeLimit;
 				CapCom.Settings.stockToolbar = stockToolbar;
 				CapCom.Settings.Save();
 				CapCom.Settings.scrollUp = up;
@@ -275,6 +278,7 @@ namespace CapCom
 				CapCom.Settings.hideNotes = hideNotes;
 				CapCom.Settings.showDeclineWarning = warnDecline;
 				CapCom.Settings.showCancelWarning = warnCancel;
+				CapCom.Settings.activeLimit = activeLimit;
 				up = CapCom.Settings.scrollUp;
 				down = CapCom.Settings.scrollDown;
 				left = CapCom.Settings.listLeft;
