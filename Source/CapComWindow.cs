@@ -172,7 +172,8 @@ namespace CapCom
 					if (currentContract.Root.ContractState != Contract.State.Offered)
 						return;
 
-					currentContract.Root.Accept();
+					if (!CapCom.Settings.activeLimit || ContractSystem.Instance.GetActiveContractCount() < GameVariables.Instance.GetActiveContractsLimit(ScenarioUpgradeableFacilities.GetFacilityLevel(SpaceCenterFacility.MissionControl)))
+						currentContract.Root.Accept();
 				}
 				if (Input.GetKeyDown(CapCom.Settings.cancel))
 				{
@@ -533,7 +534,8 @@ namespace CapCom
 
 				if (GUI.Button(r, "", CapComSkins.iconButton))
 				{
-					currentContract.Root.Accept();
+					if (!CapCom.Settings.activeLimit || ContractSystem.Instance.GetActiveContractCount() < GameVariables.Instance.GetActiveContractsLimit(ScenarioUpgradeableFacilities.GetFacilityLevel(SpaceCenterFacility.MissionControl)))
+						currentContract.Root.Accept();
 				}
 				if (r.Contains(Event.current.mousePosition) && mouseDown)
 					GUI.DrawTextureWithTexCoords(r, CapComSkins.missionControlTexture, CapComSkins.acceptButtonActive);
