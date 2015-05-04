@@ -158,7 +158,7 @@ namespace CapCom
 			CapCom.Settings.hideNotes = GUILayout.Toggle(CapCom.Settings.hideNotes, "Hide Mission Notes", GUILayout.Width(140));
 			CapCom.Settings.showDeclineWarning = GUILayout.Toggle(CapCom.Settings.showDeclineWarning, "Warn on Decline", GUILayout.Width(125));
 			CapCom.Settings.showCancelWarning = GUILayout.Toggle(CapCom.Settings.showCancelWarning, "Warn on Cancel", GUILayout.Width(125));
-			CapCom.Settings.activeLimit = GUILayout.Toggle(CapCom.Settings.activeLimit, "Limit number of active contracts", GUILayout.Width(160));
+			CapCom.Settings.activeLimit = GUILayout.Toggle(CapCom.Settings.activeLimit, "Limit number of active contracts", GUILayout.Width(200));
 			if (ToolbarManager.ToolbarAvailable)
 				stockToolbar = GUILayout.Toggle(stockToolbar, "Use Stock App Launcher", GUILayout.Width(160));
 
