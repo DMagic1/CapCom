@@ -103,19 +103,27 @@ namespace CapCom
 		private void paramRewards()
 		{
 			CurrencyModifierQuery currencyQuery = CurrencyModifierQuery.RunQuery(TransactionReasons.ContractReward, (float)param.FundsCompletion, param.ScienceCompletion, param.ReputationCompletion);
-			fundsRew = "+ " + param.FundsCompletion.ToString("N0");
+			fundsRew = "";
+			if (param.FundsCompletion != 0)
+				fundsRew = "+ " + param.FundsCompletion.ToString("N0");
 			fundsRewStrat = currencyQuery.GetEffectDelta(Currency.Funds);
 			if (fundsRewStrat != 0f)
 			{
 				fundsRew = string.Format("+ {0:N0} ({1:N0})", param.FundsCompletion + fundsRewStrat, fundsRewStrat);
 			}
-			repRew = "+ " + param.ReputationCompletion.ToString("N0");
+
+			repRew = "";
+			if (param.ReputationCompletion != 0)
+				repRew = "+ " + param.ReputationCompletion.ToString("N0");
 			repRewStrat = currencyQuery.GetEffectDelta(Currency.Reputation);
 			if (repRewStrat != 0f)
 			{
 				repRew = string.Format("+ {0:N0} ({1:N0})", param.ReputationCompletion + repRewStrat, repRewStrat);
 			}
-			sciRew = "+ " + param.ScienceCompletion.ToString("N0");
+
+			sciRew = "";
+			if (param.ScienceCompletion != 0)
+				sciRew = "+ " + param.ScienceCompletion.ToString("N0");
 			sciRewStrat = currencyQuery.GetEffectDelta(Currency.Science);
 			if (sciRewStrat != 0f)
 			{
@@ -126,13 +134,19 @@ namespace CapCom
 		private void paramPenalties()
 		{
 			CurrencyModifierQuery currencyQuery = CurrencyModifierQuery.RunQuery(TransactionReasons.ContractPenalty, (float)param.FundsFailure, 0f, param.ReputationFailure);
-			fundsPen = "- " + param.FundsFailure.ToString("N0");
+
+			fundsPen = "";
+			if (param.FundsFailure != 0)
+				fundsPen = "- " + param.FundsFailure.ToString("N0");
 			fundsPenStrat = currencyQuery.GetEffectDelta(Currency.Funds);
 			if (fundsPenStrat != 0f)
 			{
 				fundsPen = string.Format("- {0:N0} ({1:N0})", param.FundsFailure + fundsPenStrat, fundsPenStrat);
 			}
-			repPen = "- " + param.ReputationFailure.ToString("N0");
+
+			repPen = "";
+			if (param.ReputationFailure != 0)
+				repPen = "- " + param.ReputationFailure.ToString("N0");
 			repPenStrat = currencyQuery.GetEffectDelta(Currency.Reputation);
 			if (repPenStrat != 0f)
 			{
