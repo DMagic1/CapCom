@@ -7,6 +7,7 @@ using CapCom.Framework;
 using CapCom.Toolbar;
 using Contracts;
 using Contracts.Parameters;
+using Contracts.Agents;
 using FinePrint;
 using FinePrint.Contracts.Parameters;
 using FinePrint.Utilities;
@@ -43,6 +44,19 @@ namespace CapCom
 						break;
 					}
 				}
+			}
+
+			CapComSkins.currentFlag = GameDatabase.Instance.GetTexture(HighLogic.CurrentGame.flagURL, false);
+
+			if (CapComSkins.currentFlag == null)
+			{
+				int i = 0;
+				while (CapComSkins.currentFlag == null && i < AgentList.Instance.Agencies.Count)
+				{
+					CapComSkins.currentFlag = AgentList.Instance.Agencies[i].LogoScaled;
+					i++;
+				}
+
 			}
 
 			instance = this;
