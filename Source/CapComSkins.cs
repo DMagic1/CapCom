@@ -80,6 +80,7 @@ namespace CapCom
 		internal static Texture2D toggleOff;
 		internal static Texture2D toggleHoverOff;
 		internal static Texture2D toggleHoverOn;
+		internal static Texture2D currentFlag;
 
 		//Mission Control Center texture map
 		internal static Texture2D missionControlTexture;
@@ -208,7 +209,7 @@ namespace CapCom
 
 			menuButton = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.label);
 			menuButton.fontSize = 12 + fontSize;
-			menuButton.padding = new RectOffset(2, 2, 2, 2);
+			menuButton.padding = new RectOffset(26, 2, 2, 2);
 			menuButton.normal.textColor = XKCDColors.White;
 			menuButton.hover.textColor = XKCDColors.AlmostBlack;
 			Texture2D sortBackground = new Texture2D(1, 1);
