@@ -91,14 +91,14 @@ namespace CapCom
 
 		protected override void OnDestroy()
 		{
-			if (window != null)
-				Destroy(window);
-
 			if (appButton != null)
 				Destroy(appButton);
 
 			if (toolbar != null)
 				Destroy(toolbar);
+
+			if (window != null)
+				Destroy(window);
 
 			GameEvents.Contract.onAccepted.Remove(onAccepted);
 			GameEvents.Contract.onCompleted.Remove(onCompleted);
