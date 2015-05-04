@@ -12,7 +12,7 @@ namespace CapCom
 		private Guid id;
 		private string name;
 		private string briefing;
-		private bool showNotes;
+		private bool showNotes, canBeDeclined, canBeCancelled;
 		private Contract root;
 		private float totalFundsReward, totalRepReward, totalSciReward;
 		private float totalFundsPenalty, totalRepPenalty;
@@ -30,6 +30,8 @@ namespace CapCom
 			name = root.Title;
 			notes = root.Notes;
 			briefing = root.Description;
+			canBeDeclined = root.CanBeDeclined();
+			canBeCancelled = root.CanBeCancelled();
 
 			if (root.Agent != null)
 				agent = root.Agent;
@@ -202,6 +204,16 @@ namespace CapCom
 		{
 			get { return showNotes; }
 			set { showNotes = value; }
+		}
+
+		public bool CanBeDeclined
+		{
+			get { return canBeDeclined; }
+		}
+
+		public bool CanBeCancelled
+		{
+			get { return canBeCancelled; }
 		}
 
 		public Contract Root
