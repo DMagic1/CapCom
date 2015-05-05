@@ -1,4 +1,32 @@
-﻿using System;
+﻿#region license
+/*The MIT License (MIT)
+CapComWindow - Primary interface for the addon
+
+Copyright (c) 2015 DMagic
+
+KSP Plugin Framework by TriggerAu, 2014: http://forum.kerbalspaceprogram.com/threads/66503-KSP-Plugin-Framework
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
+#endregion
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using CapCom.Framework;
@@ -182,7 +210,7 @@ namespace CapCom
 
 					if (currentContract.Root.ContractState == Contract.State.Offered)
 					{
-						if (!currentContract.Root.CanBeDeclined())
+						if (!CapCom.Settings.forceDecline && !currentContract.CanBeDeclined)
 							return;
 
 						if (CapCom.Settings.showDeclineWarning)
@@ -195,7 +223,7 @@ namespace CapCom
 					}
 					else if (currentContract.Root.ContractState == Contract.State.Active)
 					{
-						if (!currentContract.Root.CanBeCancelled())
+						if (!CapCom.Settings.forceCancel && !currentContract.CanBeCancelled)
 							return;
 
 						if (CapCom.Settings.showCancelWarning)
@@ -658,7 +686,7 @@ namespace CapCom
 
 				if (GUI.Button(r, "", CapComSkins.iconButton))
 				{
-					if (currentContract.CanBeDeclined)
+					if (CapCom.Settings.forceDecline || currentContract.CanBeDeclined)
 					{
 						if (CapCom.Settings.showDeclineWarning)
 						{
@@ -669,7 +697,7 @@ namespace CapCom
 							currentContract.Root.Decline();
 					}
 				}
-				drawTextureButton(r, CapComSkins.declineButtonActive, CapComSkins.declineButtonHover, CapComSkins.declineButtonNormal, CapComSkins.declineButtonInactive, CapComSkins.missionControlTexture, currentContract.CanBeDeclined);
+				drawTextureButton(r, CapComSkins.declineButtonActive, CapComSkins.declineButtonHover, CapComSkins.declineButtonNormal, CapComSkins.declineButtonInactive, CapComSkins.missionControlTexture, !CapCom.Settings.forceDecline && !currentContract.CanBeDeclined);
 			}
 			else if (currentContract.Root.ContractState == Contract.State.Active)
 			{
@@ -690,7 +718,7 @@ namespace CapCom
 							currentContract.Root.Cancel();
 					}
 				}
-				drawTextureButton(r, CapComSkins.cancelButtonActive, CapComSkins.cancelButtonHover, CapComSkins.cancelButtonNormal, CapComSkins.cancelButtonInactive, CapComSkins.missionControlTexture, currentContract.CanBeCancelled);
+				drawTextureButton(r, CapComSkins.cancelButtonActive, CapComSkins.cancelButtonHover, CapComSkins.cancelButtonNormal, CapComSkins.cancelButtonInactive, CapComSkins.missionControlTexture, !CapCom.Settings.forceCancel && !currentContract.CanBeCancelled);
 			}
 			else
 			{
@@ -1161,7 +1189,7 @@ namespace CapCom
 
 		private void drawTextureButton(Rect r, Rect tActive, Rect tHover, Rect tNormal, Rect tInactive, Texture2D t, bool a)
 		{
-			if (!a)
+			if (a)
 				GUI.DrawTextureWithTexCoords(r, t, tInactive);
 			else if (r.Contains(Event.current.mousePosition) && mouseDown)
 				GUI.DrawTextureWithTexCoords(r, t, tActive);
