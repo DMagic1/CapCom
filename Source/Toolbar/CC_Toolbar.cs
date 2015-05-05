@@ -1,6 +1,6 @@
 ﻿#region license
 /*The MIT License (MIT)
-Contract Toolbar- Addon for toolbar interface
+CapCom Toolbar- Addon for toolbar interface
 
 Copyright (c) 2014 DMagic
 

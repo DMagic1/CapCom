@@ -1,8 +1,8 @@
 ﻿#region license
 /*The MIT License (MIT)
-Contract Stock Toolbar- Addon for stock app launcher interface
+CapCom Stock Toolbar- Addon for stock app launcher interface
 
-Copyright (c) 2014 DMagic
+Copyright (c) 2015 DMagic
 
 KSP Plugin Framework by TriggerAu, 2014: http://forum.kerbalspaceprogram.com/threads/66503-KSP-Plugin-Framework
 
