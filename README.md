@@ -18,7 +18,7 @@
 
 [DMagic][DMagic]: Author and maintainer
 
-[TriggerAu][TriggerAu]: Contracts Window + uses a modified version of TriggerAu's KSP Plugin Framework
+[TriggerAu][TriggerAu]: CapCom uses a modified version of TriggerAu's KSP Plugin Framework
 
 #### License
 
@@ -119,7 +119,7 @@ license][CCLicense]
 ![][CC:settings-options]
 
 ##### At the top of the **settings window** are several toggle options
-   * **Hide Mission Briefing Text** will prevent the non-sense mission briefing from being shown at all
+   * **Hide Mission Briefing Text** will prevent the nonsense mission briefing from being shown at all
    * **Hide Mission Notes** will cause mission and parameter notes to be hidden by default, they can be displayed by clicking on the blue **+** icon next to each note
    * **Warn on Decline** causes a warning window with a confirmation button to appear when declining an offered contract
    * **Warn on Cancel** causes a warning window with a confirmation button to appear when canceling an active contract
