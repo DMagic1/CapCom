@@ -44,6 +44,8 @@ namespace CapCom
 		[Persistent]
 		public bool showCancelWarning = true;
 		[Persistent]
+		public bool tooltipsEnabled = true;
+		[Persistent]
 		public int sortMode = 0;
 		[Persistent]
 		public bool ascending = true;

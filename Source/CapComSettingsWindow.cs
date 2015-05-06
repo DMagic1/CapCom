@@ -38,8 +38,8 @@ namespace CapCom
 	class CapComSettingsWindow : CC_MBW
 	{
 		private bool controlLock;
-		private bool hideBriefing, hideNotes, warnDecline, warnCancel, stockToolbar;
-		private bool oldToolbar;
+		private bool hideBriefing, hideNotes, warnDecline, warnCancel, stockToolbar, tooltips;
+		private bool oldToolbar, oldTooltips;
 		private bool dropdown, dup, ddown, dleft, dright, daccept, ddecline;
 		private KeyCode up, down, left, right, accept, decline;
 		private Rect ddRect = new Rect();
@@ -75,6 +75,7 @@ namespace CapCom
 			warnDecline = CapCom.Settings.showDeclineWarning;
 			warnCancel = CapCom.Settings.showCancelWarning;
 			oldToolbar = stockToolbar = CapCom.Settings.stockToolbar;
+			oldTooltips = tooltips = CapCom.Settings.tooltipsEnabled;
 			up = CapCom.Settings.scrollUp;
 			down = CapCom.Settings.scrollDown;
 			left = CapCom.Settings.listLeft;
@@ -185,6 +186,7 @@ namespace CapCom
 			CapCom.Settings.hideNotes = GUILayout.Toggle(CapCom.Settings.hideNotes, "Hide Mission Notes", GUILayout.Width(140));
 			CapCom.Settings.showDeclineWarning = GUILayout.Toggle(CapCom.Settings.showDeclineWarning, "Warn on Decline", GUILayout.Width(125));
 			CapCom.Settings.showCancelWarning = GUILayout.Toggle(CapCom.Settings.showCancelWarning, "Warn on Cancel", GUILayout.Width(125));
+			tooltips = GUILayout.Toggle(tooltips, "Toolips", GUILayout.Width(70));
 			if (ToolbarManager.ToolbarAvailable)
 				stockToolbar = GUILayout.Toggle(stockToolbar, "Use Stock App Launcher", GUILayout.Width(160));
 
@@ -286,6 +288,7 @@ namespace CapCom
 				hideNotes = CapCom.Settings.hideNotes;
 				warnDecline = CapCom.Settings.showDeclineWarning;
 				warnCancel = CapCom.Settings.showCancelWarning;
+				CapCom.Settings.tooltipsEnabled = tooltips;
 				CapCom.Settings.stockToolbar = stockToolbar;
 				CapCom.Settings.Save();
 				CapCom.Settings.scrollUp = up;
@@ -303,6 +306,7 @@ namespace CapCom
 				CapCom.Settings.hideNotes = hideNotes;
 				CapCom.Settings.showDeclineWarning = warnDecline;
 				CapCom.Settings.showCancelWarning = warnCancel;
+				tooltips = CapCom.Settings.tooltipsEnabled;
 				up = CapCom.Settings.scrollUp;
 				down = CapCom.Settings.scrollDown;
 				left = CapCom.Settings.listLeft;
@@ -340,6 +344,12 @@ namespace CapCom
 						Destroy(CapCom.Instance.StockToolbar);
 					}
 				}
+			}
+
+			if (oldTooltips != tooltips)
+			{
+				oldTooltips = tooltips;
+				CapCom.Instance.Window.TooltipsEnabled = tooltips;
 			}
 
 			if (dropdown && Event.current.type == EventType.mouseDown && !ddRect.Contains(Event.current.mousePosition))
