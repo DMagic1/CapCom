@@ -43,7 +43,7 @@ using UnityEngine;
 
 namespace CapCom
 {
-	[CC_KSPAddonImproved(CC_KSPAddonImproved.Startup.TimeElapses, false)]
+	[CC_KSPAddonImproved(CC_KSPAddonImproved.Startup.TimeElapses | CC_KSPAddonImproved.Startup.Editor, false)]
 	public class CapCom : CC_MBE
 	{
 		private static CapCom instance;
@@ -108,18 +108,19 @@ namespace CapCom
 
 			window = gameObject.AddComponent<CapComWindow>();
 
-			if (settings.stockToolbar || !ToolbarManager.ToolbarAvailable)
-			{
-				appButton = gameObject.AddComponent<CC_StockToolbar>();
-				if (toolbar != null)
-					Destroy(toolbar);
-			}
-			else if (ToolbarManager.ToolbarAvailable && settings.stockToolbar)
+			if (ToolbarManager.ToolbarAvailable && !settings.stockToolbar)
 			{
 				toolbar = gameObject.AddComponent<CC_Toolbar>();
 				if (appButton != null)
 					Destroy(appButton);
 			}
+			else
+			{
+				appButton = gameObject.AddComponent<CC_StockToolbar>();
+				if (toolbar != null)
+					Destroy(toolbar);
+			}
+
 
 			GameEvents.Contract.onAccepted.Add(onAccepted);
 			GameEvents.Contract.onCompleted.Add(onCompleted);
