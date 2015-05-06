@@ -237,6 +237,7 @@ namespace CapCom
 
 			menuButton = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.label);
 			menuButton.fontSize = 12 + fontSize;
+			menuButton.fontStyle = FontStyle.Bold;
 			menuButton.padding = new RectOffset(26, 2, 2, 2);
 			menuButton.normal.textColor = XKCDColors.White;
 			menuButton.hover.textColor = XKCDColors.AlmostBlack;
