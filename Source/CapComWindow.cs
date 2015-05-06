@@ -72,6 +72,7 @@ namespace CapCom
 			ClampToScreenOffset = new RectOffset(-650, -650, -300, -300);
 			TooltipMouseOffset = new Vector2d(-10, -25);
 
+
 			currentList = 0;
 
 			CC_SkinsLibrary.SetCurrent("CCUnitySkin");
@@ -84,6 +85,7 @@ namespace CapCom
 			WindowRect.x = CapCom.Settings.windowPosX;
 			WindowRect.y = CapCom.Settings.windowPosY;
 			WindowRect.yMax = WindowRect.y + CapCom.Settings.windowHeight;
+			TooltipsEnabled = CapCom.Settings.tooltipsEnabled;
 		}
 
 		protected override void OnDestroy()
@@ -437,7 +439,7 @@ namespace CapCom
 		private void closeButton(int id)
 		{
 			Rect r = new Rect(WindowRect.width - 60, 1, 24, 24);
-			if (GUI.Button(r, CapComSkins.settingsIcon, CapComSkins.textureButton))
+			if (GUI.Button(r, new GUIContent(CapComSkins.settingsIcon, "Settings Menu"), CapComSkins.textureButton))
 			{
 				if (settings == null)
 					settings = gameObject.AddComponent<CapComSettingsWindow>();
@@ -461,14 +463,14 @@ namespace CapCom
 
 			toggleIcon(r, t, CapCom.Settings.sortMode == 0);
 
-			if (GUI.Button(t, "", CapComSkins.iconButton))
+			if (GUI.Button(t, new GUIContent("", "Sort By Difficulty"), CapComSkins.iconButton))
 			{
 				CapCom.Settings.sortMode = 0;
 				CapCom.Settings.Save();
 				sortContracts();
 			}
 
-			if (GUI.Button(r, CapComSkins.sortStars, CapComSkins.iconButton))
+			if (GUI.Button(r, new GUIContent(CapComSkins.sortStars, "Sort By Difficulty") , CapComSkins.iconButton))
 			{
 				CapCom.Settings.sortMode = 0;
 				CapCom.Settings.Save();
@@ -476,11 +478,13 @@ namespace CapCom
 			}
 
 			r.x += 180;
+			r.y += 4;
+			r.height = 40;
 			t.x += 180;
 
 			toggleIcon(r, t, CapCom.Settings.sortMode == 4);
 
-			if (GUI.Button(t, "", CapComSkins.iconButton))
+			if (GUI.Button(t, new GUIContent("", "Sort By Agency"), CapComSkins.iconButton))
 			{
 				CapCom.Settings.sortMode = 4;
 				CapCom.Settings.Save();
@@ -489,7 +493,7 @@ namespace CapCom
 
 			GUI.DrawTextureWithTexCoords(r, CapComSkins.missionControlTexture, CapComSkins.flagRect);
 
-			if (GUI.Button(r, CapComSkins.currentFlag, CapComSkins.iconButton))
+			if (GUI.Button(r, new GUIContent(CapComSkins.currentFlag, "Sort By Agency"), CapComSkins.iconButton))
 			{
 				CapCom.Settings.sortMode = 4;
 				CapCom.Settings.Save();
@@ -497,19 +501,20 @@ namespace CapCom
 			}
 
 			r.x -= 90;
+			r.y -= 4;
 			r.width = 58;
 			r.height = 48;
 			t.x -= 95;
 
 			toggleIcon(r, t, CapCom.Settings.sortMode == 1 || CapCom.Settings.sortMode == 2 || CapCom.Settings.sortMode == 3);
 
-			if (GUI.Button(t, "", CapComSkins.iconButton))
+			if (GUI.Button(t, new GUIContent("", "Sort By Rewards"), CapComSkins.iconButton))
 			{
 				dropdown = !dropdown;
 				sortMenu = !sortMenu;
 			}
 
-			if (GUI.Button(r, "", CapComSkins.iconButton))
+			if (GUI.Button(r, new GUIContent("", "Sort By Rewards"), CapComSkins.iconButton))
 			{
 				dropdown = !dropdown;
 				sortMenu = !sortMenu;
@@ -560,9 +565,9 @@ namespace CapCom
 			r.x = 270;
 			r.y = 26;
 			r.width = 60;
-			r.height = 38;
+			r.height = 45;
 
-			if (GUI.Button(r, CapCom.Settings.ascending ? CapComSkins.orderAsc : CapComSkins.orderDesc, CapComSkins.textureButton))
+			if (GUI.Button(r, new GUIContent(CapCom.Settings.ascending ? CapComSkins.orderAsc : CapComSkins.orderDesc, "Ascending/Descending Order"), CapComSkins.textureButton))
 			{
 				CapCom.Settings.ascending = !CapCom.Settings.ascending;
 				CapCom.Settings.Save();
@@ -675,16 +680,16 @@ namespace CapCom
 
 				bool active = !CapCom.Settings.activeLimit || ContractSystem.Instance.GetActiveContractCount() < GameVariables.Instance.GetActiveContractsLimit(ScenarioUpgradeableFacilities.GetFacilityLevel(SpaceCenterFacility.MissionControl));
 
-				if (GUI.Button(r, "", CapComSkins.iconButton))
+				if (GUI.Button(r, new GUIContent("", "Accept"), CapComSkins.iconButton))
 				{
 					if (active)
 						currentContract.Root.Accept();
 				}
-				drawTextureButton(r, CapComSkins.acceptButtonActive, CapComSkins.acceptButtonHover, CapComSkins.acceptButtonNormal, CapComSkins.acceptButtonInactive, CapComSkins.missionControlTexture, active);
+				drawTextureButton(r, CapComSkins.acceptButtonActive, CapComSkins.acceptButtonHover, CapComSkins.acceptButtonNormal, CapComSkins.acceptButtonInactive, CapComSkins.missionControlTexture, !active);
 
 				r.y += 65;
 
-				if (GUI.Button(r, "", CapComSkins.iconButton))
+				if (GUI.Button(r, new GUIContent("", "Decline"), CapComSkins.iconButton))
 				{
 					if (CapCom.Settings.forceDecline || currentContract.CanBeDeclined)
 					{
@@ -705,7 +710,7 @@ namespace CapCom
 
 				Rect r = new Rect(WindowRect.width - 60, 100, 44, 44);
 
-				if (GUI.Button(r, "", CapComSkins.iconButton))
+				if (GUI.Button(r, new GUIContent("", "Cancel"), CapComSkins.iconButton))
 				{
 					if (currentContract.CanBeCancelled)
 					{
@@ -835,8 +840,9 @@ namespace CapCom
 				if (CapCom.Settings.hideNotes)
 				{
 					Rect r = GUILayoutUtility.GetLastRect();
-					r.x += 120;
-					r.width = 13;
+					r.x += 100;
+					r.y += 2;
+					r.width = 16;
 					r.height = 16;
 					if (GUI.Button(r, currentContract.ShowNotes ? CapComSkins.notesMinusIcon : CapComSkins.notesPlusIcon, CapComSkins.textureButton))
 						currentContract.ShowNotes = !currentContract.ShowNotes;
@@ -902,7 +908,7 @@ namespace CapCom
 					{
 						b.x -= 28;
 						b.height = 16;
-						b.width = 13;
+						b.width = 16;
 						if (GUI.Button(b, cp.ShowNotes ? CapComSkins.notesMinusIcon :CapComSkins.notesPlusIcon, CapComSkins.textureButton))
 							cp.ShowNotes = !cp.ShowNotes;
 
@@ -916,8 +922,8 @@ namespace CapCom
 					{
 						b.x -= 14;
 						b.y += 4;
-						b.height = 10;
-						b.width = 10;
+						b.height = 12;
+						b.width = 12;
 						GUI.DrawTexture(b, parameterStateIcon(cp.Param));
 					}
 
@@ -1038,10 +1044,10 @@ namespace CapCom
 			{
 				if (sortMenu)
 				{
-					ddRect = new Rect(65, 100, 100, 100);
+					ddRect = new Rect(88, 68, 106, 100);
 					GUI.Box(ddRect, "");
-					Rect r = new Rect(ddRect.x + 5, ddRect.y + 5, 90, 20);
-					GUI.Label(r, "Sort Options:");
+					Rect r = new Rect(ddRect.x + 5, ddRect.y + 5, 100, 20);
+					GUI.Label(r, "Sort Options:", CapComSkins.titleText);
 					for (int i = 1; i < 4; i++)
 					{
 						r.y += 22;
