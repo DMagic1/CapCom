@@ -33,11 +33,6 @@ license][CCLicense]
 ### 
 -------------------------------
 
-#### Header and footer bars
-![][CWP:annotated-breakout]
-
-#### Window content
-![][CWP:annotated-interior]
 
 #### Sort Bar
 ![][CC:sort-bar]
