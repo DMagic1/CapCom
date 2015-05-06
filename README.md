@@ -7,7 +7,6 @@
 ![][CC:header]
 
 [![][shield:support-toolbar]][toolbar:release]&nbsp;
-[![][shield:support-crm]][crm:release]&nbsp;
 [![][shield:support-cwp]][cwp:release]&nbsp;
 
 
