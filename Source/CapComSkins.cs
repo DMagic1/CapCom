@@ -1,4 +1,32 @@
-﻿using System;
+﻿#region license
+/*The MIT License (MIT)
+CapComSkins - Store and initialize styles and textures
+
+Copyright (c) 2015 DMagic
+
+KSP Plugin Framework by TriggerAu, 2014: http://forum.kerbalspaceprogram.com/threads/66503-KSP-Plugin-Framework
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
+#endregion
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using CapCom.Framework;
@@ -20,17 +48,13 @@ namespace CapCom
 		internal static GUIStyle titleButtonBehind;
 		internal static GUIStyle textureButton;
 		internal static GUIStyle tabButton;
+		internal static GUIStyle tabButtonInactive;
 		internal static GUIStyle menuButton;
 		internal static GUIStyle keycodeButton;
 		internal static GUIStyle warningButton;
 
 		//Icon Button styles
 		internal static GUIStyle iconButton;
-		internal static GUIStyle acceptButton;
-		internal static GUIStyle declineButton;
-		internal static GUIStyle cancelButton;
-		internal static GUIStyle tabButtonKSP;
-		internal static GUIStyle titleButtonKSP;
 
 		//Text label styles
 		internal static GUIStyle headerText;
@@ -60,13 +84,10 @@ namespace CapCom
 		internal static Texture2D windowTex;
 		internal static Texture2D buttonHover;
 		internal static Texture2D fundsGreen;
-		internal static Texture2D fundsRed;
-		internal static Texture2D repGreen;
 		internal static Texture2D repRed;
 		internal static Texture2D science;
 		internal static Texture2D orderAsc;
 		internal static Texture2D orderDesc;
-		internal static Texture2D tooltipIcon;
 		internal static Texture2D goldStar;
 		internal static Texture2D goldStarTwo;
 		internal static Texture2D goldStarThree;
@@ -80,6 +101,14 @@ namespace CapCom
 		internal static Texture2D emptyBox;
 		internal static Texture2D notesPlusIcon;
 		internal static Texture2D notesMinusIcon;
+		internal static Texture2D sortStars;
+		internal static Texture2D sortRewards;
+		internal static Texture2D sortAgents;
+		internal static Texture2D toggleOn;
+		internal static Texture2D toggleOff;
+		internal static Texture2D toggleHoverOff;
+		internal static Texture2D toggleHoverOn;
+		internal static Texture2D currentFlag;
 
 		//Mission Control Center texture map
 		internal static Texture2D missionControlTexture;
@@ -88,14 +117,17 @@ namespace CapCom
 		internal static Rect acceptButtonNormal = new Rect(0, 0.3671875f, 0.04296875f, 0.0439456125f);
 		internal static Rect acceptButtonHover = new Rect(0.0478515625f, 0.3671875f, 0.04296875f, 0.0439456125f);
 		internal static Rect acceptButtonActive = new Rect(0.095703125f, 0.3671875f, 0.04296875f, 0.0439456125f);
+		internal static Rect acceptButtonInactive = new Rect(0, 0.4169921875f, 0.04296875f, 0.0439456125f);
 
 		internal static Rect declineButtonNormal = new Rect(0.0478515625f, 0.4169921875f, 0.04296875f, 0.0439456125f);
 		internal static Rect declineButtonHover = new Rect(0.095703125f, 0.4169921875f, 0.04296875f, 0.0439456125f);
 		internal static Rect declineButtonActive = new Rect(0, 0.466796875f, 0.04296875f, 0.0439456125f);
+		internal static Rect declineButtonInactive = new Rect(0.0478515625f, 0.466796875f, 0.04296875f, 0.0439456125f);
 
 		internal static Rect cancelButtonNormal = new Rect(0.095703125f, 0.466796875f, 0.04296875f, 0.0439456125f);
 		internal static Rect cancelButtonHover = new Rect(0, 0.5166015625f, 0.04296875f, 0.0439456125f);
 		internal static Rect cancelButtonActive = new Rect(0.0478515625f, 0.5166015625f, 0.04296875f, 0.0439456125f);
+		internal static Rect cancelButtonInactive = new Rect(0.095703125f, 0.5166015625f, 0.04296875f, 0.0439456125f);
 
 		internal static Rect titleButtonFlagNormal = new Rect(0, 0.3125f, 0.0751953125f, 0.0498046875f);
 		internal static Rect titleButtonFlagActive = new Rect(0, 0.2626953125f, 0.0751953125f, 0.0498046875f);
@@ -126,13 +158,10 @@ namespace CapCom
 			toolbarIcon = GameDatabase.Instance.GetTexture("CapCom/Textures/CapComAppIcon", false);
 			buttonHover = GameDatabase.Instance.GetTexture("CapCom/Textures/ButtonHover", false);
 			fundsGreen = GameDatabase.Instance.GetTexture("CapCom/Textures/FundsGreenIcon", false);
-			fundsRed = GameDatabase.Instance.GetTexture("CapCom/Textures/FundsRedIcon", false);
-			repGreen = GameDatabase.Instance.GetTexture("CapCom/Textures/RepGreenIcon", false);
 			repRed = GameDatabase.Instance.GetTexture("CapCom/Textures/RepRedIcon", false);
 			science = GameDatabase.Instance.GetTexture("CapCom/Textures/ScienceIcon", false);
 			orderAsc = GameDatabase.Instance.GetTexture("CapCom/Textures/OrderAsc", false);
 			orderDesc = GameDatabase.Instance.GetTexture("CapCom/Textures/OrderDesc", false);
-			tooltipIcon = GameDatabase.Instance.GetTexture("CapCom/Textures/ToolTipIcon", false);
 			goldStar = GameDatabase.Instance.GetTexture("CapCom/Textures/GoldStar", false);
 			goldStarTwo = GameDatabase.Instance.GetTexture("CapCom/Textures/GoldStarTwo", false);
 			goldStarThree = GameDatabase.Instance.GetTexture("CapCom/Textures/GoldStarThree", false);
@@ -146,6 +175,14 @@ namespace CapCom
 			emptyBox = GameDatabase.Instance.GetTexture("CapCom/Textures/EmptyBoxIcon", false);
 			notesPlusIcon = GameDatabase.Instance.GetTexture("CapCom/Textures/OpenNotesIcon", false);
 			notesMinusIcon = GameDatabase.Instance.GetTexture("CapCom/Textures/CloseNotesIcon", false);
+			sortStars = GameDatabase.Instance.GetTexture("CapCom/Textures/SortDifficultyIcon", false);
+			sortRewards = GameDatabase.Instance.GetTexture("CapCom/Textures/SortRewardsIcon", false);
+			sortAgents = GameDatabase.Instance.GetTexture("CapCom/Textures/SortRewardsIcon", false);
+
+			toggleOn = CC_SkinsLibrary.DefKSPSkin.toggle.onNormal.background;
+			toggleOff = CC_SkinsLibrary.DefKSPSkin.toggle.normal.background;
+			toggleHoverOff = CC_SkinsLibrary.DefKSPSkin.toggle.hover.background;
+			toggleHoverOn = CC_SkinsLibrary.DefKSPSkin.toggle.onHover.background;
 
 			initializeSkins();
 		}
@@ -182,9 +219,13 @@ namespace CapCom
 			titleButtonBehind.hover.textColor = titleButtonBehind.normal.textColor;
 
 			tabButton = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.button);
-			tabButton.fontSize = 12 + fontSize;
+			tabButton.fontSize = 14 + fontSize;
 			tabButton.fontStyle = FontStyle.Bold;
-			tabButton.normal.textColor = XKCDColors.FadedRed;
+			tabButton.normal.textColor = XKCDColors.White;
+
+			tabButtonInactive = new GUIStyle(tabButton);
+			tabButtonInactive.fontSize = 12 + fontSize;
+			tabButtonInactive.normal.textColor = XKCDColors.LightGrey;
 
 			textureButton = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.button);
 			textureButton.fontSize = 14;
@@ -196,7 +237,8 @@ namespace CapCom
 
 			menuButton = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.label);
 			menuButton.fontSize = 12 + fontSize;
-			menuButton.padding = new RectOffset(2, 2, 2, 2);
+			menuButton.fontStyle = FontStyle.Bold;
+			menuButton.padding = new RectOffset(26, 2, 2, 2);
 			menuButton.normal.textColor = XKCDColors.White;
 			menuButton.hover.textColor = XKCDColors.AlmostBlack;
 			Texture2D sortBackground = new Texture2D(1, 1);

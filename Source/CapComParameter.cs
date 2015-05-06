@@ -1,4 +1,32 @@
-﻿using System;
+﻿#region license
+/*The MIT License (MIT)
+CapComParameter - Object to store cached data about a contract parameter
+
+Copyright (c) 2015 DMagic
+
+KSP Plugin Framework by TriggerAu, 2014: http://forum.kerbalspaceprogram.com/threads/66503-KSP-Plugin-Framework
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
+#endregion
+
+using System;
 using System.Collections.Generic;
 using Contracts;
 using CapCom.Framework;
@@ -103,19 +131,27 @@ namespace CapCom
 		private void paramRewards()
 		{
 			CurrencyModifierQuery currencyQuery = CurrencyModifierQuery.RunQuery(TransactionReasons.ContractReward, (float)param.FundsCompletion, param.ScienceCompletion, param.ReputationCompletion);
-			fundsRew = "+ " + param.FundsCompletion.ToString("N0");
+			fundsRew = "";
+			if (param.FundsCompletion != 0)
+				fundsRew = "+ " + param.FundsCompletion.ToString("N0");
 			fundsRewStrat = currencyQuery.GetEffectDelta(Currency.Funds);
 			if (fundsRewStrat != 0f)
 			{
 				fundsRew = string.Format("+ {0:N0} ({1:N0})", param.FundsCompletion + fundsRewStrat, fundsRewStrat);
 			}
-			repRew = "+ " + param.ReputationCompletion.ToString("N0");
+
+			repRew = "";
+			if (param.ReputationCompletion != 0)
+				repRew = "+ " + param.ReputationCompletion.ToString("N0");
 			repRewStrat = currencyQuery.GetEffectDelta(Currency.Reputation);
 			if (repRewStrat != 0f)
 			{
 				repRew = string.Format("+ {0:N0} ({1:N0})", param.ReputationCompletion + repRewStrat, repRewStrat);
 			}
-			sciRew = "+ " + param.ScienceCompletion.ToString("N0");
+
+			sciRew = "";
+			if (param.ScienceCompletion != 0)
+				sciRew = "+ " + param.ScienceCompletion.ToString("N0");
 			sciRewStrat = currencyQuery.GetEffectDelta(Currency.Science);
 			if (sciRewStrat != 0f)
 			{
@@ -126,13 +162,19 @@ namespace CapCom
 		private void paramPenalties()
 		{
 			CurrencyModifierQuery currencyQuery = CurrencyModifierQuery.RunQuery(TransactionReasons.ContractPenalty, (float)param.FundsFailure, 0f, param.ReputationFailure);
-			fundsPen = "- " + param.FundsFailure.ToString("N0");
+
+			fundsPen = "";
+			if (param.FundsFailure != 0)
+				fundsPen = "- " + param.FundsFailure.ToString("N0");
 			fundsPenStrat = currencyQuery.GetEffectDelta(Currency.Funds);
 			if (fundsPenStrat != 0f)
 			{
 				fundsPen = string.Format("- {0:N0} ({1:N0})", param.FundsFailure + fundsPenStrat, fundsPenStrat);
 			}
-			repPen = "- " + param.ReputationFailure.ToString("N0");
+
+			repPen = "";
+			if (param.ReputationFailure != 0)
+				repPen = "- " + param.ReputationFailure.ToString("N0");
 			repPenStrat = currencyQuery.GetEffectDelta(Currency.Reputation);
 			if (repPenStrat != 0f)
 			{

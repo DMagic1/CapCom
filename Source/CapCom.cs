@@ -1,4 +1,32 @@
-﻿using System;
+﻿#region license
+/*The MIT License (MIT)
+CapCom - Main control MonoBehaviour for contract information
+
+Copyright (c) 2015 DMagic
+
+KSP Plugin Framework by TriggerAu, 2014: http://forum.kerbalspaceprogram.com/threads/66503-KSP-Plugin-Framework
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
+#endregion
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +35,7 @@ using CapCom.Framework;
 using CapCom.Toolbar;
 using Contracts;
 using Contracts.Parameters;
+using Contracts.Agents;
 using FinePrint;
 using FinePrint.Contracts.Parameters;
 using FinePrint.Utilities;
@@ -14,7 +43,7 @@ using UnityEngine;
 
 namespace CapCom
 {
-	[CC_KSPAddonImproved(CC_KSPAddonImproved.Startup.TimeElapses, false)]
+	[CC_KSPAddonImproved(CC_KSPAddonImproved.Startup.TimeElapses | CC_KSPAddonImproved.Startup.Editor, false)]
 	public class CapCom : CC_MBE
 	{
 		private static CapCom instance;
@@ -45,6 +74,19 @@ namespace CapCom
 				}
 			}
 
+			CapComSkins.currentFlag = GameDatabase.Instance.GetTexture(HighLogic.CurrentGame.flagURL, false);
+
+			if (CapComSkins.currentFlag == null)
+			{
+				int i = 0;
+				while (CapComSkins.currentFlag == null && i < AgentList.Instance.Agencies.Count)
+				{
+					CapComSkins.currentFlag = AgentList.Instance.Agencies[i].LogoScaled;
+					i++;
+				}
+
+			}
+
 			instance = this;
 
 			Assembly assembly = AssemblyLoader.loadedAssemblies.GetByAssembly(Assembly.GetExecutingAssembly()).assembly;
@@ -66,18 +108,19 @@ namespace CapCom
 
 			window = gameObject.AddComponent<CapComWindow>();
 
-			if (settings.stockToolbar || !ToolbarManager.ToolbarAvailable)
-			{
-				appButton = gameObject.AddComponent<CC_StockToolbar>();
-				if (toolbar != null)
-					Destroy(toolbar);
-			}
-			else if (ToolbarManager.ToolbarAvailable && settings.stockToolbar)
+			if (ToolbarManager.ToolbarAvailable && !settings.stockToolbar)
 			{
 				toolbar = gameObject.AddComponent<CC_Toolbar>();
 				if (appButton != null)
 					Destroy(appButton);
 			}
+			else
+			{
+				appButton = gameObject.AddComponent<CC_StockToolbar>();
+				if (toolbar != null)
+					Destroy(toolbar);
+			}
+
 
 			GameEvents.Contract.onAccepted.Add(onAccepted);
 			GameEvents.Contract.onCompleted.Add(onCompleted);
@@ -91,14 +134,14 @@ namespace CapCom
 
 		protected override void OnDestroy()
 		{
-			if (window != null)
-				Destroy(window);
-
 			if (appButton != null)
 				Destroy(appButton);
 
 			if (toolbar != null)
 				Destroy(toolbar);
+
+			if (window != null)
+				Destroy(window);
 
 			GameEvents.Contract.onAccepted.Remove(onAccepted);
 			GameEvents.Contract.onCompleted.Remove(onCompleted);
@@ -422,6 +465,7 @@ namespace CapCom
 		{
 			int i = 0;
 
+			//Agency modifiers don't seem to work unless I wait a few frames before loading contracts
 			while (i < 5)
 			{
 				i++;
@@ -546,7 +590,6 @@ namespace CapCom
 				WaypointManager.AddWaypoint(p.Way);
 			}
 		}
-
 
 		#endregion
 
