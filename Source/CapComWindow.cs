@@ -866,16 +866,16 @@ namespace CapCom
 
 					drawParameter(cp);
 
-					for (int j = 0; j < cp.ParameterCount; j++)
-					{
-						CapComParameter subP = cp.getParameter(j);
-						if (subP == null)
-							continue;
-						if (subP.Level > 4)
-							continue;
+					//for (int j = 0; j < cp.ParameterCount; j++)
+					//{
+					//	CapComParameter subP = cp.getParameter(j);
+					//	if (subP == null)
+					//		continue;
+					//	if (subP.Level > 4)
+					//		continue;
 
-						drawParameter(subP);
-					}
+					//	drawParameter(subP);
+					//}
 				}
 			}
 
@@ -938,6 +938,17 @@ namespace CapCom
 					sizedContent(cp.FundsPen, "", cp.RepPen, TransactionReasons.ContractPenalty);
 				GUILayout.EndVertical();
 			GUILayout.EndHorizontal();
+
+			for (int j = 0; j < cp.ParameterCount; j++)
+			{
+				CapComParameter subP = cp.getParameter(j);
+				if (subP == null)
+					continue;
+				if (subP.Level > 4)
+					continue;
+
+				drawParameter(subP);
+			}
 		}
 
 		private void currentAgentInfo(int id)
