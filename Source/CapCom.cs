@@ -52,7 +52,6 @@ namespace CapCom
 		private CapComWindow window;
 		private CC_StockToolbar appButton;
 		private CC_Toolbar toolbar;
-		private bool loaded;
 		private Dictionary<Guid, CapComContract> activeContracts = new Dictionary<Guid, CapComContract>();
 		private Dictionary<Guid, CapComContract> offeredContracts = new Dictionary<Guid, CapComContract>();
 		private Dictionary<Guid, CapComContract> completedContracts = new Dictionary<Guid, CapComContract>();
@@ -84,10 +83,7 @@ namespace CapCom
 					CapComSkins.currentFlag = AgentList.Instance.Agencies[i].LogoScaled;
 					i++;
 				}
-
 			}
-
-			instance = this;
 
 			Assembly assembly = AssemblyLoader.loadedAssemblies.GetByAssembly(Assembly.GetExecutingAssembly()).assembly;
 			var ainfoV = Attribute.GetCustomAttribute(assembly, typeof(AssemblyInformationalVersionAttribute)) as AssemblyInformationalVersionAttribute;
@@ -100,6 +96,8 @@ namespace CapCom
 
 		protected override void Start()
 		{
+			instance = this;
+
 			if (HighLogic.CurrentGame.Mode != Game.Modes.CAREER)
 				Destroy(this);
 			
@@ -120,7 +118,6 @@ namespace CapCom
 				if (toolbar != null)
 					Destroy(toolbar);
 			}
-
 
 			GameEvents.Contract.onAccepted.Add(onAccepted);
 			GameEvents.Contract.onCompleted.Add(onCompleted);
@@ -180,11 +177,6 @@ namespace CapCom
 		{
 			get { return appButton; }
 			set { appButton = value; }
-		}
-
-		public bool Loaded
-		{
-			get { return loaded; }
 		}
 
 		public static string Version
@@ -522,7 +514,11 @@ namespace CapCom
 				}
 			}
 
-			loaded = true;
+			if (instance == null)
+				instance = this;
+
+			LogFormatted("CapCom Contracts Loaded...");
+
 			window.refreshContracts();
 		}
 
