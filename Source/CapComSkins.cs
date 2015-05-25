@@ -102,8 +102,7 @@ namespace CapCom
 		internal static Texture2D notesPlusIcon;
 		internal static Texture2D notesMinusIcon;
 		internal static Texture2D sortStars;
-		internal static Texture2D sortRewards;
-		internal static Texture2D sortAgents;
+		internal static Texture2D sortPlanet;
 		internal static Texture2D toggleOn;
 		internal static Texture2D toggleOff;
 		internal static Texture2D toggleHoverOff;
@@ -176,8 +175,7 @@ namespace CapCom
 			notesPlusIcon = GameDatabase.Instance.GetTexture("CapCom/Textures/OpenNotesIcon", false);
 			notesMinusIcon = GameDatabase.Instance.GetTexture("CapCom/Textures/CloseNotesIcon", false);
 			sortStars = GameDatabase.Instance.GetTexture("CapCom/Textures/SortDifficultyIcon", false);
-			sortRewards = GameDatabase.Instance.GetTexture("CapCom/Textures/SortRewardsIcon", false);
-			sortAgents = GameDatabase.Instance.GetTexture("CapCom/Textures/SortRewardsIcon", false);
+			sortPlanet = GameDatabase.Instance.GetTexture("CapCom/Textures/SortPlanetsIcon", false);
 
 			toggleOn = CC_SkinsLibrary.DefKSPSkin.toggle.onNormal.background;
 			toggleOff = CC_SkinsLibrary.DefKSPSkin.toggle.normal.background;
