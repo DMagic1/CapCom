@@ -33,6 +33,7 @@ using CapCom.Framework;
 using FinePrint;
 using FinePrint.Contracts.Parameters;
 using System.Reflection;
+using UnityEngine;
 
 namespace CapCom
 {
@@ -53,8 +54,26 @@ namespace CapCom
 		{
 			root = r;
 			param = p;
-			name = param.Title;
-			notes = param.Notes;
+			try
+			{
+				name = param.Title;
+			}
+			catch (Exception e)
+			{
+				Debug.LogError("Parameter Title not set, using type name..." + e);
+				name = param.GetType().Name;
+			}
+
+			try
+			{
+				notes = param.Notes;
+			}
+			catch (Exception e)
+			{
+				Debug.LogError("Parameter Notes not set, using blank..." + e);
+				name = "";
+			}
+
 			level = l;
 
 			if (level < 4)

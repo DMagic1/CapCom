@@ -37,6 +37,7 @@ using FinePrint.Contracts;
 using FinePrint.Contracts.Parameters;
 using FinePrint.Utilities;
 using Contracts.Agents;
+using UnityEngine;
 
 using CapCom.Framework;
 
@@ -62,12 +63,66 @@ namespace CapCom
 		public CapComContract(Contract c)
 		{
 			root = c;
-			id = root.ContractGuid;
-			name = root.Title;
-			notes = root.Notes;
-			briefing = root.Description;
-			canBeDeclined = root.CanBeDeclined();
-			canBeCancelled = root.CanBeCancelled();
+			try
+			{
+				id = root.ContractGuid;
+			}
+			catch (Exception e)
+			{
+				Debug.LogError("Contract Guid not set, skipping...: " + e);
+				root = null;
+				return;
+			}
+
+			try
+			{
+				name = root.Title;
+			}
+			catch (Exception e)
+			{
+				Debug.LogError("Contract Title not set, using type name..: " + e);
+				name = root.GetType().Name;
+			}
+
+			try
+			{
+				notes = root.Notes;
+			}
+			catch (Exception e)
+			{
+				Debug.LogError("Contract Notes not set, blank notes used...: " + e);
+				notes = "";
+			}
+
+			try
+			{
+				briefing = root.Description;
+			}
+			catch (Exception e)
+			{
+				Debug.LogError("Contract Briefing not set, blank briefing used...: " + e);
+				briefing = "";
+			}
+
+			try
+			{
+				canBeDeclined = root.CanBeDeclined();
+			}
+			catch (Exception e)
+			{
+				Debug.LogError("Contract Decline state not set, using true...: " + e);
+				canBeDeclined = true;
+			}
+
+			try
+			{
+				canBeCancelled = root.CanBeCancelled();
+			}
+			catch (Exception e)
+			{
+				Debug.LogError("Contract Cancel state not set, using true...: " + e);
+				canBeCancelled = true;
+			}
 
 			if (root.Agent != null)
 				agent = root.Agent;
