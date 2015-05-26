@@ -354,11 +354,17 @@ namespace CapCom
 
 		private void onAccepted(Contract c)
 		{
+			if (c == null)
+			{
+				LogFormatted("Error in loading null accepted contract");
+				return;
+			}
+
 			CapComContract cc = getOfferedContract(c.ContractGuid);
 
 			if (cc == null)
 			{
-				LogFormatted("");
+				LogFormatted("Error in accessing accepted contract");
 				return;
 			}
 
@@ -373,11 +379,17 @@ namespace CapCom
 
 		private void onCompleted(Contract c)
 		{
+			if (c == null)
+			{
+				LogFormatted("Error in loading null completed contract");
+				return;
+			}
+
 			CapComContract cc = getActiveContract(c.ContractGuid);
 
 			if (cc == null)
 			{
-				LogFormatted("");
+				LogFormatted("Error in accessing completed contract");
 				return;
 			}
 
@@ -389,11 +401,17 @@ namespace CapCom
 
 		private void onDeclined(Contract c)
 		{
+			if (c == null)
+			{
+				LogFormatted("Error in loading null declined contract");
+				return;
+			}
+
 			CapComContract cc = getOfferedContract(c.ContractGuid);
 
 			if (cc == null)
 			{
-				LogFormatted("");
+				LogFormatted("Error in accessing declined contract");
 				return;
 			}
 
@@ -403,11 +421,17 @@ namespace CapCom
 
 		private void onFailed(Contract c)
 		{
+			if (c == null)
+			{
+				LogFormatted("Error in loading null failed contract");
+				return;
+			}
+
 			CapComContract cc = getActiveContract(c.ContractGuid);
 
 			if (cc == null)
 			{
-				LogFormatted("");
+				LogFormatted("Error in accessing failed contract");
 				return;
 			}
 
@@ -419,11 +443,17 @@ namespace CapCom
 
 		private void onFinished(Contract c)
 		{
+			if (c == null)
+			{
+				LogFormatted("Error in loading null finished contract");
+				return;
+			}
+
 			CapComContract cc = getOfferedContract(c.ContractGuid);
 
 			if (cc == null)
 			{
-				LogFormatted("");
+				LogFormatted("Error in accessing finished contract");
 				return;
 			}
 
@@ -433,7 +463,19 @@ namespace CapCom
 
 		private void onOffered(Contract c)
 		{
+			if (c == null)
+			{
+				LogFormatted("Error in loading null offered contract");
+				return;
+			}
+
 			CapComContract cc = new CapComContract(c);
+
+			if (cc == null)
+			{
+				LogFormatted("Error in accessing offered contract");
+				return;
+			}
 
 			addOfferedContract(cc);
 			refreshList();
@@ -458,15 +500,26 @@ namespace CapCom
 			int i = 0;
 
 			//Agency modifiers don't seem to work unless I wait a few frames before loading contracts
-			while (i < 5)
-			{
+			while (i < 5)			{
 				i++;
 				yield return null;
 			}
 
 			foreach(Contract c in ContractSystem.Instance.Contracts)
 			{
+				if (c == null)
+				{
+					LogFormatted("Error in loading null contract from master list");
+					continue;
+				}
+
 				CapComContract cc = new CapComContract(c);
+
+				if (cc.Root == null)
+				{
+					LogFormatted("Error while loading contract of type {0}; skipping", c.GetType().Name);
+					continue;
+				}
 
 				switch (cc.Root.ContractState)
 				{
@@ -491,7 +544,19 @@ namespace CapCom
 
 			foreach(Contract c in ContractSystem.Instance.ContractsFinished)
 			{
+				if (c == null)
+				{
+					LogFormatted("Error in loading contract from finished list");
+					continue;
+				}
+
 				CapComContract cc = new CapComContract(c);
+
+				if (cc.Root == null)
+				{
+					LogFormatted("Error while loading finished contract of type {0}; skipping", c.GetType().Name);
+					continue;
+				}
 
 				switch (cc.Root.ContractState)
 				{
@@ -513,9 +578,6 @@ namespace CapCom
 						continue;
 				}
 			}
-
-			if (instance == null)
-				instance = this;
 
 			LogFormatted("CapCom Contracts Loaded...");
 
