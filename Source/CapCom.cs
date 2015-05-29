@@ -225,7 +225,7 @@ namespace CapCom
 			if (offeredContracts.ContainsKey(id))
 				return offeredContracts[id];
 			else
-				LogFormatted("No Offerd Contract Of ID: [{0}] Found", id);
+				LogFormatted("No Offered Contract Of ID: [{0}] Found", id);
 
 			return null;
 		}
@@ -449,7 +449,7 @@ namespace CapCom
 				return;
 			}
 
-			CapComContract cc = getOfferedContract(c.ContractGuid);
+			CapComContract cc = getActiveContract(c.ContractGuid);
 
 			if (cc == null)
 			{
