@@ -143,7 +143,7 @@ license][CCLicense]
 [CKAN:org]: http://ksp-ckan.org/
 [CCLicense]: https://github.com/DMagic1/CapCom/blob/master/LICENSE
 
-[CC:header]: http://i.imgur.com/xS0uSj8.png
+[CC:header]: http://i.imgur.com/uIUDjTi.png
 [CC:settings-full]: http://i.imgur.com/qiEHuI7.png
 [CC:sort-bar]: http://i.imgur.com/jpCV6Pe.png
 [CC:sort-rewards]: http://i.imgur.com/p1NNhwy.png
