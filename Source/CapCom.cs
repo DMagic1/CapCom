@@ -446,7 +446,8 @@ namespace CapCom
 			int i = 0;
 
 			//Agency modifiers don't seem to work unless I wait a few frames before loading contracts
-			while (i < 5)			{
+			while (i < 5)
+			{
 				i++;
 				yield return null;
 			}
