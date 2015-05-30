@@ -52,7 +52,6 @@ namespace CapCom
 		private CapComWindow window;
 		private CC_StockToolbar appButton;
 		private CC_Toolbar toolbar;
-		private bool loaded;
 		private Dictionary<Guid, CapComContract> activeContracts = new Dictionary<Guid, CapComContract>();
 		private Dictionary<Guid, CapComContract> offeredContracts = new Dictionary<Guid, CapComContract>();
 		private Dictionary<Guid, CapComContract> completedContracts = new Dictionary<Guid, CapComContract>();
@@ -84,10 +83,7 @@ namespace CapCom
 					CapComSkins.currentFlag = AgentList.Instance.Agencies[i].LogoScaled;
 					i++;
 				}
-
 			}
-
-			instance = this;
 
 			Assembly assembly = AssemblyLoader.loadedAssemblies.GetByAssembly(Assembly.GetExecutingAssembly()).assembly;
 			var ainfoV = Attribute.GetCustomAttribute(assembly, typeof(AssemblyInformationalVersionAttribute)) as AssemblyInformationalVersionAttribute;
@@ -100,6 +96,8 @@ namespace CapCom
 
 		protected override void Start()
 		{
+			instance = this;
+
 			if (HighLogic.CurrentGame.Mode != Game.Modes.CAREER)
 				Destroy(this);
 			
@@ -121,11 +119,8 @@ namespace CapCom
 					Destroy(toolbar);
 			}
 
-
 			GameEvents.Contract.onAccepted.Add(onAccepted);
-			GameEvents.Contract.onCompleted.Add(onCompleted);
 			GameEvents.Contract.onDeclined.Add(onDeclined);
-			GameEvents.Contract.onFailed.Add(onFailed);
 			GameEvents.Contract.onFinished.Add(onFinished);
 			GameEvents.Contract.onOffered.Add(onOffered);
 			GameEvents.Contract.onContractsLoaded.Add(onContractsLoaded);
@@ -144,9 +139,7 @@ namespace CapCom
 				Destroy(window);
 
 			GameEvents.Contract.onAccepted.Remove(onAccepted);
-			GameEvents.Contract.onCompleted.Remove(onCompleted);
 			GameEvents.Contract.onDeclined.Remove(onDeclined);
-			GameEvents.Contract.onFailed.Remove(onFailed);
 			GameEvents.Contract.onFinished.Remove(onFinished);
 			GameEvents.Contract.onOffered.Remove(onOffered);
 			GameEvents.Contract.onContractsLoaded.Remove(onContractsLoaded);
@@ -182,155 +175,150 @@ namespace CapCom
 			set { appButton = value; }
 		}
 
-		public bool Loaded
-		{
-			get { return loaded; }
-		}
-
 		public static string Version
 		{
 			get { return version; }
 		}
 
-		public CapComContract getActiveContract(Guid id)
+		public CapComContract getActiveContract(Guid id, bool warn = false)
 		{
 			if (activeContracts.ContainsKey(id))
 				return activeContracts[id];
-			else
+			else if (warn)
 				LogFormatted("No Active Contract Of ID: [{0}] Found", id);
 
 			return null;
 		}
 
-		public bool addActiveContract(CapComContract c)
+		public bool addActiveContract(CapComContract c, bool warn = false)
 		{
 			if (!activeContracts.ContainsKey(c.ID))
 			{
 				activeContracts.Add(c.ID, c);
 				return true;
 			}
-			else
+			else if (warn)
 				LogFormatted("Active Contract List Already Has Contract [{0} ; ID: {1}]", c.Name, c.ID);
 
 			return false;
 		}
 
-		public bool removeActiveContract(CapComContract c)
+		public bool removeActiveContract(CapComContract c, bool warn = false)
 		{
 			if (activeContracts.ContainsKey(c.ID))
 			{
 				activeContracts.Remove(c.ID);
 				return true;
 			}
-			else
+			else if (warn)
 				LogFormatted("Contract Not Found In Active Contract List [{0} ; ID: {1}]", c.Name, c.ID);
 
 			return false;
 		}
 
-		public CapComContract getOfferedContract(Guid id)
+		public CapComContract getOfferedContract(Guid id, bool warn = false)
 		{
 			if (offeredContracts.ContainsKey(id))
 				return offeredContracts[id];
-			else
-				LogFormatted("No Offerd Contract Of ID: [{0}] Found", id);
+			else if (warn)
+				LogFormatted("No Offered Contract Of ID: [{0}] Found", id);
 
 			return null;
 		}
 
-		public bool addOfferedContract(CapComContract c)
+		public bool addOfferedContract(CapComContract c, bool warn = false)
 		{
 			if (!offeredContracts.ContainsKey(c.ID))
 			{
 				offeredContracts.Add(c.ID, c);
 				return true;
 			}
-			else
+			else if (warn)
 				LogFormatted("Offered Contract List Already Has Contract [{0} ; ID: {1}]", c.Name, c.ID);
 
 			return false;
 		}
 
-		public bool removeOfferedContract(CapComContract c)
+		public bool removeOfferedContract(CapComContract c, bool warn = false)
 		{
 			if (offeredContracts.ContainsKey(c.ID))
 			{
 				offeredContracts.Remove(c.ID);
 				return true;
 			}
-			else
+			else if (warn)
 				LogFormatted("Contract Not Found In Offered Contract List [{0} ; ID: {1}]", c.Name, c.ID);
 
 			return false;
 		}
 
-		public CapComContract getCompletedContract(Guid id)
+		public CapComContract getCompletedContract(Guid id, bool warn = false)
 		{
 			if (completedContracts.ContainsKey(id))
 				return completedContracts[id];
-			else
+			else if (warn)
 				LogFormatted("No Completed Contract Of ID: [{0}] Found", id);
 
 			return null;
 		}
 
-		public bool addCompletedContract(CapComContract c)
+		public bool addCompletedContract(CapComContract c, bool warn = false)
 		{
 			if (!completedContracts.ContainsKey(c.ID))
 			{
 				completedContracts.Add(c.ID, c);
 				return true;
 			}
-			else
+			else if (warn)
 				LogFormatted("Completed Contract List Already Has Contract [{0} ; ID: {1}]", c.Name, c.ID);
 
 			return false;
 		}
 
-		public bool removeCompletedContract(CapComContract c)
+		public bool removeCompletedContract(CapComContract c, bool warn = false)
 		{
 			if (completedContracts.ContainsKey(c.ID))
 			{
 				completedContracts.Remove(c.ID);
 				return true;
 			}
-			else
+			else if (warn)
 				LogFormatted("Contract Not Found In Completed Contract List [{0} ; ID: {1}]", c.Name, c.ID);
 
 			return false;
 		}
 
-		public CapComContract getFailedContract(Guid id)
+		public CapComContract getFailedContract(Guid id, bool warn = false)
 		{
 			if (failedContracts.ContainsKey(id))
 				return failedContracts[id];
-			else
+			else if (warn)
 				LogFormatted("No Failed Contract Of ID: [{0}] Found", id);
 
 			return null;
 		}
 
-		public bool addFailedContract(CapComContract c)
+		public bool addFailedContract(CapComContract c, bool warn = false)
 		{
 			if (!failedContracts.ContainsKey(c.ID))
 			{
 				failedContracts.Add(c.ID, c);
 				return true;
 			}
-			else
+			else if (warn)
 				LogFormatted("Failed Contract List Already Has Contract [{0} ; ID: {1}]", c.Name, c.ID);
 
 			return false;
 		}
 
-		public bool removeFailedContract(CapComContract c)
+		public bool removeFailedContract(CapComContract c, bool warn = false)
 		{
 			if (failedContracts.ContainsKey(c.ID))
 			{
 				failedContracts.Remove(c.ID);
 				return true;
 			}
-			else
+			else if (warn)
 				LogFormatted("Contract Not Found In Failed Contract List [{0} ; ID: {1}]", c.Name, c.ID);
 
 			return false;
@@ -362,88 +350,80 @@ namespace CapCom
 
 		private void onAccepted(Contract c)
 		{
-			CapComContract cc = getOfferedContract(c.ContractGuid);
-
-			if (cc == null)
+			if (c == null)
 			{
-				LogFormatted("");
+				LogFormatted("Error in loading null accepted contract");
 				return;
 			}
 
-			removeOfferedContract(cc);
+			CapComContract cc = getOfferedContract(c.ContractGuid, true);
 
-			addActiveContract(cc);
+			if (cc == null)
+				return;
+
+			removeOfferedContract(cc, true);
+
+			addActiveContract(cc, true);
 			refreshList();
 
 			updateWaypoints(cc);
 			updateOrbits(cc);
 		}
 
-		private void onCompleted(Contract c)
-		{
-			CapComContract cc = getActiveContract(c.ContractGuid);
-
-			if (cc == null)
-			{
-				LogFormatted("");
-				return;
-			}
-
-			removeActiveContract(cc);
-
-			addCompletedContract(cc);
-			refreshList();
-		}
-
 		private void onDeclined(Contract c)
 		{
-			CapComContract cc = getOfferedContract(c.ContractGuid);
-
-			if (cc == null)
+			if (c == null)
 			{
-				LogFormatted("");
+				LogFormatted("Error in loading null declined contract");
 				return;
 			}
 
-			removeOfferedContract(cc);
-			refreshList();
-		}
-
-		private void onFailed(Contract c)
-		{
-			CapComContract cc = getActiveContract(c.ContractGuid);
+			CapComContract cc = getOfferedContract(c.ContractGuid, true);
 
 			if (cc == null)
-			{
-				LogFormatted("");
 				return;
-			}
 
-			removeActiveContract(cc);
-
-			addFailedContract(cc);
+			removeOfferedContract(cc, true);
 			refreshList();
 		}
 
 		private void onFinished(Contract c)
 		{
-			CapComContract cc = getOfferedContract(c.ContractGuid);
-
-			if (cc == null)
+			if (c == null)
 			{
-				LogFormatted("");
+				LogFormatted("Error in loading null finished contract");
 				return;
 			}
 
+			CapComContract cc = getActiveContract(c.ContractGuid);
+
+			if (cc == null)
+				cc = getOfferedContract(c.ContractGuid, true);
+
+			if (cc == null)
+				return;
+
 			removeOfferedContract(cc);
+			removeActiveContract(cc);
+			if (c.ContractState == Contract.State.Completed)
+				addCompletedContract(cc, true);
 			refreshList();
 		}
 
 		private void onOffered(Contract c)
 		{
+			if (c == null)
+			{
+				LogFormatted("Error in loading null offered contract");
+				return;
+			}
+
 			CapComContract cc = new CapComContract(c);
 
-			addOfferedContract(cc);
+			if (cc == null)
+				return;
+
+			addOfferedContract(cc, true);
 			refreshList();
 		}
 
@@ -474,7 +454,19 @@ namespace CapCom
 
 			foreach(Contract c in ContractSystem.Instance.Contracts)
 			{
+				if (c == null)
+				{
+					LogFormatted("Error in loading null contract from master list");
+					continue;
+				}
+
 				CapComContract cc = new CapComContract(c);
+
+				if (cc.Root == null)
+				{
+					LogFormatted("Error while loading contract of type {0}; skipping", c.GetType().Name);
+					continue;
+				}
 
 				switch (cc.Root.ContractState)
 				{
@@ -499,7 +491,19 @@ namespace CapCom
 
 			foreach(Contract c in ContractSystem.Instance.ContractsFinished)
 			{
+				if (c == null)
+				{
+					LogFormatted("Error in loading contract from finished list");
+					continue;
+				}
+
 				CapComContract cc = new CapComContract(c);
+
+				if (cc.Root == null)
+				{
+					LogFormatted("Error while loading finished contract of type {0}; skipping", c.GetType().Name);
+					continue;
+				}
 
 				switch (cc.Root.ContractState)
 				{
@@ -522,7 +526,8 @@ namespace CapCom
 				}
 			}
 
-			loaded = true;
+			LogFormatted("CapCom Contracts Loaded...");
+
 			window.refreshContracts();
 		}
 

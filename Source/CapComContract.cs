@@ -28,8 +28,16 @@ THE SOFTWARE.
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Reflection;
 using Contracts;
+using Contracts.Templates;
+using FinePrint.Contracts;
+using FinePrint.Contracts.Parameters;
+using FinePrint.Utilities;
 using Contracts.Agents;
+using UnityEngine;
 
 using CapCom.Framework;
 
@@ -40,6 +48,7 @@ namespace CapCom
 		private Guid id;
 		private string name;
 		private string briefing;
+		private string target;
 		private bool showNotes, canBeDeclined, canBeCancelled;
 		private Contract root;
 		private float totalFundsReward, totalRepReward, totalSciReward;
@@ -54,12 +63,66 @@ namespace CapCom
 		public CapComContract(Contract c)
 		{
 			root = c;
-			id = root.ContractGuid;
-			name = root.Title;
-			notes = root.Notes;
-			briefing = root.Description;
-			canBeDeclined = root.CanBeDeclined();
-			canBeCancelled = root.CanBeCancelled();
+			try
+			{
+				id = root.ContractGuid;
+			}
+			catch (Exception e)
+			{
+				Debug.LogError("Contract Guid not set, skipping...: " + e);
+				root = null;
+				return;
+			}
+
+			try
+			{
+				name = root.Title;
+			}
+			catch (Exception e)
+			{
+				Debug.LogError("Contract Title not set, using type name..: " + e);
+				name = root.GetType().Name;
+			}
+
+			try
+			{
+				notes = root.Notes;
+			}
+			catch (Exception e)
+			{
+				Debug.LogError("Contract Notes not set, blank notes used...: " + e);
+				notes = "";
+			}
+
+			try
+			{
+				briefing = root.Description;
+			}
+			catch (Exception e)
+			{
+				Debug.LogError("Contract Briefing not set, blank briefing used...: " + e);
+				briefing = "";
+			}
+
+			try
+			{
+				canBeDeclined = root.CanBeDeclined();
+			}
+			catch (Exception e)
+			{
+				Debug.LogError("Contract Decline state not set, using true...: " + e);
+				canBeDeclined = true;
+			}
+
+			try
+			{
+				canBeCancelled = root.CanBeCancelled();
+			}
+			catch (Exception e)
+			{
+				Debug.LogError("Contract Cancel state not set, using true...: " + e);
+				canBeCancelled = true;
+			}
 
 			if (root.Agent != null)
 				agent = root.Agent;
@@ -84,6 +147,10 @@ namespace CapCom
 			totalRepReward = repRewards();
 			totalSciReward = sciRewards();
 			totalRepPenalty = repPenalties();
+
+			CelestialBody t = getTargetBody();
+
+			target = t == null ? "" : t.name;
 		}
 
 		private void addContractParam(ContractParameter param)
@@ -208,6 +275,97 @@ namespace CapCom
 			return f;
 		}
 
+		private CelestialBody getTargetBody()
+		{
+			if (root == null)
+				return null;
+
+			bool checkTitle = false;
+
+			Type t = root.GetType();
+
+			if (t == typeof(CollectScience))
+				return ((CollectScience)root).TargetBody;
+			else if (t == typeof(ExploreBody))
+				return ((ExploreBody)root).TargetBody;
+			else if (t == typeof(PartTest))
+			{
+				var fields = typeof(PartTest).GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+
+				return fields[1].GetValue((PartTest)root) as CelestialBody;
+			}
+			else if (t == typeof(PlantFlag))
+				return ((PlantFlag)root).TargetBody;
+			else if (t == typeof(RecoverAsset))
+			{
+				var fields = typeof(RecoverAsset).GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+
+				return fields[0].GetValue((RecoverAsset)root) as CelestialBody;
+			}
+			else if (t == typeof(GrandTour))
+				return ((GrandTour)root).TargetBodies.LastOrDefault();
+			else if (t == typeof(ARMContract))
+			{
+				var fields = typeof(ARMContract).GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+
+				return fields[0].GetValue((ARMContract)root) as CelestialBody;
+			}
+			else if (t == typeof(BaseContract))
+				return ((BaseContract)root).targetBody;
+			else if (t == typeof(ISRUContract))
+				return ((ISRUContract)root).targetBody;
+			else if (t == typeof(RecordTrackContract))
+				return null;
+			else if (t == typeof(SatelliteContract))
+			{
+				SpecificOrbitParameter p = root.GetParameter<SpecificOrbitParameter>();
+
+				if (p == null)
+					return null;
+
+				return p.targetBody;
+			}
+			else if (t == typeof(StationContract))
+				return ((StationContract)root).targetBody;
+			else if (t == typeof(SurveyContract))
+				return ((SurveyContract)root).targetBody;
+			else if (t == typeof(TourismContract))
+				return null;
+			else if (t == typeof(WorldFirstContract))
+			{
+				ProgressTrackingParameter p = root.GetParameter<ProgressTrackingParameter>();
+
+				if (p == null)
+					return null;
+
+				var fields = typeof(ProgressTrackingParameter).GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+
+				var milestone = fields[0].GetValue(p) as ProgressMilestone;
+
+				if (milestone == null)
+					return null;
+
+				return milestone.body;
+			}
+			else
+				checkTitle = true;
+
+			if (checkTitle)
+			{
+				foreach (CelestialBody b in FlightGlobals.Bodies)
+				{
+					string n = b.name;
+
+					Regex r = new Regex(string.Format(@"\b{0}\b", n));
+
+					if (r.IsMatch(name))
+						return b;
+				}
+			}
+
+			return null;
+		}
+
 		public void addToParams(CapComParameter p)
 		{
 			if (!allParameters.Contains(p))
@@ -330,6 +488,11 @@ namespace CapCom
 		public string SciRew
 		{
 			get { return sciRew; }
+		}
+
+		public string Target
+		{
+			get { return target; }
 		}
 	}
 }
