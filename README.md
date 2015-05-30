@@ -50,9 +50,11 @@ license][CCLicense]
 
 ##### Controls contract sorting options and order
   * Contracts can be sorted based on a variety of criteria in either ascending or descending order
-       * **Contract difficulty**, as noted by the number of stars
-	   * **Contract reward** amounts; **Funds**, **Science**, or **Reputation**
-	   * **Contract agency**, sorted alphabetically
+       * **Contract difficulty**, as noted by the number of stars	
+       * **Contract reward** amounts; **Funds**, **Science**, or **Reputation**
+       * **Contract agency**, sorted alphabetically
+       * **Target Planet**, not all contracts have target planets associated with them; addon contracts rely on the planet being in the contract title
+  * Current active contract count and max contract limit are shown above 
   
 ##### Selecting the rewards sorting option will open a drop-down menu; select the desired reward type here
 ![][CC:sort-rewards]
@@ -141,9 +143,9 @@ license][CCLicense]
 [CKAN:org]: http://ksp-ckan.org/
 [CCLicense]: https://github.com/DMagic1/CapCom/blob/master/LICENSE
 
-[CC:header]: http://i.imgur.com/DX4lf2W.png
+[CC:header]: http://i.imgur.com/xS0uSj8.png
 [CC:settings-full]: http://i.imgur.com/qiEHuI7.png
-[CC:sort-bar]: http://i.imgur.com/sHgEV4g.png
+[CC:sort-bar]: http://i.imgur.com/jpCV6Pe.png
 [CC:sort-rewards]: http://i.imgur.com/p1NNhwy.png
 [CC:contract-list]: http://i.imgur.com/6JCjutL.png
 [CC:contract-header]: http://i.imgur.com/238zNhQ.png
