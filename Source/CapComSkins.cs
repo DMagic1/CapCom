@@ -53,6 +53,16 @@ namespace CapCom
 		internal static GUIStyle keycodeButton;
 		internal static GUIStyle warningButton;
 
+		internal static GUIStyle acceptButton;
+		internal static GUIStyle acceptButtonGreyed;
+		internal static GUIStyle declineButton;
+		internal static GUIStyle declineButtonGreyed;
+		internal static GUIStyle cancelButton;
+		internal static GUIStyle cancelButtonGreyed;
+
+		internal static GUIStyle toggleOnButton;
+		internal static GUIStyle toggleOffButton;
+
 		//Icon Button styles
 		internal static GUIStyle iconButton;
 
@@ -109,44 +119,31 @@ namespace CapCom
 		internal static Texture2D toggleHoverOn;
 		internal static Texture2D currentFlag;
 
-		//Mission Control Center texture map
-		internal static Texture2D missionControlTexture;
+		internal static Texture2D acceptButtonNormal;
+		internal static Texture2D acceptButtonHover;
+		internal static Texture2D acceptButtonActive;
+		internal static Texture2D acceptButtonInactive;
 
-		//Texture element locations on the mission control center texture map; values are normalized
-		internal static Rect acceptButtonNormal = new Rect(0, 0.3671875f, 0.04296875f, 0.0439456125f);
-		internal static Rect acceptButtonHover = new Rect(0.0478515625f, 0.3671875f, 0.04296875f, 0.0439456125f);
-		internal static Rect acceptButtonActive = new Rect(0.095703125f, 0.3671875f, 0.04296875f, 0.0439456125f);
-		internal static Rect acceptButtonInactive = new Rect(0, 0.4169921875f, 0.04296875f, 0.0439456125f);
+		internal static Texture2D declineButtonNormal;
+		internal static Texture2D declineButtonHover;
+		internal static Texture2D declineButtonActive;
+		internal static Texture2D declineButtonInactive;
 
-		internal static Rect declineButtonNormal = new Rect(0.0478515625f, 0.4169921875f, 0.04296875f, 0.0439456125f);
-		internal static Rect declineButtonHover = new Rect(0.095703125f, 0.4169921875f, 0.04296875f, 0.0439456125f);
-		internal static Rect declineButtonActive = new Rect(0, 0.466796875f, 0.04296875f, 0.0439456125f);
-		internal static Rect declineButtonInactive = new Rect(0.0478515625f, 0.466796875f, 0.04296875f, 0.0439456125f);
+		internal static Texture2D cancelButtonNormal;
+		internal static Texture2D cancelButtonHover;
+		internal static Texture2D cancelButtonActive;
+		internal static Texture2D cancelButtonInactive;
 
-		internal static Rect cancelButtonNormal = new Rect(0.095703125f, 0.466796875f, 0.04296875f, 0.0439456125f);
-		internal static Rect cancelButtonHover = new Rect(0, 0.5166015625f, 0.04296875f, 0.0439456125f);
-		internal static Rect cancelButtonActive = new Rect(0.0478515625f, 0.5166015625f, 0.04296875f, 0.0439456125f);
-		internal static Rect cancelButtonInactive = new Rect(0.095703125f, 0.5166015625f, 0.04296875f, 0.0439456125f);
+		internal static Texture2D titleButtonNormal;
+		internal static Texture2D titleButtonActive;
 
-		internal static Rect titleButtonFlagNormal = new Rect(0, 0.3125f, 0.0751953125f, 0.0498046875f);
-		internal static Rect titleButtonFlagActive = new Rect(0, 0.2626953125f, 0.0751953125f, 0.0498046875f);
+		internal static Texture2D tabButtonNormalLeft;
 
-		internal static Rect titleButtonNormal = new Rect(0.0751953125f, 0.3125f, 0.0244140625f, 0.0498046875f);
-		internal static Rect titleButtonActive = new Rect(0.0751953125f, 0.2626953125f, 0.0244140625f, 0.0498046875f);
+		internal static Texture2D tabButtonHoverLeft;
 
-		internal static Rect tabButtonNormalLeft = new Rect(0, 0.560546875f, 0.017578125f, 0.0224609375f);
-		internal static Rect tabButtonNormalMiddle = new Rect(0.017578125f, 0.560546875f, 0.009765625f, 0.0224609375f);
-		internal static Rect tabButtonNormalRight = new Rect(0.02734375f, 0.560546875f, 0.02734375f, 0.0224609375f);
+		internal static Texture2D tabButtonActiveLeft;
 
-		internal static Rect tabButtonHoverLeft = new Rect(0.0546875f, 0.560546875f, 0.017578125f, 0.0224609375f);
-		internal static Rect tabButtonHoverMiddle = new Rect(0.0712890625f, 0.560546875f, 0.009765625f, 0.0224609375f);
-		internal static Rect tabButtonHoverRight = new Rect(0.0810546875f, 0.560546875f, 0.0263671875f, 0.0224609375f);
-
-		internal static Rect tabButtonActiveLeft = new Rect(0.9462890625f, 0.099609375f, 0.017578125f, 0.0224609375f);
-		internal static Rect tabButtonActiveMiddle = new Rect(0.962890625f, 0.099609375f, 0.009765625f, 0.0224609375f);
-		internal static Rect tabButtonActiveRight = new Rect(0.9736328125f, 0.099609375f, 0.0263671875f, 0.0224609375f);
-
-		internal static Rect flagRect = new Rect(0, 0.1513671875f, 0.16796875f, 0.1103515625f);
+		internal static Texture2D flagTex = new Texture2D(1, 1);
 
 		internal static int fontSize = 0;
 
@@ -177,12 +174,269 @@ namespace CapCom
 			sortStars = GameDatabase.Instance.GetTexture("CapCom/Textures/SortDifficultyIcon", false);
 			sortPlanet = GameDatabase.Instance.GetTexture("CapCom/Textures/SortPlanetsIcon", false);
 
-			toggleOn = CC_SkinsLibrary.DefKSPSkin.toggle.onNormal.background;
-			toggleOff = CC_SkinsLibrary.DefKSPSkin.toggle.normal.background;
-			toggleHoverOff = CC_SkinsLibrary.DefKSPSkin.toggle.hover.background;
-			toggleHoverOn = CC_SkinsLibrary.DefKSPSkin.toggle.onHover.background;
-
+			toggleButtons();
 			initializeSkins();
+		}
+
+		private static void toggleButtons()
+		{
+			Texture2D toggleOnOriginal = CC_SkinsLibrary.DefKSPSkin.toggle.onNormal.background;
+			Texture2D toggleOffOriginal = CC_SkinsLibrary.DefKSPSkin.toggle.normal.background;
+			Texture2D toggleHoverOnOriginal = CC_SkinsLibrary.DefKSPSkin.toggle.onHover.background;
+			Texture2D toggleHoverOffOriginal = CC_SkinsLibrary.DefKSPSkin.toggle.hover.background;
+
+			toggleOn = new Texture2D(toggleOnOriginal.width, toggleOnOriginal.height);
+			toggleOff = new Texture2D(toggleOffOriginal.width, toggleOffOriginal.height);
+			toggleHoverOn = new Texture2D(toggleHoverOnOriginal.width, toggleHoverOnOriginal.height);
+			toggleHoverOff = new Texture2D(toggleHoverOffOriginal.width, toggleHoverOffOriginal.height);
+
+			var rt = RenderTexture.GetTemporary(toggleOnOriginal.width, toggleOnOriginal.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB, 1);
+
+			Graphics.Blit(toggleOnOriginal, rt);
+
+			RenderTexture.active = rt;
+
+			toggleOn.ReadPixels(new Rect(0, 0, toggleOnOriginal.width, toggleOnOriginal.height), 0, 0);
+
+			RenderTexture.active = null;
+			RenderTexture.ReleaseTemporary(rt);
+
+			toggleOn.Apply();
+
+			rt = RenderTexture.GetTemporary(toggleOffOriginal.width, toggleOffOriginal.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB, 1);
+
+			Graphics.Blit(toggleOffOriginal, rt);
+
+			RenderTexture.active = rt;
+
+			toggleOff.ReadPixels(new Rect(0, 0, toggleOffOriginal.width, toggleOffOriginal.height), 0, 0);
+
+			RenderTexture.active = null;
+			RenderTexture.ReleaseTemporary(rt);
+
+			toggleOff.Apply();
+
+			rt = RenderTexture.GetTemporary(toggleHoverOnOriginal.width, toggleHoverOnOriginal.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB, 1);
+
+			Graphics.Blit(toggleHoverOnOriginal, rt);
+
+			RenderTexture.active = rt;
+
+			toggleHoverOn.ReadPixels(new Rect(0, 0, toggleHoverOnOriginal.width, toggleHoverOnOriginal.height), 0, 0);
+
+			RenderTexture.active = null;
+			RenderTexture.ReleaseTemporary(rt);
+
+			toggleHoverOn.Apply();
+
+			rt = RenderTexture.GetTemporary(toggleHoverOffOriginal.width, toggleHoverOffOriginal.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB, 1);
+
+			Graphics.Blit(toggleHoverOffOriginal, rt);
+
+			RenderTexture.active = rt;
+
+			toggleHoverOff.ReadPixels(new Rect(0, 0, toggleHoverOffOriginal.width, toggleHoverOffOriginal.height), 0, 0);
+
+			RenderTexture.active = null;
+			RenderTexture.ReleaseTemporary(rt);
+
+			toggleHoverOff.Apply();
+
+			rt = null;
+
+			toggleOnOriginal = null;
+			toggleOffOriginal = null;
+			toggleHoverOnOriginal = null;
+			toggleHoverOffOriginal = null;
+
+			var pix = toggleOn.GetPixels(14, 19, 92, 92);
+			toggleOn = new Texture2D(92, 92);
+			toggleOn.SetPixels(pix);
+			toggleOn.Apply();
+
+			TextureScale.Bilinear(toggleOn, 26, 26);
+			pix = toggleOn.GetPixels();
+			toggleOn = new Texture2D(28, 28);
+			Color[] clearPix = new Color[28 * 28];
+			for (int i = 0; i < clearPix.Length; i++)
+			{
+				clearPix[i] = Color.clear;
+			}
+			toggleOn.SetPixels(clearPix);
+			toggleOn.SetPixels(0, 1, 26, 26, pix);
+			toggleOn.Apply();
+
+			pix = toggleOff.GetPixels(14, 19, 92, 92);
+			toggleOff = new Texture2D(92, 92);
+			toggleOff.SetPixels(pix);
+			toggleOff.Apply();
+
+			TextureScale.Bilinear(toggleOff, 26, 26);
+
+			pix = toggleHoverOn.GetPixels(14, 19, 92, 92);
+			toggleHoverOn = new Texture2D(92, 92);
+			toggleHoverOn.SetPixels(pix);
+			toggleHoverOn.Apply();
+
+			TextureScale.Bilinear(toggleHoverOn, 26, 26);
+			pix = toggleHoverOn.GetPixels();
+			toggleHoverOn = new Texture2D(28, 28);
+			clearPix = new Color[28 * 28];
+			for (int i = 0; i < clearPix.Length; i++)
+			{
+				clearPix[i] = Color.clear;
+			}
+			toggleHoverOn.SetPixels(clearPix);
+			toggleHoverOn.SetPixels(0, 1, 26, 26, pix);
+			toggleHoverOn.Apply();
+
+			pix = toggleHoverOff.GetPixels(14, 19, 92, 92);
+			toggleHoverOff = new Texture2D(92, 92);
+			toggleHoverOff.SetPixels(pix);
+			toggleHoverOff.Apply();
+
+			TextureScale.Bilinear(toggleHoverOff, 26, 26);
+		}
+
+		internal static void texturesFromAtlas(Texture2D atlas)
+		{
+			var pix = atlas.GetPixels(0, 372, 48, 49);
+
+			acceptButtonNormal = new Texture2D(48, 49);
+			acceptButtonNormal.SetPixels(pix);
+			acceptButtonNormal.Apply();
+
+			pix = atlas.GetPixels(49, 372, 48, 49);
+
+			acceptButtonHover = new Texture2D(48, 49);
+			acceptButtonHover.SetPixels(pix);
+			acceptButtonHover.Apply();
+
+			pix = atlas.GetPixels(98, 372, 48, 49);
+
+			acceptButtonActive = new Texture2D(48, 49);
+			acceptButtonActive.SetPixels(pix);
+			acceptButtonActive.Apply();
+
+			pix = atlas.GetPixels(0, 423, 48, 49);
+
+			acceptButtonInactive = new Texture2D(48, 49);
+			acceptButtonInactive.SetPixels(pix);
+			acceptButtonInactive.Apply();
+
+			pix = atlas.GetPixels(49, 423, 48, 49);
+
+			declineButtonNormal = new Texture2D(48, 49);
+			declineButtonNormal.SetPixels(pix);
+			declineButtonNormal.Apply();
+
+			pix = atlas.GetPixels(98, 423, 48, 49);
+
+			declineButtonHover = new Texture2D(48, 49);
+			declineButtonHover.SetPixels(pix);
+			declineButtonHover.Apply();
+
+			pix = atlas.GetPixels(0, 474, 48, 49);
+
+			declineButtonActive = new Texture2D(48, 49);
+			declineButtonActive.SetPixels(pix);
+			declineButtonActive.Apply();
+
+			pix = atlas.GetPixels(49, 474, 48, 49);
+
+			declineButtonInactive = new Texture2D(48, 49);
+			declineButtonInactive.SetPixels(pix);
+			declineButtonInactive.Apply();
+
+			pix = atlas.GetPixels(98, 474, 48, 49);
+
+			cancelButtonNormal = new Texture2D(48, 49);
+			cancelButtonNormal.SetPixels(pix);
+			cancelButtonNormal.Apply();
+
+			pix = atlas.GetPixels(0, 525, 48, 49);
+
+			cancelButtonHover = new Texture2D(48, 49);
+			cancelButtonHover.SetPixels(pix);
+			cancelButtonHover.Apply();
+
+			pix = atlas.GetPixels(49, 525, 48, 49);
+
+			cancelButtonActive = new Texture2D(48, 49);
+			cancelButtonActive.SetPixels(pix);
+			cancelButtonActive.Apply();
+
+			pix = atlas.GetPixels(98, 525, 48, 49);
+
+			cancelButtonInactive = new Texture2D(48, 49);
+			cancelButtonInactive.SetPixels(pix);
+			cancelButtonInactive.Apply();
+
+			pix = atlas.GetPixels(0, 319, 102, 51);
+
+			titleButtonNormal = new Texture2D(102, 51);
+			titleButtonNormal.SetPixels(pix);
+			titleButtonNormal.Apply();
+
+			pix = atlas.GetPixels(0, 268, 102, 51);
+
+			titleButtonActive = new Texture2D(102, 51);
+			titleButtonActive.SetPixels(pix);
+			titleButtonActive.Apply();
+
+			pix = atlas.GetPixels(0, 372, 48, 49);
+
+			tabButtonNormalLeft = new Texture2D(48, 49);
+			tabButtonNormalLeft.SetPixels(pix);
+			tabButtonNormalLeft.Apply();
+
+			pix = atlas.GetPixels(0, 372, 48, 49);
+
+			tabButtonHoverLeft = new Texture2D(48, 49);
+			tabButtonHoverLeft.SetPixels(pix);
+			tabButtonHoverLeft.Apply();
+
+			pix = atlas.GetPixels(0, 372, 48, 49);
+
+			tabButtonActiveLeft = new Texture2D(48, 49);
+			tabButtonActiveLeft.SetPixels(pix);
+			tabButtonActiveLeft.Apply();
+
+			pix = atlas.GetPixels(0, 155, 172, 113);
+
+			flagTex = new Texture2D(172, 113);
+			flagTex.SetPixels(pix);
+			flagTex.Apply();
+
+			atlasStyles();
+		}
+
+		private static void atlasStyles()
+		{
+			acceptButton = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.button);
+			acceptButton.padding = new RectOffset(0, 0, 0, 0);
+			acceptButton.normal.background = acceptButtonNormal;
+			acceptButton.hover.background = acceptButtonHover;
+			acceptButton.active.background = acceptButtonActive;
+
+			acceptButtonGreyed = new GUIStyle(acceptButton);
+			acceptButtonGreyed.normal.background = acceptButtonGreyed.hover.background = acceptButtonGreyed.active.background = acceptButtonInactive;
+
+			declineButton = new GUIStyle(acceptButton);
+			declineButton.normal.background = declineButtonNormal;
+			declineButton.hover.background = declineButtonHover;
+			declineButton.active.background = declineButtonActive;
+
+			declineButtonGreyed = new GUIStyle(acceptButtonGreyed);
+			declineButtonGreyed.normal.background = declineButtonGreyed.hover.background = declineButtonGreyed.active.background = declineButtonInactive;
+
+			cancelButton = new GUIStyle(acceptButton);
+			cancelButton.normal.background = cancelButtonNormal;
+			cancelButton.hover.background = cancelButtonHover;
+			cancelButton.active.background = cancelButtonActive;
+
+			cancelButtonGreyed = new GUIStyle(acceptButtonGreyed);
+			cancelButtonGreyed.normal.background = cancelButtonGreyed.hover.background = cancelButtonGreyed.active.background = cancelButtonInactive;
 		}
 
 		internal static void initializeSkins()
@@ -253,6 +507,19 @@ namespace CapCom
 			iconButton = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.label);
 
 			keycodeButton = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.button);
+
+			//Toggle Buttons
+			toggleOnButton = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.button);
+			toggleOnButton.padding = new RectOffset(0, 0, 0, 0);
+			toggleOnButton.border = new RectOffset(27, 0, 0, 0);
+			toggleOnButton.normal.background = toggleOn;
+			toggleOnButton.active.background = toggleHoverOn;
+			toggleOnButton.hover.background = toggleHoverOn;
+
+			toggleOffButton = new GUIStyle(toggleOnButton);
+			toggleOffButton.normal.background = toggleOff;
+			toggleOffButton.active.background = toggleHoverOff;
+			toggleOffButton.hover.background = toggleHoverOff;
 
 			//Label Styles
 			headerText = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.label);
