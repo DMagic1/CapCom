@@ -475,9 +475,9 @@ namespace CapCom
 			GUI.Label(r, string.Format("{0} Active Contracts {1}", ContractSystem.Instance.GetActiveContractCount(), s), CapComSkins.headerText);
 
 			r = new Rect(18, 20, 54, 44);
-			Rect t = new Rect(0, 30, 24, 24);
+			Rect t = new Rect(-5, 20, 72, 44);
 
-			if (GUI.Button(new Rect(0, 20, 78, 44), new GUIContent("", "Sort By Difficulty"), CapCom.Settings.sortMode == 0 ? CapComSkins.toggleOnButton : CapComSkins.toggleOffButton))
+			if (GUI.Button(t, new GUIContent("", "Sort By Difficulty"), CapCom.Settings.sortMode == 0 ? CapComSkins.toggleOnButton : CapComSkins.toggleOffButton))
 			{
 				CapCom.Settings.sortMode = 0;
 				CapCom.Settings.Save();
@@ -486,56 +486,8 @@ namespace CapCom
 
 			GUI.DrawTexture(r, CapComSkins.sortStars);
 
-			//if (GUI.Button(r, new GUIContent(CapComSkins.sortStars, "Sort By Difficulty") , CapComSkins.iconButton))
-			//{
-			//	CapCom.Settings.sortMode = 0;
-			//	CapCom.Settings.Save();
-			//	sortContracts();
-			//}
-
-			r.x += 144;
-			r.y += 4;
-			r.height = 40;
-			t.x += 140;
-
-			if (GUI.Button(t, new GUIContent("", "Sort By Agency"), CapCom.Settings.sortMode == 4 ? CapComSkins.toggleOnButton : CapComSkins.toggleOffButton))
-			{
-				CapCom.Settings.sortMode = 4;
-				CapCom.Settings.Save();
-				sortContracts();
-			}
-
-			GUI.DrawTexture(r, CapComSkins.flagTex);
-
-			if (GUI.Button(r, new GUIContent(CapComSkins.currentFlag, "Sort By Agency"), CapComSkins.iconButton))
-			{
-				CapCom.Settings.sortMode = 4;
-				CapCom.Settings.Save();
-				sortContracts();
-			}
-
-			r.x += 80;
-			t.x += 80;
-
-			if (GUI.Button(t, new GUIContent("", "Sort By Target Body"), CapCom.Settings.sortMode == 5 ? CapComSkins.toggleOnButton : CapComSkins.toggleOffButton))
-			{
-				CapCom.Settings.sortMode = 5;
-				CapCom.Settings.Save();
-				sortContracts();
-			}
-
-			if (GUI.Button(r, new GUIContent(CapComSkins.sortPlanet, "Sort By Target Body"), CapComSkins.iconButton))
-			{
-				CapCom.Settings.sortMode = 5;
-				CapCom.Settings.Save();
-				sortContracts();
-			}
-
-			r.x -= 165;
-			r.y -= 4;
-			r.width = 58;
-			r.height = 48;
-			t.x -= 160;
+			r.x += 68;
+			t.x += 72;
 
 			if (GUI.Button(t, new GUIContent("", "Sort By Rewards"), CapCom.Settings.sortMode == 1 || CapCom.Settings.sortMode == 2 || CapCom.Settings.sortMode == 3 ? CapComSkins.toggleOnButton : CapComSkins.toggleOffButton))
 			{
@@ -543,13 +495,6 @@ namespace CapCom
 				sortMenu = !sortMenu;
 			}
 
-			if (GUI.Button(r, new GUIContent("", "Sort By Rewards"), CapComSkins.iconButton))
-			{
-				dropdown = !dropdown;
-				sortMenu = !sortMenu;
-			}
-
-			r.x += 2;
 			r.y += 18;
 			r.height = 24;
 			r.width = 24;
@@ -577,6 +522,8 @@ namespace CapCom
 				r.y += 4;
 				r.x += 4;
 				GUI.DrawTexture(r, CapComSkins.repRed);
+				r.y -= 4;
+				r.x -= 4;
 			}
 			else if (CapCom.Settings.sortMode == 1)
 			{
@@ -591,7 +538,37 @@ namespace CapCom
 				GUI.DrawTexture(r, CapComSkins.repRed);
 			}
 
-			r.x = 316;
+			r.x += 68;
+			r.width = 54;
+			r.height = 40;
+			t.x += 73;
+
+			if (GUI.Button(t, new GUIContent("", "Sort By Agency"), CapCom.Settings.sortMode == 4 ? CapComSkins.toggleOnButton : CapComSkins.toggleOffButton))
+			{
+				CapCom.Settings.sortMode = 4;
+				CapCom.Settings.Save();
+				sortContracts();
+			}
+
+			GUI.DrawTexture(r, CapComSkins.flagTex);
+
+			GUI.DrawTexture(r, CapComSkins.currentFlag);
+
+			r.x += 72;
+			r.width = 50;
+			r.height = 38;
+			t.x += 73;
+
+			if (GUI.Button(t, new GUIContent("", "Sort By Target Body"), CapCom.Settings.sortMode == 5 ? CapComSkins.toggleOnButton : CapComSkins.toggleOffButton))
+			{
+				CapCom.Settings.sortMode = 5;
+				CapCom.Settings.Save();
+				sortContracts();
+			}
+
+			GUI.DrawTexture(r, CapComSkins.sortPlanet);
+
+			r.x = 326;
 			r.y = 26;
 			r.width = 32;
 			r.height = 26;
@@ -609,9 +586,9 @@ namespace CapCom
 			GUILayout.BeginHorizontal();
 				if (dropdown)
 				{
-					GUILayout.Label("Offered", listStyle(0), GUILayout.Width(106));
-					GUILayout.Label("Active", listStyle(1), GUILayout.Width(106));
-					GUILayout.Label("Completed", listStyle(2), GUILayout.Width(106));
+					GUILayout.Label("Offered", listStyle(0), GUILayout.Width(106), GUILayout.Height(22));
+					GUILayout.Label("Active", listStyle(1), GUILayout.Width(106), GUILayout.Height(22));
+					GUILayout.Label("Completed", listStyle(2), GUILayout.Width(106), GUILayout.Height(22));
 				}
 				else
 				{
@@ -647,19 +624,19 @@ namespace CapCom
 
 		private void contractList(int id)
 		{
-			cScroll = GUILayout.BeginScrollView(cScroll, false, true, GUILayout.Width(340));
+			cScroll = GUILayout.BeginScrollView(cScroll, false, true, GUILayout.Width(356));
 
 			for (int i = 0; i < currentContracts.Count; i++)
 			{
 				GUILayout.BeginHorizontal();
-					GUILayout.Space(63);
+					GUILayout.Space(75);
 					if (dropdown)
 					{
-						GUILayout.Label(currentContracts[i].Name, CapComSkins.titleButtonBehind, GUILayout.Width(250), GUILayout.Height(46));
+						GUILayout.Label(currentContracts[i].Name, CapComSkins.titleButtonBehind, GUILayout.Width(260), GUILayout.Height(46));
 					}
 					else
 					{
-						if (GUILayout.Button(currentContracts[i].Name, GUILayout.Width(250), GUILayout.Height(46)))
+						if (GUILayout.Button(currentContracts[i].Name, GUILayout.Width(260), GUILayout.Height(46)))
 						{
 							currentContract = currentContracts[i];
 							contractIndex = i;
@@ -670,8 +647,8 @@ namespace CapCom
 				GUILayout.EndHorizontal();
 				GUILayout.Space(-4);
 
-				r.width = 60;
-				r.x -= 60;
+				r.width = 69;
+				r.x -= 69;
 				r.height = 46;
 				if (!dropdown)
 				{
@@ -682,15 +659,15 @@ namespace CapCom
 						showAgency = false;
 					}
 				}
-				GUI.DrawTexture(r, CapComSkins.flagTex);
-				r.x += 1;
+				GUI.DrawTexture(r, contractIndex == i ? CapComSkins.titleButtonActiveLeft : CapComSkins.titleButtonNormalLeft);
+				r.x += 10;
 				r.y += 3;
 				r.width = 58;
 				r.height = 40;
 				GUI.DrawTexture(r, currentContracts[i].RootAgent.LogoScaled);
 				r.width = 11;
 				r.height = 40;
-				r.x += 297;
+				r.x += 307;
 				GUI.DrawTexture(r, contractPrestigeIcon(currentContracts[i].Root.Prestige));
 			}
 			GUILayout.EndScrollView();
@@ -762,7 +739,7 @@ namespace CapCom
 			if (currentContract == null)
 				return;
 
-			Rect r = new Rect(350, 33, 160, 106);
+			Rect r = new Rect(360, 33, 160, 106);
 
 			if (GUI.Button(r, "", CapComSkins.iconButton))
 			{
