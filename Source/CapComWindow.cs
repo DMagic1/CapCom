@@ -231,7 +231,7 @@ namespace CapCom
 							warnDecline = true;
 						}
 						else
-							currentContract.Root.Decline();
+							declineContract();
 					}
 					else if (currentContract.Root.ContractState == Contract.State.Active)
 					{
@@ -244,7 +244,7 @@ namespace CapCom
 							warnCancel = true;
 						}
 						else
-							currentContract.Root.Cancel();
+							cancelContract();
 					}
 				}
 			}
@@ -299,6 +299,22 @@ namespace CapCom
 					break;
 				case 5:
 					ccList.Sort((a, b) => RUIutils.SortAscDescPrimarySecondary(CapCom.Settings.ascending, a.Target.CompareTo(b.Target), a.Name.CompareTo(b.Name)));
+					break;
+				case 6:
+					switch (currentList)
+					{
+						case 0:
+							ccList.Sort((a, b) => RUIutils.SortAscDescPrimarySecondary(CapCom.Settings.ascending, a.Expire.CompareTo(b.Expire), a.Name.CompareTo(b.Name)));
+							break;
+						case 1:
+							ccList.Sort((a, b) => RUIutils.SortAscDescPrimarySecondary(CapCom.Settings.ascending, a.Deadline.CompareTo(b.Deadline), a.Name.CompareTo(b.Name)));
+							break;
+						case 2:
+							ccList.Sort((a, b) => RUIutils.SortAscDescPrimarySecondary(CapCom.Settings.ascending, a.Finished.CompareTo(b.Finished), a.Name.CompareTo(b.Name)));
+							break;
+						default:
+							break;
+					}
 					break;
 				default:
 					ccList.Sort((a, b) => RUIutils.SortAscDescPrimarySecondary(CapCom.Settings.ascending, a.Root.Prestige.CompareTo(b.Root.Prestige), a.Name.CompareTo(b.Name)));
@@ -568,6 +584,21 @@ namespace CapCom
 
 			GUI.DrawTexture(r, CapComSkins.sortPlanet);
 
+			r.x += 67;
+			r.width = 36;
+			r.height = 40;
+			t.x += 70;
+			t.width = 60;
+
+			if (GUI.Button(t, new GUIContent("", "Sort By Time Remaining"), CapCom.Settings.sortMode == 6 ? CapComSkins.toggleOnButton : CapComSkins.toggleOffButton))
+			{
+				CapCom.Settings.sortMode = 6;
+				CapCom.Settings.Save();
+				sortContracts();
+			}
+
+			GUI.DrawTexture(r, CapComSkins.sortTime);
+
 			r.x = 326;
 			r.y = 26;
 			r.width = 32;
@@ -598,6 +629,11 @@ namespace CapCom
 						{
 							currentList = 0;
 							sortContracts();
+							contractIndex = 0;
+							if (currentContracts.Count > 0)
+								currentContract = currentContracts[0];
+							else
+								currentContract = null;
 						}
 					}
 
@@ -607,6 +643,12 @@ namespace CapCom
 						{
 							currentList = 1;
 							sortContracts();
+
+							contractIndex = 0;
+							if (currentContracts.Count > 0)
+								currentContract = currentContracts[0];
+							else
+								currentContract = null;
 						}
 					}
 
@@ -616,6 +658,12 @@ namespace CapCom
 						{
 							currentList = 2;
 							sortContracts();
+
+							contractIndex = 0;
+							if (currentContracts.Count > 0)
+								currentContract = currentContracts[0];
+							else
+								currentContract = null;
 						}
 					}
 				}
@@ -704,7 +752,7 @@ namespace CapCom
 							warnDecline = true;
 						}
 						else
-							currentContract.Root.Decline();
+							declineContract();
 					}
 				}
 			}
@@ -724,7 +772,7 @@ namespace CapCom
 							warnCancel = true;
 						}
 						else
-							currentContract.Root.Cancel();
+							cancelContract();
 					}
 				}
 			}
@@ -1081,8 +1129,7 @@ namespace CapCom
 					r = new Rect(ddRect.x + 40, ddRect.y + 30, 80, 30);
 					if (GUI.Button(r, "Confirm", CapComSkins.warningButton))
 					{
-						if (currentContract.Root.CanBeCancelled())
-							currentContract.Root.Cancel();
+						cancelContract();
 						warnCancel = false;
 						dropdown = false;
 					}
@@ -1096,14 +1143,63 @@ namespace CapCom
 					r = new Rect(ddRect.x + 40, ddRect.y + 30, 80, 30);
 					if (GUI.Button(r, "Confirm", CapComSkins.warningButton))
 					{
-						if (currentContract.Root.CanBeDeclined())
-							currentContract.Root.Decline();
+						declineContract();
 						warnDecline = false;
 						dropdown = false;
 					}
 				}
 				else
 					dropdown = false;
+			}
+		}
+
+		private void cancelContract()
+		{
+			if (currentContract.Root.CanBeCancelled())
+			{
+				currentContract.Root.Cancel();
+
+				if (currentContract == null)
+				{
+					contractIndex = 0;
+					currentContract = currentContracts[contractIndex];
+				}
+				else if (contractIndex >= currentContracts.Count - 1)
+				{
+					contractIndex = 0;
+					currentContract = currentContracts[contractIndex];
+				}
+				else
+				{
+					contractIndex += 1;
+					currentContract = currentContracts[contractIndex];
+				}
+				showAgency = false;
+			}
+		}
+
+		private void declineContract()
+		{
+			if (currentContract.Root.CanBeDeclined())
+			{
+				currentContract.Root.Decline();
+
+				if (currentContract == null)
+				{
+					contractIndex = 0;
+					currentContract = currentContracts[contractIndex];
+				}
+				else if (contractIndex >= currentContracts.Count - 1)
+				{
+					contractIndex = 0;
+					currentContract = currentContracts[contractIndex];
+				}
+				else
+				{
+					contractIndex += 1;
+					currentContract = currentContracts[contractIndex];
+				}
+				showAgency = false;
 			}
 		}
 
@@ -1275,6 +1371,8 @@ namespace CapCom
 					return "Agency";
 				case 5:
 					return "Target Body";
+				case 6:
+					return "Time";
 				default:
 					return "";
 			}
