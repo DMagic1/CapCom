@@ -53,6 +53,7 @@ namespace CapCom
 		private Contract root;
 		private float totalFundsReward, totalRepReward, totalSciReward;
 		private float totalFundsPenalty, totalRepPenalty;
+		private double expire, deadline, completed;
 		private string notes;
 		private string fundsRew, fundsAdv, fundsPen, repRew, repPen, sciRew;
 		private float fundsRewStrat, fundsAdvStrat, fundsPenStrat, repRewStrat, repPenStrat, sciRewStrat;
@@ -69,7 +70,7 @@ namespace CapCom
 			}
 			catch (Exception e)
 			{
-				Debug.LogError("Contract Guid not set, skipping...: " + e);
+				Debug.LogError("[CapCom] Contract Guid not set, skipping...: " + e);
 				root = null;
 				return;
 			}
@@ -80,7 +81,7 @@ namespace CapCom
 			}
 			catch (Exception e)
 			{
-				Debug.LogError("Contract Title not set, using type name..: " + e);
+				Debug.LogError("[CapCom] Contract Title not set, using type name..: " + e);
 				name = root.GetType().Name;
 			}
 
@@ -90,7 +91,7 @@ namespace CapCom
 			}
 			catch (Exception e)
 			{
-				Debug.LogError("Contract Notes not set, blank notes used...: " + e);
+				Debug.LogError("[CapCom] Contract Notes not set, blank notes used...: " + e);
 				notes = "";
 			}
 
@@ -100,7 +101,7 @@ namespace CapCom
 			}
 			catch (Exception e)
 			{
-				Debug.LogError("Contract Briefing not set, blank briefing used...: " + e);
+				Debug.LogError("[CapCom] Contract Briefing not set, blank briefing used...: " + e);
 				briefing = "";
 			}
 
@@ -110,7 +111,7 @@ namespace CapCom
 			}
 			catch (Exception e)
 			{
-				Debug.LogError("Contract Decline state not set, using true...: " + e);
+				Debug.LogError("[CapCom] Contract Decline state not set, using true...: " + e);
 				canBeDeclined = true;
 			}
 
@@ -120,8 +121,38 @@ namespace CapCom
 			}
 			catch (Exception e)
 			{
-				Debug.LogError("Contract Cancel state not set, using true...: " + e);
+				Debug.LogError("[CapCom] Contract Cancel state not set, using true...: " + e);
 				canBeCancelled = true;
+			}
+
+			try
+			{
+				expire = root.DateExpire;
+			}
+			catch (Exception e)
+			{
+				Debug.LogError("[CapCom] Contract Expiration Date not set, using 0...: " + e);
+				expire = 0;
+			}
+
+			try
+			{
+				deadline = root.DateDeadline;
+			}
+			catch (Exception e)
+			{
+				Debug.LogError("[CapCom] Contract Deadline Date not set, using 0...: " + e);
+				deadline = 0;
+			}
+
+			try
+			{
+				completed = root.DateFinished;
+			}
+			catch (Exception e)
+			{
+				Debug.LogError("[CapCom] Contract Finished Date not set, using 0..." + e);
+				completed = 0;
 			}
 
 			if (root.Agent != null)
@@ -493,6 +524,21 @@ namespace CapCom
 		public string Target
 		{
 			get { return target; }
+		}
+
+		public double Expire
+		{
+			get { return expire; }
+		}
+
+		public double Deadline
+		{
+			get { return deadline; }
+		}
+
+		public double Finished
+		{
+			get { return completed; }
 		}
 	}
 }
