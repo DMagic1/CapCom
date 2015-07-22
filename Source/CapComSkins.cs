@@ -256,16 +256,6 @@ namespace CapCom
 			toggleOn.Apply();
 
 			TextureScale.Bilinear(toggleOn, 26, 26);
-			pix = toggleOn.GetPixels();
-			toggleOn = new Texture2D(28, 28);
-			Color[] clearPix = new Color[28 * 28];
-			for (int i = 0; i < clearPix.Length; i++)
-			{
-				clearPix[i] = Color.clear;
-			}
-			toggleOn.SetPixels(clearPix);
-			toggleOn.SetPixels(0, 1, 26, 26, pix);
-			toggleOn.Apply();
 
 			pix = toggleOff.GetPixels(14, 19, 92, 92);
 			toggleOff = new Texture2D(92, 92);
@@ -280,16 +270,6 @@ namespace CapCom
 			toggleHoverOn.Apply();
 
 			TextureScale.Bilinear(toggleHoverOn, 26, 26);
-			pix = toggleHoverOn.GetPixels();
-			toggleHoverOn = new Texture2D(28, 28);
-			clearPix = new Color[28 * 28];
-			for (int i = 0; i < clearPix.Length; i++)
-			{
-				clearPix[i] = Color.clear;
-			}
-			toggleHoverOn.SetPixels(clearPix);
-			toggleHoverOn.SetPixels(0, 1, 26, 26, pix);
-			toggleHoverOn.Apply();
 
 			pix = toggleHoverOff.GetPixels(14, 19, 92, 92);
 			toggleHoverOff = new Texture2D(92, 92);
@@ -524,7 +504,7 @@ namespace CapCom
 			//Toggle Buttons
 			toggleOnButton = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.button);
 			toggleOnButton.padding = new RectOffset(0, 0, 0, 0);
-			toggleOnButton.border = new RectOffset(27, 0, 0, 0);
+			toggleOnButton.border = new RectOffset(27, 0, 0, 27);
 			toggleOnButton.normal.background = toggleOn;
 			toggleOnButton.active.background = toggleHoverOn;
 			toggleOnButton.hover.background = toggleHoverOn;
