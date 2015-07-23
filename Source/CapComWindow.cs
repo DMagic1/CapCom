@@ -44,6 +44,7 @@ namespace CapCom
 		private List<CapComContract> currentContracts = new List<CapComContract>();
 		private List<CapComContract> agentOfferedContracts = new List<CapComContract>();
 		private List<CapComContract> agentActiveContracts = new List<CapComContract>();
+		private List<CapComContract> selectedContracts = new List<CapComContract>();
 		private CapComContract currentContract;
 		private CapComSettingsWindow settings;
 
@@ -52,8 +53,8 @@ namespace CapCom
 		private int currentList;
 		private bool controlLock;
 		private bool showAgency;
+		private bool multiSelectKeyDown;
 		private bool resizing;
-		private bool mouseDown;
 		private bool dropdown, warnDecline, warnCancel, sortMenu;
 		private Rect ddRect;
 		private float dH, dragStart;
@@ -73,10 +74,7 @@ namespace CapCom
 			ClampToScreenOffset = new RectOffset(-650, -650, -300, -300);
 			TooltipMouseOffset = new Vector2d(-10, -25);
 
-
 			currentList = 0;
-
-			CC_SkinsLibrary.SetCurrent("CCUnitySkin");
 
 			InputLockManager.RemoveControlLock(lockID);
 		}
@@ -109,54 +107,25 @@ namespace CapCom
 			mousePos.y = Screen.height - mousePos.y;
 			if (WindowRect.Contains(mousePos))
 			{
-				if (Input.GetMouseButton(0) || Input.GetMouseButton(1))
-					mouseDown = true;
-				else
-					mouseDown = false;
+				multiSelectKeyDown = Input.GetKey(CapCom.Settings.multiSelect);
 
 				if (Input.GetKeyDown(CapCom.Settings.scrollUp))
 				{
-					if (currentContracts.Count > 0)
-					{
-						if (currentContract == null)
-						{
-							contractIndex = currentContracts.Count - 1;
-							currentContract = currentContracts[contractIndex];
-						}
-						else if (contractIndex > 0)
-						{
-							contractIndex -= 1;
-							currentContract = currentContracts[contractIndex];
-						}
-						else
-						{
-							contractIndex = currentContracts.Count - 1;
-							currentContract = currentContracts[contractIndex];
-						}
-						showAgency = false;
-					}
+					if (currentContract == null)
+						selectContract(currentContracts.Count - 1);
+					else if (contractIndex > 0)
+						selectContract(contractIndex - 1);
+					else
+						selectContract(currentContracts.Count - 1);
 				}
 				if (Input.GetKeyDown(CapCom.Settings.scrollDown))
 				{
-					if (currentContracts.Count > 0)
-					{
-						if (currentContract == null)
-						{
-							contractIndex = 0;
-							currentContract = currentContracts[contractIndex];
-						}
-						else if (contractIndex >= currentContracts.Count - 1)
-						{
-							contractIndex = 0;
-							currentContract = currentContracts[contractIndex];
-						}
-						else
-						{
-							contractIndex += 1;
-							currentContract = currentContracts[contractIndex];
-						}
-						showAgency = false;
-					}
+					if (currentContract == null)
+						selectContract(0);
+					else if (contractIndex >= currentContracts.Count - 1)
+						selectContract(0);
+					else
+						selectContract(contractIndex + 1);
 				}
 				if (Input.GetKeyDown(CapCom.Settings.listRight))
 				{
@@ -167,18 +136,7 @@ namespace CapCom
 
 					sortContracts();
 
-					if (currentContracts.Count > 0)
-					{
-						contractIndex = 0;
-						currentContract = currentContracts[contractIndex];
-						showAgency = false;
-					}
-					else
-					{
-						currentContract = null;
-						contractIndex = 0;
-						showAgency = false;
-					}
+					selectContract(0);
 				}
 				if (Input.GetKeyDown(CapCom.Settings.listLeft))
 				{
@@ -189,40 +147,26 @@ namespace CapCom
 
 					sortContracts();
 
-					if (currentContracts.Count > 0)
-					{
-						contractIndex = 0;
-						currentContract = currentContracts[contractIndex];
-						showAgency = false;
-					}
-					else
-					{
-						currentContract = null;
-						contractIndex = 0;
-						showAgency = false;
-					}
+					selectContract(0);
 				}
 				if (Input.GetKeyDown(CapCom.Settings.accept))
 				{
 					if (currentContract == null)
 						return;
 
-					if (currentContract.Root.ContractState != Contract.State.Offered)
+					if (currentList != 0)
 						return;
 
-					maxContracts = getMaxContracts();
-
-					if (!CapCom.Settings.activeLimit || ContractSystem.Instance.GetActiveContractCount() < maxContracts)
-						currentContract.Root.Accept();
+					acceptContract();
 				}
 				if (Input.GetKeyDown(CapCom.Settings.cancel))
 				{
 					if (currentContract == null)
 						return;
 
-					if (currentContract.Root.ContractState == Contract.State.Offered)
+					if (currentList == 0)
 					{
-						if (!CapCom.Settings.forceDecline && !currentContract.CanBeDeclined)
+						if (!CapCom.Settings.forceDecline && !selectedContracts.Any(c => c.CanBeDeclined))
 							return;
 
 						if (CapCom.Settings.showDeclineWarning)
@@ -233,9 +177,9 @@ namespace CapCom
 						else
 							declineContract();
 					}
-					else if (currentContract.Root.ContractState == Contract.State.Active)
+					else if (currentList == 1)
 					{
-						if (!CapCom.Settings.forceCancel && !currentContract.CanBeCancelled)
+						if (!CapCom.Settings.forceCancel && !selectedContracts.Any(c => c.CanBeCancelled))
 							return;
 
 						if (CapCom.Settings.showCancelWarning)
@@ -250,7 +194,7 @@ namespace CapCom
 			}
 		}
 
-		public void refreshContracts()
+		public void refreshContracts(bool setContract)
 		{
 			if (CapCom.Instance == null)
 				LogFormatted("CapCom Instance Not Loaded; Something Went Wrong Here...");
@@ -260,6 +204,9 @@ namespace CapCom
 			completedContracts = CapCom.Instance.getCompletedContracts;
 
 			sortContracts();
+
+			if (setContract)
+				selectContract(0);
 		}
 
 		private void sortContracts()
@@ -531,7 +478,7 @@ namespace CapCom
 			r.y -= 16;
 			r.width = 34;
 			r.height = 34;
-			if (CapCom.Settings.sortMode == 0 || CapCom.Settings.sortMode == 4 || CapCom.Settings.sortMode == 5)
+			if (CapCom.Settings.sortMode == 0 || CapCom.Settings.sortMode == 4 || CapCom.Settings.sortMode == 5 || CapCom.Settings.sortMode == 6)
 			{
 				r.height = 24;
 				r.width = 24;
@@ -629,11 +576,8 @@ namespace CapCom
 						{
 							currentList = 0;
 							sortContracts();
-							contractIndex = 0;
-							if (currentContracts.Count > 0)
-								currentContract = currentContracts[0];
-							else
-								currentContract = null;
+
+							selectContract(0);
 						}
 					}
 
@@ -644,11 +588,7 @@ namespace CapCom
 							currentList = 1;
 							sortContracts();
 
-							contractIndex = 0;
-							if (currentContracts.Count > 0)
-								currentContract = currentContracts[0];
-							else
-								currentContract = null;
+							selectContract(0);
 						}
 					}
 
@@ -659,11 +599,7 @@ namespace CapCom
 							currentList = 2;
 							sortContracts();
 
-							contractIndex = 0;
-							if (currentContracts.Count > 0)
-								currentContract = currentContracts[0];
-							else
-								currentContract = null;
+							selectContract(0);
 						}
 					}
 				}
@@ -680,14 +616,14 @@ namespace CapCom
 					GUILayout.Space(75);
 					if (dropdown)
 					{
-						GUILayout.Label(currentContracts[i].Name, CapComSkins.titleButtonBehind, GUILayout.Width(260), GUILayout.Height(46));
+						GUILayout.Label(currentContracts[i].Name, selectedContracts.Contains(currentContracts[i]) ? CapComSkins.titleButtonActive : CapComSkins.titleButton, GUILayout.Width(260), GUILayout.Height(46));
 					}
 					else
 					{
-						if (GUILayout.Button(currentContracts[i].Name, GUILayout.Width(260), GUILayout.Height(46)))
+						if (GUILayout.Button(currentContracts[i].Name, selectedContracts.Contains(currentContracts[i]) ? CapComSkins.titleButtonActive : CapComSkins.titleButton, GUILayout.Width(260), GUILayout.Height(46)))
 						{
-							currentContract = currentContracts[i];
-							contractIndex = i;
+							selectContract(i, multiSelectKeyDown);
+
 							showAgency = false;
 						}
 					}
@@ -702,12 +638,12 @@ namespace CapCom
 				{
 					if (GUI.Button(r, "", CapComSkins.iconButton))
 					{
-						currentContract = currentContracts[i];
-						contractIndex = i;
+						selectContract(i, multiSelectKeyDown);
+
 						showAgency = false;
 					}
 				}
-				GUI.DrawTexture(r, contractIndex == i ? CapComSkins.titleButtonActiveLeft : CapComSkins.titleButtonNormalLeft);
+				GUI.DrawTexture(r, selectedContracts.Contains(currentContracts[i]) ? CapComSkins.titleButtonOnLeft : CapComSkins.titleButtonOffLeft);
 				r.x += 10;
 				r.y += 3;
 				r.width = 58;
@@ -730,21 +666,21 @@ namespace CapCom
 			{
 				GUI.Label(new Rect(550, 15, 100, 20), "Offered", CapComSkins.headerText);
 
-				Rect r = new Rect(WindowRect.width - 60, 35, 44, 44);
+				Rect r = new Rect(WindowRect.width - 60, 35, 47, 49);
 
 				bool active = !CapCom.Settings.activeLimit || ContractSystem.Instance.GetActiveContractCount() < maxContracts;
 
 				if (GUI.Button(r, new GUIContent("", "Accept"), active ? CapComSkins.acceptButton : CapComSkins.acceptButtonGreyed))
 				{
 					if (active)
-						currentContract.Root.Accept();
+						acceptContract();
 				}
 
 				r.y += 65;
 
-				if (GUI.Button(r, new GUIContent("", "Decline"), CapCom.Settings.forceDecline || currentContract.CanBeDeclined ? CapComSkins.declineButton : CapComSkins.declineButtonGreyed))
+				if (GUI.Button(r, new GUIContent("", "Decline"), CapCom.Settings.forceDecline || selectedContracts.Any(c => c.CanBeDeclined) ? CapComSkins.declineButton : CapComSkins.declineButtonGreyed))
 				{
-					if (CapCom.Settings.forceDecline || currentContract.CanBeDeclined)
+					if (CapCom.Settings.forceDecline || selectedContracts.Any(c => c.CanBeDeclined))
 					{
 						if (CapCom.Settings.showDeclineWarning)
 						{
@@ -760,11 +696,11 @@ namespace CapCom
 			{
 				GUI.Label(new Rect(550, 15, 100, 20), "Active", CapComSkins.headerText);
 
-				Rect r = new Rect(WindowRect.width - 60, 100, 44, 44);
+				Rect r = new Rect(WindowRect.width - 60, 100, 47, 49);
 
-				if (GUI.Button(r, new GUIContent("", "Cancel"), CapCom.Settings.forceCancel || currentContract.CanBeCancelled ? CapComSkins.cancelButton : CapComSkins.cancelButtonGreyed))
+				if (GUI.Button(r, new GUIContent("", "Cancel"), CapCom.Settings.forceCancel || selectedContracts.Any(c => c.CanBeCancelled) ? CapComSkins.cancelButton : CapComSkins.cancelButtonGreyed))
 				{
-					if (currentContract.CanBeCancelled)
+					if (CapCom.Settings.forceCancel || selectedContracts.Any(c => c.CanBeCancelled))
 					{
 						if (CapCom.Settings.showCancelWarning)
 						{
@@ -1125,7 +1061,7 @@ namespace CapCom
 					ddRect = new Rect(WindowRect.width - 230, 95, 160, 70);
 					GUI.Box(ddRect, "");
 					Rect r = new Rect(ddRect.x + 10, ddRect.y + 5, 140, 30);
-					GUI.Label(r, "Cancel this contract?", CapComSkins.warningText);
+					GUI.Label(r, "Cancel contract?", CapComSkins.warningText);
 					r = new Rect(ddRect.x + 40, ddRect.y + 30, 80, 30);
 					if (GUI.Button(r, "Confirm", CapComSkins.warningButton))
 					{
@@ -1139,7 +1075,7 @@ namespace CapCom
 					ddRect = new Rect(WindowRect.width - 230, 95, 160, 70);
 					GUI.Box(ddRect, "");
 					Rect r = new Rect(ddRect.x + 10, ddRect.y + 5, 140, 30);
-					GUI.Label(r, "Decline this contract?", CapComSkins.warningText);
+					GUI.Label(r, "Decline contract?", CapComSkins.warningText);
 					r = new Rect(ddRect.x + 40, ddRect.y + 30, 80, 30);
 					if (GUI.Button(r, "Confirm", CapComSkins.warningButton))
 					{
@@ -1153,54 +1089,104 @@ namespace CapCom
 			}
 		}
 
+		private void acceptContract()
+		{
+			int count = ContractSystem.Instance.GetActiveContractCount();
+			maxContracts = getMaxContracts();
+
+			foreach (CapComContract cc in selectedContracts)
+			{
+				if (!CapCom.Settings.activeLimit || count < maxContracts)
+				{
+					cc.Root.Accept();
+					count++;
+				}
+			}
+
+			if (selectedContracts.Count <= 1)
+			{
+				if (currentContract == null)
+					selectContract(0);
+				else if (contractIndex >= currentContracts.Count - 1)
+					selectContract(0);
+				else
+					selectContract(contractIndex);
+			}
+			else
+				selectContract(0);
+		}
+
 		private void cancelContract()
 		{
-			if (currentContract.Root.CanBeCancelled())
+			bool any = false;
+			foreach (CapComContract cc in selectedContracts)
 			{
-				currentContract.Root.Cancel();
-
-				if (currentContract == null)
+				if (cc.Root.CanBeCancelled() || CapCom.Settings.forceCancel)
 				{
-					contractIndex = 0;
-					currentContract = currentContracts[contractIndex];
+					cc.Root.Cancel();
+					any = true;
 				}
-				else if (contractIndex >= currentContracts.Count - 1)
-				{
-					contractIndex = 0;
-					currentContract = currentContracts[contractIndex];
-				}
-				else
-				{
-					contractIndex += 1;
-					currentContract = currentContracts[contractIndex];
-				}
-				showAgency = false;
 			}
+
+			if (!any)
+				return;
+
+			if (selectedContracts.Count <= 1)
+			{
+				if (currentContract == null)
+					selectContract(0);
+				else if (contractIndex >= currentContracts.Count - 1)
+					selectContract(0);
+				else
+					selectContract(contractIndex);
+			}
+			else
+				selectContract(0);
 		}
 
 		private void declineContract()
 		{
-			if (currentContract.Root.CanBeDeclined())
+			bool any = false;
+			foreach (CapComContract cc in selectedContracts)
 			{
-				currentContract.Root.Decline();
-
-				if (currentContract == null)
+				if (cc.Root.CanBeDeclined() || CapCom.Settings.forceDecline)
 				{
-					contractIndex = 0;
-					currentContract = currentContracts[contractIndex];
+					cc.Root.Decline();
+					any = true;
 				}
-				else if (contractIndex >= currentContracts.Count - 1)
-				{
-					contractIndex = 0;
-					currentContract = currentContracts[contractIndex];
-				}
-				else
-				{
-					contractIndex += 1;
-					currentContract = currentContracts[contractIndex];
-				}
-				showAgency = false;
 			}
+
+			if (!any)
+				return;
+
+			if (selectedContracts.Count <= 1)
+			{
+				if (currentContract == null)
+					selectContract(0);
+				else if (contractIndex >= currentContracts.Count - 1)
+					selectContract(0);
+				else
+					selectContract(contractIndex);
+			}
+			else
+				selectContract(0);
+		}
+
+		private void selectContract(int i, bool selectMany = false)
+		{
+			contractIndex = i;
+
+			if (!selectMany)
+				selectedContracts.Clear();
+
+			if (currentContracts.Count > 0)
+				currentContract = currentContracts[contractIndex];
+			else
+				currentContract = null;
+
+			selectedContracts.Add(currentContract);
+
+			showAgency = false;
 		}
 
 		private void sizedContent(string funds, string sci, string rep, TransactionReasons type)
