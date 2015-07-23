@@ -38,13 +38,12 @@ namespace CapCom
 	class CapComSettingsWindow : CC_MBW
 	{
 		private bool controlLock;
-		private bool hideBriefing, hideNotes, warnDecline, warnCancel, stockToolbar, tooltips;
-		private bool oldToolbar, oldTooltips;
-		private bool dropdown, dup, ddown, dleft, dright, daccept, ddecline;
-		private KeyCode up, down, left, right, accept, decline;
+		private bool hideBriefing, hideNotes, warnDecline, warnCancel, stockToolbar, tooltips, style;
+		private bool oldToolbar, oldTooltips, oldStyle;
+		private bool dropdown, dup, ddown, dleft, dright, daccept, ddecline, dmulti;
+		private KeyCode up, down, left, right, accept, decline, multiSelect;
 		private Rect ddRect = new Rect();
 		private const string lockID = "CapCom_LockID";
-
 
 		protected override void Awake()
 		{
@@ -63,8 +62,6 @@ namespace CapCom
 			DragEnabled = true;
 			ClampToScreen = false;
 
-			CC_SkinsLibrary.SetCurrent("CCUnitySkin");
-
 			InputLockManager.RemoveControlLock(lockID);
 		}
 
@@ -76,12 +73,14 @@ namespace CapCom
 			warnCancel = CapCom.Settings.showCancelWarning;
 			oldToolbar = stockToolbar = CapCom.Settings.stockToolbar;
 			oldTooltips = tooltips = CapCom.Settings.tooltipsEnabled;
+			oldStyle = style = CapCom.Settings.useKSPStyle;
 			up = CapCom.Settings.scrollUp;
 			down = CapCom.Settings.scrollDown;
 			left = CapCom.Settings.listLeft;
 			right = CapCom.Settings.listRight;
 			accept = CapCom.Settings.accept;
 			decline = CapCom.Settings.cancel;
+			multiSelect = CapCom.Settings.multiSelect;
 		}
 
 		private void unlockControls()
@@ -177,6 +176,7 @@ namespace CapCom
 				dright = false;
 				daccept = false;
 				ddecline = false;
+				dmulti = false;
 			}
 		}
 
@@ -187,6 +187,7 @@ namespace CapCom
 			CapCom.Settings.showDeclineWarning = GUILayout.Toggle(CapCom.Settings.showDeclineWarning, "Warn on Decline", GUILayout.Width(125));
 			CapCom.Settings.showCancelWarning = GUILayout.Toggle(CapCom.Settings.showCancelWarning, "Warn on Cancel", GUILayout.Width(125));
 			tooltips = GUILayout.Toggle(tooltips, "Toolips", GUILayout.Width(70));
+			style = GUILayout.Toggle(style, "Use KSP Style", GUILayout.Width(120));
 			if (ToolbarManager.ToolbarAvailable)
 				stockToolbar = GUILayout.Toggle(stockToolbar, "Use Stock App Launcher", GUILayout.Width(160));
 
@@ -281,6 +282,21 @@ namespace CapCom
 			GUILayout.EndHorizontal();
 
 			GUILayout.BeginHorizontal();
+			GUILayout.Label("Multi Select:", GUILayout.Width(100));
+			GUILayout.Label(multiSelect.ToString(), GUILayout.Width(100));
+			if (!dropdown)
+			{
+				if (GUILayout.Button(multiSelect.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100)))
+				{
+					dropdown = true;
+					dmulti = true;
+				}
+			}
+			else
+				GUILayout.Label(multiSelect.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100));
+			GUILayout.EndHorizontal();
+
+			GUILayout.BeginHorizontal();
 			GUILayout.FlexibleSpace();
 			if (GUILayout.Button("Save", CapComSkins.warningButton, GUILayout.Width(60)))
 			{
@@ -289,6 +305,7 @@ namespace CapCom
 				warnDecline = CapCom.Settings.showDeclineWarning;
 				warnCancel = CapCom.Settings.showCancelWarning;
 				CapCom.Settings.tooltipsEnabled = tooltips;
+				CapCom.Settings.useKSPStyle = style;
 				CapCom.Settings.stockToolbar = stockToolbar;
 				CapCom.Settings.Save();
 				CapCom.Settings.scrollUp = up;
@@ -297,6 +314,7 @@ namespace CapCom
 				CapCom.Settings.listRight = right;
 				CapCom.Settings.accept = accept;
 				CapCom.Settings.cancel = decline;
+				CapCom.Settings.multiSelect = multiSelect;
 				Visible = false;
 			}
 			GUILayout.FlexibleSpace();
@@ -307,12 +325,14 @@ namespace CapCom
 				CapCom.Settings.showDeclineWarning = warnDecline;
 				CapCom.Settings.showCancelWarning = warnCancel;
 				tooltips = CapCom.Settings.tooltipsEnabled;
+				style = CapCom.Settings.useKSPStyle;
 				up = CapCom.Settings.scrollUp;
 				down = CapCom.Settings.scrollDown;
 				left = CapCom.Settings.listLeft;
 				right = CapCom.Settings.listRight;
 				accept = CapCom.Settings.accept;
 				decline = CapCom.Settings.cancel;
+				multiSelect = CapCom.Settings.multiSelect;
 
 				stockToolbar = CapCom.Settings.stockToolbar;
 				Visible = false;
@@ -350,6 +370,24 @@ namespace CapCom
 			{
 				oldTooltips = tooltips;
 				CapCom.Instance.Window.TooltipsEnabled = tooltips;
+			}
+
+			if (oldStyle != style)
+			{
+				oldStyle = style;
+				if (style)
+				{
+					CapComSkins.initializeKSPSkins();
+					CC_SkinsLibrary.SetCurrent("CCKSPSkin");
+				}
+				else
+				{
+					CapComSkins.initializeUnitySkins();
+					CC_SkinsLibrary.SetCurrent("CCUnitySkin");
+				}
+
+				WindowStyle = CapComSkins.newWindowStyle;
+				CapCom.Instance.Window.WindowStyle = CapComSkins.newWindowStyle;
 			}
 
 			if (dropdown && Event.current.type == EventType.mouseDown && !ddRect.Contains(Event.current.mousePosition))
@@ -417,6 +455,8 @@ namespace CapCom
 				return accept.ToString();
 			else if (ddecline)
 				return decline.ToString();
+			else if (dmulti)
+				return multiSelect.ToString();
 			return "";
 		}
 
@@ -434,6 +474,8 @@ namespace CapCom
 				accept = k;
 			else if (ddecline)
 				decline = k;
+			else if (dmulti)
+				multiSelect = k;
 		}
 
 		private void resetKey()
@@ -450,6 +492,8 @@ namespace CapCom
 				accept = CapCom.Settings.accept;
 			else if (ddecline)
 				decline = CapCom.Settings.cancel;
+			else if (dmulti)
+				multiSelect = CapCom.Settings.multiSelect;
 		}
 
 	}
