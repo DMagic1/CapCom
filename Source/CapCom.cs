@@ -135,9 +135,22 @@ namespace CapCom
 
 			if (HighLogic.CurrentGame.Mode != Game.Modes.CAREER)
 				Destroy(this);
-			
+
 			if (settings == null)
+			{
 				settings = new CapComSettings(filePath);
+
+				if (settings.useKSPStyle)
+				{
+					CapComSkins.initializeKSPSkins();
+					CC_SkinsLibrary.SetCurrent("CCKSPSkin");
+				}
+				else
+				{
+					CapComSkins.initializeUnitySkins();
+					CC_SkinsLibrary.SetCurrent("CCUnitySkin");
+				}
+			}
 
 			window = gameObject.AddComponent<CapComWindow>();
 
@@ -563,12 +576,12 @@ namespace CapCom
 
 			LogFormatted("CapCom Contracts Loaded...");
 
-			window.refreshContracts();
+			window.refreshContracts(true);
 		}
 
 		private void refreshList()
 		{
-			window.refreshContracts();
+			window.refreshContracts(false);
 		}
 
 		private void updateOrbits(CapComContract c)
