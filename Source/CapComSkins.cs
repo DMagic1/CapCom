@@ -181,6 +181,7 @@ namespace CapCom
 
 			toggleButtons();
 			initializeUnitySkins();
+			CC_SkinsLibrary.SetCurrent("CCUnitySkin");
 		}
 
 		private static void toggleButtons()
@@ -580,7 +581,6 @@ namespace CapCom
 			failure.normal.textColor = XKCDColors.DustyRed;
 
 			funds = new GUIStyle(advance);
-			funds.fontStyle = FontStyle.Normal;
 			funds.normal.textColor = XKCDColors.PaleOliveGreen;
 
 			rep = new GUIStyle(funds);
@@ -738,7 +738,6 @@ namespace CapCom
 			failure.normal.textColor = XKCDColors.DustyRed;
 
 			funds = new GUIStyle(advance);
-			funds.fontStyle = FontStyle.Normal;
 			funds.normal.textColor = XKCDColors.PaleOliveGreen;
 
 			rep = new GUIStyle(funds);
