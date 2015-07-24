@@ -38,6 +38,7 @@ namespace CapCom
 	class CapComSkins : CC_MBE
 	{
 		internal static GUISkin ccUnitySkin;
+		internal static GUISkin ccKSPSkin;
 
 		//Window styles
 		internal static GUIStyle newWindowStyle;
@@ -45,13 +46,23 @@ namespace CapCom
 
 		//Button styles
 		internal static GUIStyle titleButton;
-		internal static GUIStyle titleButtonBehind;
+		internal static GUIStyle titleButtonActive;
 		internal static GUIStyle textureButton;
 		internal static GUIStyle tabButton;
 		internal static GUIStyle tabButtonInactive;
 		internal static GUIStyle menuButton;
 		internal static GUIStyle keycodeButton;
 		internal static GUIStyle warningButton;
+
+		internal static GUIStyle acceptButton;
+		internal static GUIStyle acceptButtonGreyed;
+		internal static GUIStyle declineButton;
+		internal static GUIStyle declineButtonGreyed;
+		internal static GUIStyle cancelButton;
+		internal static GUIStyle cancelButtonGreyed;
+
+		internal static GUIStyle toggleOnButton;
+		internal static GUIStyle toggleOffButton;
 
 		//Icon Button styles
 		internal static GUIStyle iconButton;
@@ -103,50 +114,40 @@ namespace CapCom
 		internal static Texture2D notesMinusIcon;
 		internal static Texture2D sortStars;
 		internal static Texture2D sortPlanet;
+		internal static Texture2D sortTime;
+
 		internal static Texture2D toggleOn;
 		internal static Texture2D toggleOff;
 		internal static Texture2D toggleHoverOff;
 		internal static Texture2D toggleHoverOn;
 		internal static Texture2D currentFlag;
 
-		//Mission Control Center texture map
-		internal static Texture2D missionControlTexture;
+		internal static Texture2D acceptButtonNormal;
+		internal static Texture2D acceptButtonHover;
+		internal static Texture2D acceptButtonActive;
+		internal static Texture2D acceptButtonInactive;
 
-		//Texture element locations on the mission control center texture map; values are normalized
-		internal static Rect acceptButtonNormal = new Rect(0, 0.3671875f, 0.04296875f, 0.0439456125f);
-		internal static Rect acceptButtonHover = new Rect(0.0478515625f, 0.3671875f, 0.04296875f, 0.0439456125f);
-		internal static Rect acceptButtonActive = new Rect(0.095703125f, 0.3671875f, 0.04296875f, 0.0439456125f);
-		internal static Rect acceptButtonInactive = new Rect(0, 0.4169921875f, 0.04296875f, 0.0439456125f);
+		internal static Texture2D declineButtonNormal;
+		internal static Texture2D declineButtonHover;
+		internal static Texture2D declineButtonActive;
+		internal static Texture2D declineButtonInactive;
 
-		internal static Rect declineButtonNormal = new Rect(0.0478515625f, 0.4169921875f, 0.04296875f, 0.0439456125f);
-		internal static Rect declineButtonHover = new Rect(0.095703125f, 0.4169921875f, 0.04296875f, 0.0439456125f);
-		internal static Rect declineButtonActive = new Rect(0, 0.466796875f, 0.04296875f, 0.0439456125f);
-		internal static Rect declineButtonInactive = new Rect(0.0478515625f, 0.466796875f, 0.04296875f, 0.0439456125f);
+		internal static Texture2D cancelButtonNormal;
+		internal static Texture2D cancelButtonHover;
+		internal static Texture2D cancelButtonActive;
+		internal static Texture2D cancelButtonInactive;
 
-		internal static Rect cancelButtonNormal = new Rect(0.095703125f, 0.466796875f, 0.04296875f, 0.0439456125f);
-		internal static Rect cancelButtonHover = new Rect(0, 0.5166015625f, 0.04296875f, 0.0439456125f);
-		internal static Rect cancelButtonActive = new Rect(0.0478515625f, 0.5166015625f, 0.04296875f, 0.0439456125f);
-		internal static Rect cancelButtonInactive = new Rect(0.095703125f, 0.5166015625f, 0.04296875f, 0.0439456125f);
+		internal static Texture2D titleButtonOff;
+		internal static Texture2D titleButtonOn;
 
-		internal static Rect titleButtonFlagNormal = new Rect(0, 0.3125f, 0.0751953125f, 0.0498046875f);
-		internal static Rect titleButtonFlagActive = new Rect(0, 0.2626953125f, 0.0751953125f, 0.0498046875f);
+		internal static Texture2D titleButtonOffLeft;
+		internal static Texture2D titleButtonOnLeft;
 
-		internal static Rect titleButtonNormal = new Rect(0.0751953125f, 0.3125f, 0.0244140625f, 0.0498046875f);
-		internal static Rect titleButtonActive = new Rect(0.0751953125f, 0.2626953125f, 0.0244140625f, 0.0498046875f);
+		internal static Texture2D tabButtonOff;
+		internal static Texture2D tabButtonOn;
+		internal static Texture2D tabButtonHover;
 
-		internal static Rect tabButtonNormalLeft = new Rect(0, 0.560546875f, 0.017578125f, 0.0224609375f);
-		internal static Rect tabButtonNormalMiddle = new Rect(0.017578125f, 0.560546875f, 0.009765625f, 0.0224609375f);
-		internal static Rect tabButtonNormalRight = new Rect(0.02734375f, 0.560546875f, 0.02734375f, 0.0224609375f);
-
-		internal static Rect tabButtonHoverLeft = new Rect(0.0546875f, 0.560546875f, 0.017578125f, 0.0224609375f);
-		internal static Rect tabButtonHoverMiddle = new Rect(0.0712890625f, 0.560546875f, 0.009765625f, 0.0224609375f);
-		internal static Rect tabButtonHoverRight = new Rect(0.0810546875f, 0.560546875f, 0.0263671875f, 0.0224609375f);
-
-		internal static Rect tabButtonActiveLeft = new Rect(0.9462890625f, 0.099609375f, 0.017578125f, 0.0224609375f);
-		internal static Rect tabButtonActiveMiddle = new Rect(0.962890625f, 0.099609375f, 0.009765625f, 0.0224609375f);
-		internal static Rect tabButtonActiveRight = new Rect(0.9736328125f, 0.099609375f, 0.0263671875f, 0.0224609375f);
-
-		internal static Rect flagRect = new Rect(0, 0.1513671875f, 0.16796875f, 0.1103515625f);
+		internal static Texture2D flagTex = new Texture2D(1, 1);
 
 		internal static int fontSize = 0;
 
@@ -176,16 +177,267 @@ namespace CapCom
 			notesMinusIcon = GameDatabase.Instance.GetTexture("CapCom/Textures/CloseNotesIcon", false);
 			sortStars = GameDatabase.Instance.GetTexture("CapCom/Textures/SortDifficultyIcon", false);
 			sortPlanet = GameDatabase.Instance.GetTexture("CapCom/Textures/SortPlanetsIcon", false);
+			sortTime = GameDatabase.Instance.GetTexture("CapCom/Textures/SortTimeIcon", false);
 
-			toggleOn = CC_SkinsLibrary.DefKSPSkin.toggle.onNormal.background;
-			toggleOff = CC_SkinsLibrary.DefKSPSkin.toggle.normal.background;
-			toggleHoverOff = CC_SkinsLibrary.DefKSPSkin.toggle.hover.background;
-			toggleHoverOn = CC_SkinsLibrary.DefKSPSkin.toggle.onHover.background;
-
-			initializeSkins();
+			toggleButtons();
+			initializeUnitySkins();
+			CC_SkinsLibrary.SetCurrent("CCUnitySkin");
 		}
 
-		internal static void initializeSkins()
+		private static void toggleButtons()
+		{
+			Texture2D toggleOnOriginal = CC_SkinsLibrary.DefKSPSkin.toggle.onNormal.background;
+			Texture2D toggleOffOriginal = CC_SkinsLibrary.DefKSPSkin.toggle.normal.background;
+			Texture2D toggleHoverOnOriginal = CC_SkinsLibrary.DefKSPSkin.toggle.onHover.background;
+			Texture2D toggleHoverOffOriginal = CC_SkinsLibrary.DefKSPSkin.toggle.hover.background;
+
+			toggleOn = new Texture2D(toggleOnOriginal.width, toggleOnOriginal.height);
+			toggleOff = new Texture2D(toggleOffOriginal.width, toggleOffOriginal.height);
+			toggleHoverOn = new Texture2D(toggleHoverOnOriginal.width, toggleHoverOnOriginal.height);
+			toggleHoverOff = new Texture2D(toggleHoverOffOriginal.width, toggleHoverOffOriginal.height);
+
+			var rt = RenderTexture.GetTemporary(toggleOnOriginal.width, toggleOnOriginal.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB, 1);
+
+			Graphics.Blit(toggleOnOriginal, rt);
+
+			RenderTexture.active = rt;
+
+			toggleOn.ReadPixels(new Rect(0, 0, toggleOnOriginal.width, toggleOnOriginal.height), 0, 0);
+
+			RenderTexture.active = null;
+			RenderTexture.ReleaseTemporary(rt);
+
+			toggleOn.Apply();
+
+			rt = RenderTexture.GetTemporary(toggleOffOriginal.width, toggleOffOriginal.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB, 1);
+
+			Graphics.Blit(toggleOffOriginal, rt);
+
+			RenderTexture.active = rt;
+
+			toggleOff.ReadPixels(new Rect(0, 0, toggleOffOriginal.width, toggleOffOriginal.height), 0, 0);
+
+			RenderTexture.active = null;
+			RenderTexture.ReleaseTemporary(rt);
+
+			toggleOff.Apply();
+
+			rt = RenderTexture.GetTemporary(toggleHoverOnOriginal.width, toggleHoverOnOriginal.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB, 1);
+
+			Graphics.Blit(toggleHoverOnOriginal, rt);
+
+			RenderTexture.active = rt;
+
+			toggleHoverOn.ReadPixels(new Rect(0, 0, toggleHoverOnOriginal.width, toggleHoverOnOriginal.height), 0, 0);
+
+			RenderTexture.active = null;
+			RenderTexture.ReleaseTemporary(rt);
+
+			toggleHoverOn.Apply();
+
+			rt = RenderTexture.GetTemporary(toggleHoverOffOriginal.width, toggleHoverOffOriginal.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB, 1);
+
+			Graphics.Blit(toggleHoverOffOriginal, rt);
+
+			RenderTexture.active = rt;
+
+			toggleHoverOff.ReadPixels(new Rect(0, 0, toggleHoverOffOriginal.width, toggleHoverOffOriginal.height), 0, 0);
+
+			RenderTexture.active = null;
+			RenderTexture.ReleaseTemporary(rt);
+
+			toggleHoverOff.Apply();
+
+			rt = null;
+
+			toggleOnOriginal = null;
+			toggleOffOriginal = null;
+			toggleHoverOnOriginal = null;
+			toggleHoverOffOriginal = null;
+
+			var pix = toggleOn.GetPixels(14, 19, 92, 92);
+			toggleOn = new Texture2D(92, 92);
+			toggleOn.SetPixels(pix);
+			toggleOn.Apply();
+
+			TextureScale.Bilinear(toggleOn, 26, 26);
+
+			pix = toggleOff.GetPixels(14, 19, 92, 92);
+			toggleOff = new Texture2D(92, 92);
+			toggleOff.SetPixels(pix);
+			toggleOff.Apply();
+
+			TextureScale.Bilinear(toggleOff, 26, 26);
+
+			pix = toggleHoverOn.GetPixels(14, 19, 92, 92);
+			toggleHoverOn = new Texture2D(92, 92);
+			toggleHoverOn.SetPixels(pix);
+			toggleHoverOn.Apply();
+
+			TextureScale.Bilinear(toggleHoverOn, 26, 26);
+
+			pix = toggleHoverOff.GetPixels(14, 19, 92, 92);
+			toggleHoverOff = new Texture2D(92, 92);
+			toggleHoverOff.SetPixels(pix);
+			toggleHoverOff.Apply();
+
+			TextureScale.Bilinear(toggleHoverOff, 26, 26);
+		}
+
+		internal static void texturesFromAtlas(Texture2D atlas)
+		{
+			var pix = atlas.GetPixels(0, 372, 47, 49);
+
+			acceptButtonNormal = new Texture2D(47, 49);
+			acceptButtonNormal.SetPixels(pix);
+			acceptButtonNormal.Apply();
+
+			pix = atlas.GetPixels(49, 372, 47, 49);
+
+			acceptButtonHover = new Texture2D(47, 49);
+			acceptButtonHover.SetPixels(pix);
+			acceptButtonHover.Apply();
+
+			pix = atlas.GetPixels(98, 372, 47, 49);
+
+			acceptButtonActive = new Texture2D(47, 49);
+			acceptButtonActive.SetPixels(pix);
+			acceptButtonActive.Apply();
+
+			pix = atlas.GetPixels(0, 423, 47, 49);
+
+			acceptButtonInactive = new Texture2D(47, 49);
+			acceptButtonInactive.SetPixels(pix);
+			acceptButtonInactive.Apply();
+
+			pix = atlas.GetPixels(49, 423, 47, 49);
+
+			declineButtonNormal = new Texture2D(47, 49);
+			declineButtonNormal.SetPixels(pix);
+			declineButtonNormal.Apply();
+
+			pix = atlas.GetPixels(98, 423, 47, 49);
+
+			declineButtonHover = new Texture2D(47, 49);
+			declineButtonHover.SetPixels(pix);
+			declineButtonHover.Apply();
+
+			pix = atlas.GetPixels(0, 474, 47, 49);
+
+			declineButtonActive = new Texture2D(47, 49);
+			declineButtonActive.SetPixels(pix);
+			declineButtonActive.Apply();
+
+			pix = atlas.GetPixels(49, 474, 47, 49);
+
+			declineButtonInactive = new Texture2D(47, 49);
+			declineButtonInactive.SetPixels(pix);
+			declineButtonInactive.Apply();
+
+			pix = atlas.GetPixels(98, 474, 47, 49);
+
+			cancelButtonNormal = new Texture2D(47, 49);
+			cancelButtonNormal.SetPixels(pix);
+			cancelButtonNormal.Apply();
+
+			pix = atlas.GetPixels(0, 525, 47, 49);
+
+			cancelButtonHover = new Texture2D(47, 49);
+			cancelButtonHover.SetPixels(pix);
+			cancelButtonHover.Apply();
+
+			pix = atlas.GetPixels(49, 525, 47, 49);
+
+			cancelButtonActive = new Texture2D(47, 49);
+			cancelButtonActive.SetPixels(pix);
+			cancelButtonActive.Apply();
+
+			pix = atlas.GetPixels(98, 525, 47, 49);
+
+			cancelButtonInactive = new Texture2D(47, 49);
+			cancelButtonInactive.SetPixels(pix);
+			cancelButtonInactive.Apply();
+
+			pix = atlas.GetPixels(78, 319, 24, 51);
+
+			titleButtonOff = new Texture2D(24, 51);
+			titleButtonOff.SetPixels(pix);
+			titleButtonOff.Apply();
+
+			pix = atlas.GetPixels(78, 268, 24, 51);
+
+			titleButtonOn = new Texture2D(24, 51);
+			titleButtonOn.SetPixels(pix);
+			titleButtonOn.Apply();
+
+			pix = atlas.GetPixels(0, 268, 77, 51);
+
+			titleButtonOnLeft = new Texture2D(77, 51);
+			titleButtonOnLeft.SetPixels(pix);
+			titleButtonOnLeft.Apply();
+
+			pix = atlas.GetPixels(0, 319, 77, 51);
+
+			titleButtonOffLeft = new Texture2D(77, 51);
+			titleButtonOffLeft.SetPixels(pix);
+			titleButtonOffLeft.Apply();
+
+			pix = atlas.GetPixels(0, 574, 54, 23);
+
+			tabButtonOff = new Texture2D(54, 23);
+			tabButtonOff.SetPixels(pix);
+			tabButtonOff.Apply();
+
+			pix = atlas.GetPixels(55, 574, 54, 23);
+
+			tabButtonOn = new Texture2D(54, 23);
+			tabButtonOn.SetPixels(pix);
+			tabButtonOn.Apply();
+
+			pix = atlas.GetPixels(969, 102, 54, 23);
+
+			tabButtonHover = new Texture2D(54, 23);
+			tabButtonHover.SetPixels(pix);
+			tabButtonHover.Apply();
+
+			pix = atlas.GetPixels(0, 155, 172, 113);
+
+			flagTex = new Texture2D(172, 113);
+			flagTex.SetPixels(pix);
+			flagTex.Apply();
+
+			atlasStyles();
+		}
+
+		private static void atlasStyles()
+		{
+			acceptButton = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.button);
+			acceptButton.padding = new RectOffset(0, 0, 0, 0);
+			acceptButton.normal.background = acceptButtonNormal;
+			acceptButton.hover.background = acceptButtonHover;
+			acceptButton.active.background = acceptButtonActive;
+
+			acceptButtonGreyed = new GUIStyle(acceptButton);
+			acceptButtonGreyed.normal.background = acceptButtonGreyed.hover.background = acceptButtonGreyed.active.background = acceptButtonInactive;
+
+			declineButton = new GUIStyle(acceptButton);
+			declineButton.normal.background = declineButtonNormal;
+			declineButton.hover.background = declineButtonHover;
+			declineButton.active.background = declineButtonActive;
+
+			declineButtonGreyed = new GUIStyle(acceptButtonGreyed);
+			declineButtonGreyed.normal.background = declineButtonGreyed.hover.background = declineButtonGreyed.active.background = declineButtonInactive;
+
+			cancelButton = new GUIStyle(acceptButton);
+			cancelButton.normal.background = cancelButtonNormal;
+			cancelButton.hover.background = cancelButtonHover;
+			cancelButton.active.background = cancelButtonActive;
+
+			cancelButtonGreyed = new GUIStyle(acceptButtonGreyed);
+			cancelButtonGreyed.normal.background = cancelButtonGreyed.hover.background = cancelButtonGreyed.active.background = cancelButtonInactive;
+		}
+
+		internal static void initializeUnitySkins()
 		{
 			ccUnitySkin = CC_SkinsLibrary.CopySkin(CC_SkinsLibrary.DefSkinType.Unity);
 			CC_SkinsLibrary.AddSkin("CCUnitySkin", ccUnitySkin);
@@ -212,9 +464,7 @@ namespace CapCom
 			titleButton.normal.textColor = XKCDColors.ButterYellow;
 			titleButton.padding = new RectOffset(2, 14, 2, 2);
 
-			titleButtonBehind = new GUIStyle(titleButton);
-			titleButtonBehind.hover.background = titleButtonBehind.normal.background;
-			titleButtonBehind.hover.textColor = titleButtonBehind.normal.textColor;
+			titleButtonActive = new GUIStyle(titleButton);
 
 			tabButton = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.button);
 			tabButton.fontSize = 14 + fontSize;
@@ -253,6 +503,19 @@ namespace CapCom
 			iconButton = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.label);
 
 			keycodeButton = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.button);
+
+			//Toggle Buttons
+			toggleOnButton = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.button);
+			toggleOnButton.padding = new RectOffset(0, 0, 0, 0);
+			toggleOnButton.border = new RectOffset(27, 0, 0, 27);
+			toggleOnButton.normal.background = toggleOn;
+			toggleOnButton.active.background = toggleHoverOn;
+			toggleOnButton.hover.background = toggleHoverOn;
+
+			toggleOffButton = new GUIStyle(toggleOnButton);
+			toggleOffButton.normal.background = toggleOff;
+			toggleOffButton.active.background = toggleHoverOff;
+			toggleOffButton.hover.background = toggleHoverOff;
 
 			//Label Styles
 			headerText = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.label);
@@ -318,7 +581,6 @@ namespace CapCom
 			failure.normal.textColor = XKCDColors.DustyRed;
 
 			funds = new GUIStyle(advance);
-			funds.fontStyle = FontStyle.Normal;
 			funds.normal.textColor = XKCDColors.PaleOliveGreen;
 
 			rep = new GUIStyle(funds);
@@ -335,6 +597,163 @@ namespace CapCom
 			CC_SkinsLibrary.AddStyle("CCUnitySkin", newWindowStyle);
 			CC_SkinsLibrary.AddStyle("CCUnitySkin", dropDown);
 			CC_SkinsLibrary.AddStyle("CCUnitySkin", titleButton);
+		}
+
+		internal static void initializeKSPSkins()
+		{
+			ccKSPSkin = CC_SkinsLibrary.CopySkin(CC_SkinsLibrary.DefSkinType.KSP);
+			CC_SkinsLibrary.AddSkin("CCKSPSkin", ccKSPSkin);
+
+			newWindowStyle = new GUIStyle(CC_SkinsLibrary.DefKSPSkin.window);
+			newWindowStyle.fontSize = 14;
+			newWindowStyle.fontStyle = FontStyle.Bold;
+			newWindowStyle.padding = new RectOffset(0, 1, 20, 12);
+
+			dropDown = new GUIStyle(CC_SkinsLibrary.DefKSPSkin.box);
+
+			//Button Styles
+			titleButton = new GUIStyle(CC_SkinsLibrary.DefKSPSkin.button);
+			titleButton.fontSize = 12 + fontSize;
+			titleButton.wordWrap = true;
+			titleButton.fontStyle = FontStyle.Bold;
+			titleButton.normal.textColor = XKCDColors.ButterYellow;
+			titleButton.padding = new RectOffset(2, 14, 2, 2);
+			titleButton.normal.background = titleButtonOff;
+			titleButton.hover.background = titleButtonOn;
+
+			titleButtonActive = new GUIStyle(titleButton);
+			titleButtonActive.normal.background = titleButtonOn;
+
+			tabButton = new GUIStyle(CC_SkinsLibrary.DefKSPSkin.button);
+			tabButton.fontSize = 13 + fontSize;
+			tabButton.fontStyle = FontStyle.Bold;
+			tabButton.border = new RectOffset(17, 26, 0, 19);
+			tabButton.normal.background = tabButtonOn;
+			tabButton.hover.background = tabButtonHover;
+
+			tabButtonInactive = new GUIStyle(tabButton);
+			tabButtonInactive.normal.background = tabButtonOff;
+
+			textureButton = new GUIStyle(CC_SkinsLibrary.DefKSPSkin.button);
+			textureButton.fontSize = 14;
+			textureButton.fontStyle = FontStyle.Bold;
+			textureButton.alignment = TextAnchor.MiddleCenter;
+			textureButton.padding = new RectOffset(1, 1, 2, 2);
+
+			menuButton = new GUIStyle(CC_SkinsLibrary.DefKSPSkin.label);
+			menuButton.fontSize = 12 + fontSize;
+			menuButton.fontStyle = FontStyle.Bold;
+			menuButton.padding = new RectOffset(26, 2, 2, 2);
+			menuButton.normal.textColor = XKCDColors.White;
+			menuButton.hover.textColor = XKCDColors.AlmostBlack;
+			Texture2D sortBackground = new Texture2D(1, 1);
+			sortBackground.SetPixel(1, 1, XKCDColors.OffWhite);
+			sortBackground.Apply();
+			menuButton.hover.background = sortBackground;
+			menuButton.alignment = TextAnchor.MiddleLeft;
+
+			warningButton = new GUIStyle(CC_SkinsLibrary.DefKSPSkin.button);
+			warningButton.fontSize = 13 + fontSize;
+			warningButton.fontStyle = FontStyle.Bold;
+			warningButton.alignment = TextAnchor.MiddleCenter;
+
+			iconButton = new GUIStyle(CC_SkinsLibrary.DefKSPSkin.label);
+
+			keycodeButton = new GUIStyle(CC_SkinsLibrary.DefKSPSkin.button);
+
+			//Toggle Buttons
+			toggleOnButton = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.button);
+			toggleOnButton.padding = new RectOffset(0, 0, 0, 0);
+			toggleOnButton.border = new RectOffset(27, 0, 0, 27);
+			toggleOnButton.normal.background = toggleOn;
+			toggleOnButton.active.background = toggleHoverOn;
+			toggleOnButton.hover.background = toggleHoverOn;
+
+			toggleOffButton = new GUIStyle(toggleOnButton);
+			toggleOffButton.normal.background = toggleOff;
+			toggleOffButton.active.background = toggleHoverOff;
+			toggleOffButton.hover.background = toggleHoverOff;
+
+			//Label Styles
+			headerText = new GUIStyle(CC_SkinsLibrary.DefKSPSkin.label);
+			headerText.fontSize = 13 + fontSize;
+			headerText.fontStyle = FontStyle.Bold;
+			headerText.alignment = TextAnchor.MiddleLeft;
+			headerText.normal.textColor = XKCDColors.FadedOrange;
+
+			warningText = new GUIStyle(headerText);
+			warningText.alignment = TextAnchor.MiddleCenter;
+			warningText.normal.textColor = XKCDColors.VomitYellow;
+
+			reassignText = new GUIStyle(warningText);
+			reassignText.normal.textColor = Color.white;
+
+			reassignCurrentText = new GUIStyle(reassignText);
+			reassignCurrentText.fontStyle = FontStyle.Bold;
+
+			titleText = new GUIStyle(headerText);
+			titleText.normal.textColor = XKCDColors.White;
+
+			briefingText = new GUIStyle(CC_SkinsLibrary.DefKSPSkin.label);
+			briefingText.fontSize = 11 + fontSize;
+			briefingText.alignment = TextAnchor.MiddleLeft;
+			briefingText.normal.textColor = XKCDColors.KSPNeutralUIGrey;
+
+			synopsisText = new GUIStyle(briefingText);
+			synopsisText.fontSize = 12 + fontSize;
+			synopsisText.fontStyle = FontStyle.Bold;
+
+			parameterText = new GUIStyle(synopsisText);
+			parameterText.normal.textColor = XKCDColors.Beige;
+
+			subParameterText = new GUIStyle(parameterText);
+			subParameterText.normal.textColor = XKCDColors.DarkBeige;
+
+			timerText = new GUIStyle(synopsisText);
+			timerText.normal.textColor = XKCDColors.OffWhite;
+
+			noteText = new GUIStyle(synopsisText);
+			noteText.fontStyle = FontStyle.Normal;
+			noteText.normal.textColor = XKCDColors.TiffanyBlue;
+
+			agencyContractText = new GUIStyle(synopsisText);
+			agencyContractText.normal.textColor = XKCDColors.ButterYellow;
+
+			smallText = new GUIStyle(CC_SkinsLibrary.DefKSPSkin.label);
+			smallText.fontSize = 11 + fontSize;
+			smallText.alignment = TextAnchor.MiddleLeft;
+
+			//Reward and Penalty Styles
+			advance = new GUIStyle(CC_SkinsLibrary.DefKSPSkin.label);
+			advance.fontSize = 12 + fontSize;
+			advance.fontStyle = FontStyle.Bold;
+			advance.alignment = TextAnchor.MiddleLeft;
+			advance.wordWrap = false;
+			advance.normal.textColor = XKCDColors.DullYellow;
+
+			completion = new GUIStyle(advance);
+			completion.normal.textColor = XKCDColors.DustyGreen;
+
+			failure = new GUIStyle(advance);
+			failure.normal.textColor = XKCDColors.DustyRed;
+
+			funds = new GUIStyle(advance);
+			funds.normal.textColor = XKCDColors.PaleOliveGreen;
+
+			rep = new GUIStyle(funds);
+			rep.normal.textColor = XKCDColors.BrownishYellow;
+
+			sci = new GUIStyle(funds);
+			sci.normal.textColor = XKCDColors.AquaBlue;
+
+			//Add Default Styles
+			CC_SkinsLibrary.List["CCKSPSkin"].window = new GUIStyle(newWindowStyle);
+			CC_SkinsLibrary.List["CCKSPSkin"].box = new GUIStyle(dropDown);
+			CC_SkinsLibrary.List["CCKSPSkin"].button = new GUIStyle(titleButton);
+
+			CC_SkinsLibrary.AddStyle("CCKSPSkin", newWindowStyle);
+			CC_SkinsLibrary.AddStyle("CCKSPSkin", dropDown);
+			CC_SkinsLibrary.AddStyle("CCKSPSkin", titleButton);
 		}
 	}
 }

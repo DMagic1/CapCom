@@ -27,19 +27,21 @@ license][CCLicense]
 #### FAQ
 
  * What is CapCom?
-     * CapCom is a user interface that allows for reviewing, accepting, declining or canceling contracts outside of the Mission Control Center building.
+     * CapCom is a user interface that allows for reviewing, accepting, declining or canceling contracts outside of the Mission Control Center building
+	 * It provides a number of features not found in the Mission Control Center; these are described below
  * How do the keyboard shortcuts work?
      * When the window is selected keyboard shortcuts are available for several functions
 	 * The **Up/Down arrows** are used to cycle through contracts in the currently selected list
 	 * The **Right/Left arrows** are used to switch lists
 	 * The **Enter** key is used to accept an offered contract
 	 * The **Del** key is used to decline or cancel a contract
+	 * The **Left Ctrl** key is used to select multiple contracts when held down
 	 * All keys can be reassigned in the settings window
  * Is CapCom designed to replace the in-flight contract list app?
-     * CapCom can be used to monitor active contracts, but it is not designed as a replacement for the Contracts App.
-     * For an addon designed specifically for doing that try the [Contracts Window +][cwp:release].
+     * CapCom can be used to monitor active contracts, but it is not designed as a replacement for the Contracts App
+     * For an addon designed specifically for doing that try the [Contracts Window +][cwp:release]
  * Something has gone wrong; where can I get help?
-     * If you run into errors, contracts not visible in a list, contracts not being accepted, window not being displayed properly, etc... report problems either to the [GitHub Issues][CC:issues] section or the [KSP Forum Thread][CC:release]. 
+     * If you run into errors, contracts not visible in a list, contracts not being accepted, window not being displayed properly, etc... report problems either to the [GitHub Issues][CC:issues] section or the [KSP Forum Thread][CC:release] 
 
 ### 
 -------------------------------
@@ -54,6 +56,7 @@ license][CCLicense]
        * **Contract reward** amounts; **Funds**, **Science**, or **Reputation**
        * **Contract agency**, sorted alphabetically
        * **Target Planet**, not all contracts have target planets associated with them; addon contracts rely on the planet being in the contract title
+	   * **Time Remaining**, sorted by expiration date for offered contracts, deadline for active contracts, and completion date for finished contracts 
   * Current active contract count and max contract limit are shown above 
   
 ##### Selecting the rewards sorting option will open a drop-down menu; select the desired reward type here
@@ -69,6 +72,10 @@ license][CCLicense]
        * Mission status is updated for each contract
 	   * Cancel active contracts if allowed
   * Review **completed contracts**
+  
+##### Currently selected contract is indicated by the green bar on the left
+  * By holding the **multi-select key** (left Ctrl by default; can be edited) multiple contracts can be selected
+  * Multiple contracts can be accepted, declined, or canceled if allowed
 
 #### Contract Header
 ![][CC:contract-header]
@@ -143,19 +150,19 @@ license][CCLicense]
 [CKAN:org]: http://ksp-ckan.org/
 [CCLicense]: https://github.com/DMagic1/CapCom/blob/master/LICENSE
 
-[CC:header]: http://i.imgur.com/uIUDjTi.png
-[CC:settings-full]: http://i.imgur.com/qiEHuI7.png
-[CC:sort-bar]: http://i.imgur.com/jpCV6Pe.png
+[CC:header]: http://i.imgur.com/OUt6H9I.png
+[CC:settings-full]: http://i.imgur.com/KVvXHoZ.png
+[CC:sort-bar]: http://i.imgur.com/KKkif1g.png
 [CC:sort-rewards]: http://i.imgur.com/p1NNhwy.png
-[CC:contract-list]: http://i.imgur.com/6JCjutL.png
-[CC:contract-header]: http://i.imgur.com/238zNhQ.png
+[CC:contract-list]: http://i.imgur.com/4MN9IO9.png
+[CC:contract-header]: http://i.imgur.com/HQh88N1.png
 [CC:contract-info]: http://i.imgur.com/FSbIHBq.png
 [CC:contract-warn]: http://i.imgur.com/MYFREr2.png
 [CC:rewards]: http://i.imgur.com/CIqqugF.png
 [CC:objectives]: http://i.imgur.com/vheC0BB.png
 [CC:agency]: http://i.imgur.com/taMAEqY.png
-[CC:settings-options]: http://i.imgur.com/jDLiA9Q.png
-[CC:settings-keys]: http://i.imgur.com/wB3wP1c.png
+[CC:settings-options]: http://i.imgur.com/EAvmNlI.png
+[CC:settings-keys]: http://i.imgur.com/zKNYILc.png
 
 [CC:issues]: https://github.com/DMagic1/CapCom/issues
 [CC:release]: http://forum.kerbalspaceprogram.com/threads/119701
@@ -165,7 +172,7 @@ license][CCLicense]
 
 [shield:license-mit]: http://img.shields.io/badge/license-mit-a31f34.svg
 [shield:license-cc-by-sa]: http://img.shields.io/badge/license-CC%20BY--SA-green.svg
-[shield:support-ksp]: http://img.shields.io/badge/for%20KSP-v1.0.2-bad455.svg
+[shield:support-ksp]: http://img.shields.io/badge/for%20KSP-v1.0.4-bad455.svg
 [shield:ckan]: https://img.shields.io/badge/CKAN-Indexed-brightgreen.svg
 [shield:support-toolbar]: http://img.shields.io/badge/works%20with%20Blizzy's%20Toolbar-1.7.9-7c69c0.svg
-[shield:support-cwp]: https://img.shields.io/badge/works%20with%20Contracts%20Window%20%2B-5.1-orange.svg
+[shield:support-cwp]: https://img.shields.io/badge/works%20with%20Contracts%20Window%20%2B-5.3-orange.svg

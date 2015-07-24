@@ -60,7 +60,7 @@ namespace CapCom
 			}
 			catch (Exception e)
 			{
-				Debug.LogError("Parameter Title not set, using type name..." + e);
+				Debug.LogError("[CapCom] Parameter Title not set, using type name..." + e);
 				name = param.GetType().Name;
 			}
 
@@ -70,7 +70,7 @@ namespace CapCom
 			}
 			catch (Exception e)
 			{
-				Debug.LogError("Parameter Notes not set, using blank..." + e);
+				Debug.LogError("[CapCom] Parameter Notes not set, using blank..." + e);
 				name = "";
 			}
 

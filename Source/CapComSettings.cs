@@ -45,6 +45,8 @@ namespace CapCom
 		public bool showCancelWarning = true;
 		[Persistent]
 		public bool tooltipsEnabled = true;
+		//[Persistent]
+		//public bool useKSPStyle = false;
 		[Persistent]
 		public int sortMode = 0;
 		[Persistent]
@@ -75,6 +77,8 @@ namespace CapCom
 		public KeyCode accept = KeyCode.Return;
 		[Persistent]
 		public KeyCode cancel = KeyCode.Delete;
+		[Persistent]
+		public KeyCode multiSelect = KeyCode.LeftControl;
 
 		public CapComSettings (string file)
 		{

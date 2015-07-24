@@ -59,24 +59,59 @@ namespace CapCom
 
 		private const string filePath = "Settings";
 
+		private static bool loaded = false;
+
 		protected override void Awake()
 		{
-			if (CapComSkins.missionControlTexture == null)
+			if (!loaded)
 			{
+				loaded = true;
+
+				Texture original = null;
+
 				foreach (Texture2D t in Resources.FindObjectsOfTypeAll<Texture2D>())
 				{
 					if (t.name == "MissionControl")
 					{
-						CapComSkins.missionControlTexture = t;
+						original = t;
 						break;
 					}
 				}
-			}
 
-			CapComSkins.currentFlag = GameDatabase.Instance.GetTexture(HighLogic.CurrentGame.flagURL, false);
+				if (original == null)
+				{
+					LogFormatted("Error loading Mission Control Center Texture atlas; some CapCom UI elements will not appear correctly");
+					return;
+				}
+
+				Texture2D missionControlTexture = new Texture2D(original.width, original.height);
+
+				var rt = RenderTexture.GetTemporary(original.width, original.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB, 1);
+
+				Graphics.Blit(original, rt);
+
+				RenderTexture.active = rt;
+
+				missionControlTexture.ReadPixels(new Rect(0, 0, original.width, original.height), 0, 0);
+
+				RenderTexture.active = null;
+				RenderTexture.ReleaseTemporary(rt);
+
+				rt = null;
+
+				original = null;
+
+				missionControlTexture.Apply();
+
+				CapComSkins.texturesFromAtlas(missionControlTexture);
+
+				Destroy(missionControlTexture);
+			}
 
 			if (CapComSkins.currentFlag == null)
 			{
+				CapComSkins.currentFlag = GameDatabase.Instance.GetTexture(HighLogic.CurrentGame.flagURL, false);
+
 				int i = 0;
 				while (CapComSkins.currentFlag == null && i < AgentList.Instance.Agencies.Count)
 				{
@@ -100,21 +135,36 @@ namespace CapCom
 
 			if (HighLogic.CurrentGame.Mode != Game.Modes.CAREER)
 				Destroy(this);
-			
+
 			if (settings == null)
+			{
 				settings = new CapComSettings(filePath);
+
+				//if (settings.useKSPStyle)
+				//{
+				//	CapComSkins.initializeKSPSkins();
+				//	CC_SkinsLibrary.SetCurrent("CCKSPSkin");
+				//}
+				//else
+				//{
+				//	CapComSkins.initializeUnitySkins();
+				//	CC_SkinsLibrary.SetCurrent("CCUnitySkin");
+				//}
+			}
 
 			window = gameObject.AddComponent<CapComWindow>();
 
 			if (ToolbarManager.ToolbarAvailable && !settings.stockToolbar)
 			{
-				toolbar = gameObject.AddComponent<CC_Toolbar>();
+				if (toolbar == null)
+					toolbar = gameObject.AddComponent<CC_Toolbar>();
 				if (appButton != null)
 					Destroy(appButton);
 			}
 			else
 			{
-				appButton = gameObject.AddComponent<CC_StockToolbar>();
+				if (appButton == null)
+					appButton = gameObject.AddComponent<CC_StockToolbar>();
 				if (toolbar != null)
 					Destroy(toolbar);
 			}
@@ -144,6 +194,8 @@ namespace CapCom
 			GameEvents.Contract.onOffered.Remove(onOffered);
 			GameEvents.Contract.onContractsLoaded.Remove(onContractsLoaded);
 			GameEvents.Contract.onContractsListChanged.Remove(onListChanged);
+
+			instance = null;
 		}
 
 		#region Public Accessors
@@ -361,6 +413,8 @@ namespace CapCom
 			if (cc == null)
 				return;
 
+			cc.updateTimeValues();
+
 			removeOfferedContract(cc, true);
 
 			addActiveContract(cc, true);
@@ -402,6 +456,8 @@ namespace CapCom
 
 			if (cc == null)
 				return;
+
+			cc.updateTimeValues();
 
 			removeOfferedContract(cc);
 			removeActiveContract(cc);
@@ -528,12 +584,12 @@ namespace CapCom
 
 			LogFormatted("CapCom Contracts Loaded...");
 
-			window.refreshContracts();
+			window.refreshContracts(true);
 		}
 
 		private void refreshList()
 		{
-			window.refreshContracts();
+			window.refreshContracts(false);
 		}
 
 		private void updateOrbits(CapComContract c)
