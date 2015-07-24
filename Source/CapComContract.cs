@@ -125,36 +125,6 @@ namespace CapCom
 				canBeCancelled = true;
 			}
 
-			try
-			{
-				expire = root.DateExpire;
-			}
-			catch (Exception e)
-			{
-				Debug.LogError("[CapCom] Contract Expiration Date not set, using 0...: " + e);
-				expire = 0;
-			}
-
-			try
-			{
-				deadline = root.DateDeadline;
-			}
-			catch (Exception e)
-			{
-				Debug.LogError("[CapCom] Contract Deadline Date not set, using 0...: " + e);
-				deadline = 0;
-			}
-
-			try
-			{
-				completed = root.DateFinished;
-			}
-			catch (Exception e)
-			{
-				Debug.LogError("[CapCom] Contract Finished Date not set, using 0..." + e);
-				completed = 0;
-			}
-
 			if (root.Agent != null)
 				agent = root.Agent;
 			else
@@ -168,6 +138,8 @@ namespace CapCom
 
 				addContractParam(p);
 			}
+
+			updateTimeValues();
 
 			contractRewards();
 			contractAdvance();
@@ -413,6 +385,19 @@ namespace CapCom
 				CC_MBE.LogFormatted("CapCom Parameter List Index Out Of Range; Something Went Wrong Here...");
 
 			return null;
+		}
+
+		public void updateTimeValues()
+		{
+			expire = root.DateExpire;
+			if (expire <= 0)
+				expire = double.MaxValue;
+
+			deadline = root.DateDeadline;
+			if (deadline <= 0)
+				deadline = double.MaxValue;
+
+			completed = root.DateFinished;
 		}
 
 		public Guid ID
