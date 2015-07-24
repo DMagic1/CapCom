@@ -27,7 +27,8 @@ license][CCLicense]
 #### FAQ
 
  * What is CapCom?
-     * CapCom is a user interface that allows for reviewing, accepting, declining or canceling contracts outside of the Mission Control Center building.
+     * CapCom is a user interface that allows for reviewing, accepting, declining or canceling contracts outside of the Mission Control Center building
+	 * It provides a number of features not found in the Mission Control Center; these are described below
  * How do the keyboard shortcuts work?
      * When the window is selected keyboard shortcuts are available for several functions
 	 * The **Up/Down arrows** are used to cycle through contracts in the currently selected list
@@ -37,10 +38,10 @@ license][CCLicense]
 	 * The **Left Ctrl** key is used to select multiple contracts when held down
 	 * All keys can be reassigned in the settings window
  * Is CapCom designed to replace the in-flight contract list app?
-     * CapCom can be used to monitor active contracts, but it is not designed as a replacement for the Contracts App.
-     * For an addon designed specifically for doing that try the [Contracts Window +][cwp:release].
+     * CapCom can be used to monitor active contracts, but it is not designed as a replacement for the Contracts App
+     * For an addon designed specifically for doing that try the [Contracts Window +][cwp:release]
  * Something has gone wrong; where can I get help?
-     * If you run into errors, contracts not visible in a list, contracts not being accepted, window not being displayed properly, etc... report problems either to the [GitHub Issues][CC:issues] section or the [KSP Forum Thread][CC:release]. 
+     * If you run into errors, contracts not visible in a list, contracts not being accepted, window not being displayed properly, etc... report problems either to the [GitHub Issues][CC:issues] section or the [KSP Forum Thread][CC:release] 
 
 ### 
 -------------------------------
