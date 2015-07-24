@@ -140,29 +140,31 @@ namespace CapCom
 			{
 				settings = new CapComSettings(filePath);
 
-				if (settings.useKSPStyle)
-				{
-					CapComSkins.initializeKSPSkins();
-					CC_SkinsLibrary.SetCurrent("CCKSPSkin");
-				}
-				else
-				{
-					CapComSkins.initializeUnitySkins();
-					CC_SkinsLibrary.SetCurrent("CCUnitySkin");
-				}
+				//if (settings.useKSPStyle)
+				//{
+				//	CapComSkins.initializeKSPSkins();
+				//	CC_SkinsLibrary.SetCurrent("CCKSPSkin");
+				//}
+				//else
+				//{
+				//	CapComSkins.initializeUnitySkins();
+				//	CC_SkinsLibrary.SetCurrent("CCUnitySkin");
+				//}
 			}
 
 			window = gameObject.AddComponent<CapComWindow>();
 
 			if (ToolbarManager.ToolbarAvailable && !settings.stockToolbar)
 			{
-				toolbar = gameObject.AddComponent<CC_Toolbar>();
+				if (toolbar == null)
+					toolbar = gameObject.AddComponent<CC_Toolbar>();
 				if (appButton != null)
 					Destroy(appButton);
 			}
 			else
 			{
-				appButton = gameObject.AddComponent<CC_StockToolbar>();
+				if (appButton == null)
+					appButton = gameObject.AddComponent<CC_StockToolbar>();
 				if (toolbar != null)
 					Destroy(toolbar);
 			}
@@ -192,6 +194,8 @@ namespace CapCom
 			GameEvents.Contract.onOffered.Remove(onOffered);
 			GameEvents.Contract.onContractsLoaded.Remove(onContractsLoaded);
 			GameEvents.Contract.onContractsListChanged.Remove(onListChanged);
+
+			instance = null;
 		}
 
 		#region Public Accessors
@@ -409,6 +413,8 @@ namespace CapCom
 			if (cc == null)
 				return;
 
+			cc.updateTimeValues();
+
 			removeOfferedContract(cc, true);
 
 			addActiveContract(cc, true);
@@ -450,6 +456,8 @@ namespace CapCom
 
 			if (cc == null)
 				return;
+
+			cc.updateTimeValues();
 
 			removeOfferedContract(cc);
 			removeActiveContract(cc);
