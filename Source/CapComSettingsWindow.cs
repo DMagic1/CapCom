@@ -73,7 +73,7 @@ namespace CapCom
 			warnCancel = CapCom.Settings.showCancelWarning;
 			oldToolbar = stockToolbar = CapCom.Settings.stockToolbar;
 			oldTooltips = tooltips = CapCom.Settings.tooltipsEnabled;
-			oldStyle = style = CapCom.Settings.useKSPStyle;
+			//oldStyle = style = CapCom.Settings.useKSPStyle;
 			up = CapCom.Settings.scrollUp;
 			down = CapCom.Settings.scrollDown;
 			left = CapCom.Settings.listLeft;
@@ -187,7 +187,7 @@ namespace CapCom
 			CapCom.Settings.showDeclineWarning = GUILayout.Toggle(CapCom.Settings.showDeclineWarning, "Warn on Decline", GUILayout.Width(125));
 			CapCom.Settings.showCancelWarning = GUILayout.Toggle(CapCom.Settings.showCancelWarning, "Warn on Cancel", GUILayout.Width(125));
 			tooltips = GUILayout.Toggle(tooltips, "Toolips", GUILayout.Width(70));
-			style = GUILayout.Toggle(style, "Use KSP Style", GUILayout.Width(120));
+			//style = GUILayout.Toggle(style, "Use KSP Style", GUILayout.Width(120));
 			if (ToolbarManager.ToolbarAvailable)
 				stockToolbar = GUILayout.Toggle(stockToolbar, "Use Stock App Launcher", GUILayout.Width(160));
 
@@ -305,7 +305,7 @@ namespace CapCom
 				warnDecline = CapCom.Settings.showDeclineWarning;
 				warnCancel = CapCom.Settings.showCancelWarning;
 				CapCom.Settings.tooltipsEnabled = tooltips;
-				CapCom.Settings.useKSPStyle = style;
+				//CapCom.Settings.useKSPStyle = style;
 				CapCom.Settings.stockToolbar = stockToolbar;
 				CapCom.Settings.Save();
 				CapCom.Settings.scrollUp = up;
@@ -325,7 +325,7 @@ namespace CapCom
 				CapCom.Settings.showDeclineWarning = warnDecline;
 				CapCom.Settings.showCancelWarning = warnCancel;
 				tooltips = CapCom.Settings.tooltipsEnabled;
-				style = CapCom.Settings.useKSPStyle;
+				//style = CapCom.Settings.useKSPStyle;
 				up = CapCom.Settings.scrollUp;
 				down = CapCom.Settings.scrollDown;
 				left = CapCom.Settings.listLeft;
@@ -372,23 +372,23 @@ namespace CapCom
 				CapCom.Instance.Window.TooltipsEnabled = tooltips;
 			}
 
-			if (oldStyle != style)
-			{
-				oldStyle = style;
-				if (style)
-				{
-					CapComSkins.initializeKSPSkins();
-					CC_SkinsLibrary.SetCurrent("CCKSPSkin");
-				}
-				else
-				{
-					CapComSkins.initializeUnitySkins();
-					CC_SkinsLibrary.SetCurrent("CCUnitySkin");
-				}
+			//if (oldStyle != style)
+			//{
+			//	oldStyle = style;
+			//	if (style)
+			//	{
+			//		CapComSkins.initializeKSPSkins();
+			//		CC_SkinsLibrary.SetCurrent("CCKSPSkin");
+			//	}
+			//	else
+			//	{
+			//		CapComSkins.initializeUnitySkins();
+			//		CC_SkinsLibrary.SetCurrent("CCUnitySkin");
+			//	}
 
-				WindowStyle = CapComSkins.newWindowStyle;
-				CapCom.Instance.Window.WindowStyle = CapComSkins.newWindowStyle;
-			}
+			//	WindowStyle = CapComSkins.newWindowStyle;
+			//	CapCom.Instance.Window.WindowStyle = CapComSkins.newWindowStyle;
+			//}
 
 			if (dropdown && Event.current.type == EventType.mouseDown && !ddRect.Contains(Event.current.mousePosition))
 			{
