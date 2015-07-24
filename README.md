@@ -34,6 +34,7 @@ license][CCLicense]
 	 * The **Right/Left arrows** are used to switch lists
 	 * The **Enter** key is used to accept an offered contract
 	 * The **Del** key is used to decline or cancel a contract
+	 * The **Left Ctrl** key is used to select multiple contracts when held down
 	 * All keys can be reassigned in the settings window
  * Is CapCom designed to replace the in-flight contract list app?
      * CapCom can be used to monitor active contracts, but it is not designed as a replacement for the Contracts App.
@@ -73,7 +74,7 @@ license][CCLicense]
   
 ##### Currently selected contract is indicated by the green bar on the left
   * By holding the **multi-select key** (left Ctrl by default; can be edited) multiple contracts can be selected
-  * Multiple contracts can be accepted, declined, or cancelled if possible
+  * Multiple contracts can be accepted, declined, or canceled if allowed
 
 #### Contract Header
 ![][CC:contract-header]
