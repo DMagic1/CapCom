@@ -78,13 +78,14 @@ namespace CapCom
 					}
 				}
 
+				Texture2D missionControlTexture = new Texture2D(original.width, original.height);
+
 				if (original == null)
 				{
 					LogFormatted("Error loading Mission Control Center Texture atlas; some CapCom UI elements will not appear correctly");
+					CapComSkins.texturesFromAtlas(missionControlTexture);
 					return;
 				}
-
-				Texture2D missionControlTexture = new Texture2D(original.width, original.height);
 
 				var rt = RenderTexture.GetTemporary(original.width, original.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB, 1);
 
