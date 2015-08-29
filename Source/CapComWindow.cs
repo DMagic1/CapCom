@@ -45,6 +45,7 @@ namespace CapCom
 		private List<CapComContract> agentOfferedContracts = new List<CapComContract>();
 		private List<CapComContract> agentActiveContracts = new List<CapComContract>();
 		private List<CapComContract> selectedContracts = new List<CapComContract>();
+		private List<CapComContract> removeContractList = new List<CapComContract>();
 		private CapComContract currentContract;
 		private CapComSettingsWindow settings;
 
@@ -400,6 +401,17 @@ namespace CapCom
 			if (dropdown && Event.current.type == EventType.mouseDown && !ddRect.Contains(Event.current.mousePosition))
 			{
 				dropdown = false;
+			}
+
+			if (removeContractList.Count > 0)
+			{
+				foreach (CapComContract ccc in removeContractList)
+				{
+					if (selectedContracts.Contains(ccc))
+						selectedContracts.Remove(ccc);
+				}
+
+				removeContractList.Clear();
 			}
 		}
 
@@ -1180,7 +1192,10 @@ namespace CapCom
 			else
 				currentContract = null;
 
-			selectedContracts.Add(currentContract);
+			if (!selectedContracts.Contains(currentContract))
+				selectedContracts.Add(currentContract);
+			else
+				removeContractList.Add(currentContract);
 
 			showAgency = false;
 		}
