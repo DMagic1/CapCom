@@ -108,16 +108,13 @@ namespace CapCom
 				Destroy(missionControlTexture);
 			}
 
-			if (CapComSkins.currentFlag == null)
-			{
-				CapComSkins.currentFlag = GameDatabase.Instance.GetTexture(HighLogic.CurrentGame.flagURL, false);
+			CapComSkins.currentFlag = GameDatabase.Instance.GetTexture(HighLogic.CurrentGame.flagURL, false);
 
-				int i = 0;
-				while (CapComSkins.currentFlag == null && i < AgentList.Instance.Agencies.Count)
-				{
-					CapComSkins.currentFlag = AgentList.Instance.Agencies[i].LogoScaled;
-					i++;
-				}
+			int i = 0;
+			while (CapComSkins.currentFlag == null && i < AgentList.Instance.Agencies.Count)
+			{
+				CapComSkins.currentFlag = AgentList.Instance.Agencies[i].LogoScaled;
+				i++;
 			}
 
 			Assembly assembly = AssemblyLoader.loadedAssemblies.GetByAssembly(Assembly.GetExecutingAssembly()).assembly;
