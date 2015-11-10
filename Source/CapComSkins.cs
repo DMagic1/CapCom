@@ -90,62 +90,62 @@ namespace CapCom
 		internal static GUIStyle rep;
 		internal static GUIStyle sci;
 
-		internal static Texture2D toolbarIcon;
-		internal static Texture2D dropDownTex;
-		internal static Texture2D windowTex;
-		internal static Texture2D buttonHover;
-		internal static Texture2D fundsGreen;
-		internal static Texture2D repRed;
-		internal static Texture2D science;
-		internal static Texture2D orderAsc;
-		internal static Texture2D orderDesc;
-		internal static Texture2D goldStar;
-		internal static Texture2D goldStarTwo;
-		internal static Texture2D goldStarThree;
-		internal static Texture2D goldStarVertical;
-		internal static Texture2D goldStarTwoVertical;
-		internal static Texture2D goldStarThreeVertical;
-		internal static Texture2D settingsIcon;
-		internal static Texture2D resizeHandle;
-		internal static Texture2D checkBox;
-		internal static Texture2D failBox;
-		internal static Texture2D emptyBox;
-		internal static Texture2D notesPlusIcon;
-		internal static Texture2D notesMinusIcon;
-		internal static Texture2D sortStars;
-		internal static Texture2D sortPlanet;
-		internal static Texture2D sortTime;
+		internal static Texture2D toolbarIcon = new Texture2D(1, 1);
+		internal static Texture2D dropDownTex = new Texture2D(1, 1);
+		internal static Texture2D windowTex = new Texture2D(1, 1);
+		internal static Texture2D buttonHover = new Texture2D(1, 1);
+		internal static Texture2D fundsGreen = new Texture2D(1, 1);
+		internal static Texture2D repRed = new Texture2D(1, 1);
+		internal static Texture2D science = new Texture2D(1, 1);
+		internal static Texture2D orderAsc = new Texture2D(1, 1);
+		internal static Texture2D orderDesc = new Texture2D(1, 1);
+		internal static Texture2D goldStar = new Texture2D(1, 1);
+		internal static Texture2D goldStarTwo = new Texture2D(1, 1);
+		internal static Texture2D goldStarThree = new Texture2D(1, 1);
+		internal static Texture2D goldStarVertical = new Texture2D(1, 1);
+		internal static Texture2D goldStarTwoVertical = new Texture2D(1, 1);
+		internal static Texture2D goldStarThreeVertical = new Texture2D(1, 1);
+		internal static Texture2D settingsIcon = new Texture2D(1,1);
+		internal static Texture2D resizeHandle = new Texture2D(1,1);
+		internal static Texture2D checkBox = new Texture2D(1,1);
+		internal static Texture2D failBox = new Texture2D(1,1);
+		internal static Texture2D emptyBox = new Texture2D(1,1);
+		internal static Texture2D notesPlusIcon = new Texture2D(1,1);
+		internal static Texture2D notesMinusIcon = new Texture2D(1,1);
+		internal static Texture2D sortStars = new Texture2D(1,1);
+		internal static Texture2D sortPlanet = new Texture2D(1,1);
+		internal static Texture2D sortTime = new Texture2D(1,1);
 
-		internal static Texture2D toggleOn;
-		internal static Texture2D toggleOff;
-		internal static Texture2D toggleHoverOff;
-		internal static Texture2D toggleHoverOn;
-		internal static Texture2D currentFlag;
+		internal static Texture2D toggleOn = new Texture2D(1,1);
+		internal static Texture2D toggleOff = new Texture2D(1,1);
+		internal static Texture2D toggleHoverOff = new Texture2D(1,1);
+		internal static Texture2D toggleHoverOn = new Texture2D(1,1);
+		internal static Texture2D currentFlag = new Texture2D(1,1);
 
-		internal static Texture2D acceptButtonNormal;
-		internal static Texture2D acceptButtonHover;
-		internal static Texture2D acceptButtonActive;
-		internal static Texture2D acceptButtonInactive;
+		internal static Texture2D acceptButtonNormal = new Texture2D(1,1);
+		internal static Texture2D acceptButtonHover = new Texture2D(1, 1);
+		internal static Texture2D acceptButtonActive = new Texture2D(1, 1);
+		internal static Texture2D acceptButtonInactive = new Texture2D(1, 1);
 
-		internal static Texture2D declineButtonNormal;
-		internal static Texture2D declineButtonHover;
-		internal static Texture2D declineButtonActive;
-		internal static Texture2D declineButtonInactive;
+		internal static Texture2D declineButtonNormal = new Texture2D(1, 1);
+		internal static Texture2D declineButtonHover = new Texture2D(1, 1);
+		internal static Texture2D declineButtonActive = new Texture2D(1, 1);
+		internal static Texture2D declineButtonInactive = new Texture2D(1, 1);
 
-		internal static Texture2D cancelButtonNormal;
-		internal static Texture2D cancelButtonHover;
-		internal static Texture2D cancelButtonActive;
-		internal static Texture2D cancelButtonInactive;
+		internal static Texture2D cancelButtonNormal = new Texture2D(1, 1);
+		internal static Texture2D cancelButtonHover = new Texture2D(1, 1);
+		internal static Texture2D cancelButtonActive = new Texture2D(1, 1);
+		internal static Texture2D cancelButtonInactive = new Texture2D(1, 1);
 
-		internal static Texture2D titleButtonOff;
-		internal static Texture2D titleButtonOn;
+		internal static Texture2D titleButtonOff = new Texture2D(1, 1);
+		internal static Texture2D titleButtonOn = new Texture2D(1, 1);
 
-		internal static Texture2D titleButtonOffLeft;
-		internal static Texture2D titleButtonOnLeft;
+		internal static Texture2D titleButtonOffLeft = new Texture2D(1, 1);
+		internal static Texture2D titleButtonOnLeft = new Texture2D(1, 1);
 
-		internal static Texture2D tabButtonOff;
-		internal static Texture2D tabButtonOn;
-		internal static Texture2D tabButtonHover;
+		internal static Texture2D tabButtonOff = new Texture2D(1, 1);
+		internal static Texture2D tabButtonOn = new Texture2D(1, 1);
+		internal static Texture2D tabButtonHover = new Texture2D(1, 1);
 
 		internal static Texture2D flagTex = new Texture2D(1, 1);
 
