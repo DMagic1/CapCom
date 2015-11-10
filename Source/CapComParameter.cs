@@ -109,15 +109,7 @@ namespace CapCom
 				if (s.State != ParameterState.Incomplete)
 					return p;
 
-				try
-				{
-					var field = (typeof(SurveyWaypointParameter)).GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[0];
-					p = (Waypoint)field.GetValue(s);
-				}
-				catch (Exception e)
-				{
-					CC_MBE.LogFormatted("Error While Assigning FinePrint Survey Waypoint Object... {0}", e);
-				}
+				return s.wp;
 			}
 
 			else if (cp.GetType() == typeof(StationaryPointParameter))
@@ -125,6 +117,8 @@ namespace CapCom
 				StationaryPointParameter s = (StationaryPointParameter)param;
 				if (s.State != ParameterState.Incomplete)
 					return p;
+
+				
 
 				try
 				{
