@@ -422,7 +422,7 @@ namespace CapCom
 			r.x += 32;
 			r.width = r.height = 22;
 
-			if (GUI.Button(r, "✖", CapComSkins.textureButton))
+			if (GUI.Button(r, "X", CapComSkins.textureButton))
 			{
 				unlockControls();
 				Visible = false;
@@ -862,6 +862,9 @@ namespace CapCom
 
 			sizedContent(currentContract.FundsPen, "", currentContract.RepPen, TransactionReasons.ContractPenalty);
 
+			if (currentContract.Root.ContractState == Contract.State.Offered && currentContract.DecPen > 0)
+				sizedContent("", "", "- " + currentContract.DecPen.ToString("N0"), TransactionReasons.ContractDecline);
+
 			GUILayout.EndScrollView();
 		}
 
@@ -1180,7 +1183,10 @@ namespace CapCom
 			else
 				currentContract = null;
 
-			selectedContracts.Add(currentContract);
+			if (selectMany && selectedContracts.Contains(currentContract))
+				selectedContracts.Remove(currentContract);
+			else
+				selectedContracts.Add(currentContract);
 
 			showAgency = false;
 		}
@@ -1271,6 +1277,12 @@ namespace CapCom
 					{
 						GUILayout.Label("Completion: ", CapComSkins.completion, GUILayout.Width(80));
 						right = 76;
+						break;
+					}
+				case TransactionReasons.ContractDecline:
+					{
+						GUILayout.Label("Decline: ", CapComSkins.failure, GUILayout.Width(80));
+						right = 50;
 						break;
 					}
 				default:
