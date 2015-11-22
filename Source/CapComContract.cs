@@ -53,6 +53,7 @@ namespace CapCom
 		private Contract root;
 		private float totalFundsReward, totalRepReward, totalSciReward;
 		private float totalFundsPenalty, totalRepPenalty;
+		private float decPen;
 		private double expire, deadline, completed;
 		private string notes;
 		private string fundsRew, fundsAdv, fundsPen, repRew, repPen, sciRew;
@@ -144,6 +145,8 @@ namespace CapCom
 			contractRewards();
 			contractAdvance();
 			contractPenalties();
+
+			decPen = HighLogic.CurrentGame.Parameters.Career.RepLossDeclined;
 
 			totalFundsReward = rewards();
 			totalFundsPenalty = penalties();
@@ -502,6 +505,11 @@ namespace CapCom
 		public string SciRew
 		{
 			get { return sciRew; }
+		}
+
+		public float DecPen
+		{
+			get { return decPen; }
 		}
 
 		public string Target
