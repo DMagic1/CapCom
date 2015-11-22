@@ -180,6 +180,7 @@ namespace CapCom
 			sortTime = GameDatabase.Instance.GetTexture("CapCom/Textures/SortTimeIcon", false);
 
 			toggleButtons();
+			atlasStyles();
 			initializeUnitySkins();
 			CC_SkinsLibrary.SetCurrent("CCUnitySkin");
 		}
