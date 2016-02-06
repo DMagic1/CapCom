@@ -40,6 +40,8 @@ using FinePrint;
 using FinePrint.Contracts.Parameters;
 using FinePrint.Utilities;
 using UnityEngine;
+using ContractParser;
+using ProgressParser;
 
 namespace CapCom
 {
@@ -52,10 +54,6 @@ namespace CapCom
 		private CapComWindow window;
 		private CC_StockToolbar appButton;
 		private CC_Toolbar toolbar;
-		private Dictionary<Guid, CapComContract> activeContracts = new Dictionary<Guid, CapComContract>();
-		private Dictionary<Guid, CapComContract> offeredContracts = new Dictionary<Guid, CapComContract>();
-		private Dictionary<Guid, CapComContract> completedContracts = new Dictionary<Guid, CapComContract>();
-		private Dictionary<Guid, CapComContract> failedContracts = new Dictionary<Guid, CapComContract>();
 
 		private const string filePath = "Settings";
 
@@ -78,14 +76,13 @@ namespace CapCom
 					}
 				}
 
-				Texture2D missionControlTexture = new Texture2D(original.width, original.height);
-
 				if (original == null)
 				{
 					LogFormatted("Error loading Mission Control Center Texture atlas; some CapCom UI elements will not appear correctly");
-					CapComSkins.texturesFromAtlas(missionControlTexture);
 					return;
 				}
+
+				Texture2D missionControlTexture = new Texture2D(original.width, original.height);
 
 				var rt = RenderTexture.GetTemporary(original.width, original.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB, 1);
 
@@ -230,170 +227,6 @@ namespace CapCom
 			get { return version; }
 		}
 
-		public CapComContract getActiveContract(Guid id, bool warn = false)
-		{
-			if (activeContracts.ContainsKey(id))
-				return activeContracts[id];
-			else if (warn)
-				LogFormatted("No Active Contract Of ID: [{0}] Found", id);
-
-			return null;
-		}
-
-		public bool addActiveContract(CapComContract c, bool warn = false)
-		{
-			if (!activeContracts.ContainsKey(c.ID))
-			{
-				activeContracts.Add(c.ID, c);
-				return true;
-			}
-			else if (warn)
-				LogFormatted("Active Contract List Already Has Contract [{0} ; ID: {1}]", c.Name, c.ID);
-
-			return false;
-		}
-
-		public bool removeActiveContract(CapComContract c, bool warn = false)
-		{
-			if (activeContracts.ContainsKey(c.ID))
-			{
-				activeContracts.Remove(c.ID);
-				return true;
-			}
-			else if (warn)
-				LogFormatted("Contract Not Found In Active Contract List [{0} ; ID: {1}]", c.Name, c.ID);
-
-			return false;
-		}
-
-		public CapComContract getOfferedContract(Guid id, bool warn = false)
-		{
-			if (offeredContracts.ContainsKey(id))
-				return offeredContracts[id];
-			else if (warn)
-				LogFormatted("No Offered Contract Of ID: [{0}] Found", id);
-
-			return null;
-		}
-
-		public bool addOfferedContract(CapComContract c, bool warn = false)
-		{
-			if (!offeredContracts.ContainsKey(c.ID))
-			{
-				offeredContracts.Add(c.ID, c);
-				return true;
-			}
-			else if (warn)
-				LogFormatted("Offered Contract List Already Has Contract [{0} ; ID: {1}]", c.Name, c.ID);
-
-			return false;
-		}
-
-		public bool removeOfferedContract(CapComContract c, bool warn = false)
-		{
-			if (offeredContracts.ContainsKey(c.ID))
-			{
-				offeredContracts.Remove(c.ID);
-				return true;
-			}
-			else if (warn)
-				LogFormatted("Contract Not Found In Offered Contract List [{0} ; ID: {1}]", c.Name, c.ID);
-
-			return false;
-		}
-
-		public CapComContract getCompletedContract(Guid id, bool warn = false)
-		{
-			if (completedContracts.ContainsKey(id))
-				return completedContracts[id];
-			else if (warn)
-				LogFormatted("No Completed Contract Of ID: [{0}] Found", id);
-
-			return null;
-		}
-
-		public bool addCompletedContract(CapComContract c, bool warn = false)
-		{
-			if (!completedContracts.ContainsKey(c.ID))
-			{
-				completedContracts.Add(c.ID, c);
-				return true;
-			}
-			else if (warn)
-				LogFormatted("Completed Contract List Already Has Contract [{0} ; ID: {1}]", c.Name, c.ID);
-
-			return false;
-		}
-
-		public bool removeCompletedContract(CapComContract c, bool warn = false)
-		{
-			if (completedContracts.ContainsKey(c.ID))
-			{
-				completedContracts.Remove(c.ID);
-				return true;
-			}
-			else if (warn)
-				LogFormatted("Contract Not Found In Completed Contract List [{0} ; ID: {1}]", c.Name, c.ID);
-
-			return false;
-		}
-
-		public CapComContract getFailedContract(Guid id, bool warn = false)
-		{
-			if (failedContracts.ContainsKey(id))
-				return failedContracts[id];
-			else if (warn)
-				LogFormatted("No Failed Contract Of ID: [{0}] Found", id);
-
-			return null;
-		}
-
-		public bool addFailedContract(CapComContract c, bool warn = false)
-		{
-			if (!failedContracts.ContainsKey(c.ID))
-			{
-				failedContracts.Add(c.ID, c);
-				return true;
-			}
-			else if (warn)
-				LogFormatted("Failed Contract List Already Has Contract [{0} ; ID: {1}]", c.Name, c.ID);
-
-			return false;
-		}
-
-		public bool removeFailedContract(CapComContract c, bool warn = false)
-		{
-			if (failedContracts.ContainsKey(c.ID))
-			{
-				failedContracts.Remove(c.ID);
-				return true;
-			}
-			else if (warn)
-				LogFormatted("Contract Not Found In Failed Contract List [{0} ; ID: {1}]", c.Name, c.ID);
-
-			return false;
-		}
-
-		public List<CapComContract> getActiveContracts
-		{
-			get { return activeContracts.Values.ToList(); }
-		}
-
-		public List<CapComContract> getOfferedContracts
-		{
-			get { return offeredContracts.Values.ToList(); }
-		}
-
-		public List<CapComContract> getCompletedContracts
-		{
-			get { return completedContracts.Values.ToList(); }
-		}
-
-		public List<CapComContract> getFailedContracts
-		{
-			get { return failedContracts.Values.ToList(); }
-		}
-
 		#endregion
 
 		#region Events
@@ -406,16 +239,13 @@ namespace CapCom
 				return;
 			}
 
-			CapComContract cc = getOfferedContract(c.ContractGuid, true);
+			contractContainer cc = contractParser.getOfferedContract(c.ContractGuid, true);
 
 			if (cc == null)
 				return;
 
 			cc.updateTimeValues();
 
-			removeOfferedContract(cc, true);
-
-			addActiveContract(cc, true);
 			refreshList();
 
 			updateWaypoints(cc);
@@ -430,12 +260,11 @@ namespace CapCom
 				return;
 			}
 
-			CapComContract cc = getOfferedContract(c.ContractGuid, true);
+			contractContainer cc = contractParser.getOfferedContract(c.ContractGuid, true);
 
 			if (cc == null)
 				return;
 
-			removeOfferedContract(cc, true);
 			refreshList();
 		}
 
@@ -447,20 +276,16 @@ namespace CapCom
 				return;
 			}
 
-			CapComContract cc = getActiveContract(c.ContractGuid);
+			contractContainer cc = contractParser.getActiveContract(c.ContractGuid);
 
 			if (cc == null)
-				cc = getOfferedContract(c.ContractGuid, true);
+				cc = contractParser.getOfferedContract(c.ContractGuid, true);
 
 			if (cc == null)
 				return;
 
 			cc.updateTimeValues();
 
-			removeOfferedContract(cc);
-			removeActiveContract(cc);
-			if (c.ContractState == Contract.State.Completed)
-				addCompletedContract(cc, true);
 			refreshList();
 		}
 
@@ -472,12 +297,11 @@ namespace CapCom
 				return;
 			}
 
-			CapComContract cc = new CapComContract(c);
+			contractContainer cc = new contractContainer(c);
 
 			if (cc == null)
 				return;
 
-			addOfferedContract(cc, true);
 			refreshList();
 		}
 
@@ -499,88 +323,11 @@ namespace CapCom
 		{
 			int i = 0;
 
-			//Agency modifiers don't seem to work unless I wait a few frames before loading contracts
-			while (i < 5)
+			while (!contractParser.Loaded && i < 200)
 			{
 				i++;
 				yield return null;
 			}
-
-			foreach(Contract c in ContractSystem.Instance.Contracts)
-			{
-				if (c == null)
-				{
-					LogFormatted("Error in loading null contract from master list");
-					continue;
-				}
-
-				CapComContract cc = new CapComContract(c);
-
-				if (cc.Root == null)
-				{
-					LogFormatted("Error while loading contract of type {0}; skipping", c.GetType().Name);
-					continue;
-				}
-
-				switch (cc.Root.ContractState)
-				{
-					case Contract.State.Active:
-						addActiveContract(cc);
-						continue;
-					case Contract.State.Offered:
-						addOfferedContract(cc);
-						continue;
-					case Contract.State.Completed:
-						addCompletedContract(cc);
-						continue;
-					case Contract.State.Cancelled:
-					case Contract.State.DeadlineExpired:
-					case Contract.State.Failed:
-						addFailedContract(cc);
-						continue;
-					default:
-						continue;
-				}
-			}
-
-			foreach(Contract c in ContractSystem.Instance.ContractsFinished)
-			{
-				if (c == null)
-				{
-					LogFormatted("Error in loading contract from finished list");
-					continue;
-				}
-
-				CapComContract cc = new CapComContract(c);
-
-				if (cc.Root == null)
-				{
-					LogFormatted("Error while loading finished contract of type {0}; skipping", c.GetType().Name);
-					continue;
-				}
-
-				switch (cc.Root.ContractState)
-				{
-					case Contract.State.Active:
-						addActiveContract(cc);
-						continue;
-					case Contract.State.Offered:
-						addOfferedContract(cc);
-						continue;
-					case Contract.State.Completed:
-						addCompletedContract(cc);
-						continue;
-					case Contract.State.Cancelled:
-					case Contract.State.DeadlineExpired:
-					case Contract.State.Failed:
-						addFailedContract(cc);
-						continue;
-					default:
-						continue;
-				}
-			}
-
-			LogFormatted("CapCom Contracts Loaded...");
 
 			window.refreshContracts(true);
 		}
@@ -590,22 +337,22 @@ namespace CapCom
 			window.refreshContracts(false);
 		}
 
-		private void updateOrbits(CapComContract c)
+		private void updateOrbits(contractContainer c)
 		{
 			if (!HighLogic.LoadedSceneIsFlight)
 				return;
 
 			for (int i = 0; i < c.ParameterCount; i++)
 			{
-				CapComParameter p = c.getParameter(i);
+				parameterContainer p = c.getParameter(i);
 
 				if (p == null)
 					continue;
 
-				if (p.Param.GetType() != typeof(SpecificOrbitParameter))
+				if (p.CParam.GetType() != typeof(SpecificOrbitParameter))
 					continue;
 
-				SpecificOrbitParameter s = (SpecificOrbitParameter)p.Param;
+				SpecificOrbitParameter s = (SpecificOrbitParameter)p.CParam;
 
 				MethodInfo orbitSetup = (typeof(SpecificOrbitParameter)).GetMethod("setup", BindingFlags.NonPublic | BindingFlags.Instance);
 
@@ -623,7 +370,7 @@ namespace CapCom
 			}
 		}
 
-		private void updateWaypoints(CapComContract c)
+		private void updateWaypoints(contractContainer c)
 		{
 			if (!HighLogic.LoadedSceneIsFlight)
 				return;
@@ -633,7 +380,7 @@ namespace CapCom
 
 			for (int i = 0; i < c.ParameterCount; i++)
 			{
-				CapComParameter p = c.getParameter(i);
+				parameterContainer p = c.getParameter(i);
 
 				if (p == null)
 					continue;
