@@ -83,7 +83,7 @@ namespace CapCom
 		public CapComSettings (string file)
 		{
 			FilePath = file;
-			NodeName = "CapCom/" + file + "/" + this.GetType().Name;
+			NodeName = "DMagicUtilities/CapCom/" + file + "/" + this.GetType().Name;
 
 			Load();
 		}
