@@ -33,19 +33,25 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\KSP Dev Build\Kerbal Space Program\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\..\KSP Dev\Kerbal Space Program\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ContractParser">
+      <HintPath>..\..\ContractParser\ContractParser\Output\ContractParser.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ProgressParser">
+      <HintPath>..\..\Progress Parser\Progress Parser\Output\ProgressParser.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="UnityEngine">
-      <HintPath>..\..\KSP Dev Build\Kerbal Space Program\KSP_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>..\..\KSP Dev\Kerbal Space Program\KSP_Data\Managed\UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CapCom.cs" />
-    <Compile Include="CapComContract.cs" />
-    <Compile Include="CapComParameter.cs" />
     <Compile Include="CapComSettings.cs" />
     <Compile Include="CapComSettingsWindow.cs" />
     <Compile Include="CapComSkins.cs" />
