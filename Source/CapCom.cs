@@ -354,7 +354,7 @@ namespace CapCom
 
 				SpecificOrbitParameter s = (SpecificOrbitParameter)p.CParam;
 
-				MethodInfo orbitSetup = (typeof(SpecificOrbitParameter)).GetMethod("setup", BindingFlags.NonPublic | BindingFlags.Instance);
+				MethodInfo orbitSetup = (typeof(SpecificOrbitParameter)).GetMethod("SetupWaypoints", BindingFlags.NonPublic | BindingFlags.Instance);
 
 				if (orbitSetup == null)
 					return;
