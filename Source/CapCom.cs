@@ -168,7 +168,8 @@ namespace CapCom
 			GameEvents.Contract.onDeclined.Add(onDeclined);
 			GameEvents.Contract.onFinished.Add(onFinished);
 			GameEvents.Contract.onOffered.Add(onOffered);
-			GameEvents.Contract.onContractsLoaded.Add(onContractsLoaded);
+			contractParser.onContractsParsed.Add(onContractsLoaded);
+			progressParser.onProgressParsed.Add(onProgressLoaded);
 			GameEvents.Contract.onContractsListChanged.Add(onListChanged);
 		}
 
@@ -187,7 +188,8 @@ namespace CapCom
 			GameEvents.Contract.onDeclined.Remove(onDeclined);
 			GameEvents.Contract.onFinished.Remove(onFinished);
 			GameEvents.Contract.onOffered.Remove(onOffered);
-			GameEvents.Contract.onContractsLoaded.Remove(onContractsLoaded);
+			contractParser.onContractsParsed.Remove(onContractsLoaded);
+			progressParser.onProgressParsed.Remove(onProgressLoaded);
 			GameEvents.Contract.onContractsListChanged.Remove(onListChanged);
 
 			instance = null;
@@ -310,6 +312,11 @@ namespace CapCom
 			StartCoroutine(loadContracts());
 		}
 
+		private void onProgressLoaded()
+		{
+
+		}
+
 		private void onListChanged()
 		{
 			refreshList();
@@ -330,6 +337,19 @@ namespace CapCom
 			}
 
 			window.refreshContracts(true);
+		}
+
+		private IEnumerator loadProgress()
+		{
+			int i = 0;
+
+			while (!progressParser.Loaded && i < 200)
+			{
+				i++;
+				yield return null;
+			}
+			
+			//load progress.....
 		}
 
 		private void refreshList()
