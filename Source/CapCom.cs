@@ -348,8 +348,8 @@ namespace CapCom
 				i++;
 				yield return null;
 			}
-			
-			//load progress.....
+
+			window.updateProgress();
 		}
 
 		private void refreshList()
