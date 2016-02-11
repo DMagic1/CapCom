@@ -50,6 +50,7 @@ namespace CapCom
 		internal static GUIStyle textureButton;
 		internal static GUIStyle tabButton;
 		internal static GUIStyle tabButtonInactive;
+		internal static GUIStyle tabButtonTexture;
 		internal static GUIStyle menuButton;
 		internal static GUIStyle keycodeButton;
 		internal static GUIStyle warningButton;
@@ -116,6 +117,11 @@ namespace CapCom
 		internal static Texture2D sortPlanet = new Texture2D(1,1);
 		internal static Texture2D sortTime = new Texture2D(1,1);
 
+		internal static Texture2D progressIconOn = new Texture2D(1, 1);
+		internal static Texture2D progressIconOff = new Texture2D(1, 1);
+
+		internal static Texture2D worldsFirstFlag = new Texture2D(1, 1);
+
 		internal static Texture2D toggleOn = new Texture2D(1,1);
 		internal static Texture2D toggleOff = new Texture2D(1,1);
 		internal static Texture2D toggleHoverOff = new Texture2D(1,1);
@@ -178,6 +184,8 @@ namespace CapCom
 			sortStars = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/SortDifficultyIcon", false);
 			sortPlanet = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/SortPlanetsIcon", false);
 			sortTime = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/SortTimeIcon", false);
+			progressIconOn = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/ProgressOnIcon", false);
+			progressIconOff = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/ProgressOffIcon", false);
 
 			toggleButtons();
 			atlasStyles();
