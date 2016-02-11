@@ -40,6 +40,13 @@ namespace CapCom
 {
 	public class CapComWindow : CC_MBW
 	{
+		private List<progressInterval> intervalNodes = new List<progressInterval>();
+		private List<progressStandard> standardNodes = new List<progressStandard>();
+		private List<progressStandard> POInodes = new List<progressStandard>();
+		private List<progressBodyCollection> bodyNodes = new List<progressBodyCollection>();
+		private List<List<progressStandard>> bodySubNodes = new List<List<progressStandard>>();
+		private int selectedProgress;
+
 		private List<contractContainer> activeContracts = new List<contractContainer>();
 		private List<contractContainer> offeredContracts = new List<contractContainer>();
 		private List<contractContainer> completedContracts = new List<contractContainer>();
@@ -224,6 +231,9 @@ namespace CapCom
 				case 2:
 					sortContracts(completedContracts);
 					break;
+				case 3:
+					updateProgress();
+					break;
 			}
 		}
 
@@ -271,6 +281,21 @@ namespace CapCom
 			}
 
 			currentContracts = ccList;
+		}
+
+		public void updateProgress()
+		{
+			intervalNodes = progressParser.getAllIntervalNodes;
+			standardNodes = progressParser.getAllStandardNodes;
+			POInodes = progressParser.getAllPOINodes;
+			bodyNodes = progressParser.getAllBodyNodes;
+
+			bodySubNodes = new List<List<progressStandard>>(bodyNodes.Count);
+
+			for (int i = 0; i < bodyNodes.Count; i++)
+			{
+				bodySubNodes.Add(bodyNodes[i].getAllNodes);
+			}
 		}
 
 		private void unlockControls()
@@ -570,13 +595,15 @@ namespace CapCom
 			GUILayout.BeginHorizontal();
 				if (dropdown)
 				{
-					GUILayout.Label("Offered", listStyle(0), GUILayout.Width(106), GUILayout.Height(22));
-					GUILayout.Label("Active", listStyle(1), GUILayout.Width(106), GUILayout.Height(22));
-					GUILayout.Label("Completed", listStyle(2), GUILayout.Width(106), GUILayout.Height(22));
+					GUILayout.Label("Offered", listStyle(0), GUILayout.Width(98), GUILayout.Height(22));
+					GUILayout.Label("Active", listStyle(1), GUILayout.Width(98), GUILayout.Height(22));
+					GUILayout.Label("Completed", listStyle(2), GUILayout.Width(98), GUILayout.Height(22));
+					GUILayout.Label(CapComSkins.progressIconOn, listStyle(3), GUILayout.Width(32), GUILayout.Height(32));
+
 				}
 				else
 				{
-					if (GUILayout.Button("Offered", listStyle(0), GUILayout.Width(106), GUILayout.Height(22)))
+					if (GUILayout.Button("Offered", listStyle(0), GUILayout.Width(98), GUILayout.Height(22)))
 					{
 						if (currentList != 0)
 						{
@@ -587,7 +614,7 @@ namespace CapCom
 						}
 					}
 
-					if (GUILayout.Button("Active", listStyle(1), GUILayout.Width(106), GUILayout.Height(22)))
+					if (GUILayout.Button("Active", listStyle(1), GUILayout.Width(98), GUILayout.Height(22)))
 					{
 						if (currentList != 1)
 						{
@@ -598,7 +625,7 @@ namespace CapCom
 						}
 					}
 
-					if (GUILayout.Button("Completed", listStyle(2), GUILayout.Width(106), GUILayout.Height(22)))
+					if (GUILayout.Button("Completed", listStyle(2), GUILayout.Width(98), GUILayout.Height(22)))
 					{
 						if (currentList != 2)
 						{
@@ -606,6 +633,15 @@ namespace CapCom
 							sortContracts();
 
 							selectContract(0);
+						}
+					}
+
+					if (GUILayout.Button(currentList == 3 ? CapComSkins.progressIconOn : CapComSkins.progressIconOff, listStyle(3), GUILayout.Width(32), GUILayout.Height(32)))
+					{
+						if (currentList != 3)
+						{
+							currentList = 3;
+							updateProgress();
 						}
 					}
 				}
@@ -616,55 +652,120 @@ namespace CapCom
 		{
 			cScroll = GUILayout.BeginScrollView(cScroll, false, true, GUILayout.Width(356));
 
-			for (int i = 0; i < currentContracts.Count; i++)
+			if (currentList == 3)
 			{
-				GUILayout.BeginHorizontal();
-					GUILayout.Space(75);
-					if (dropdown)
-					{
-						GUILayout.Label(currentContracts[i].Title, selectedContracts.Contains(currentContracts[i]) ? CapComSkins.titleButtonActive : CapComSkins.titleButton, GUILayout.Width(260), GUILayout.Height(46));
-					}
-					else
-					{
-						if (GUILayout.Button(currentContracts[i].Title, selectedContracts.Contains(currentContracts[i]) ? CapComSkins.titleButtonActive : CapComSkins.titleButton, GUILayout.Width(260), GUILayout.Height(46)))
-						{
-							selectContract(i, multiSelectKeyDown);
-
-							showAgency = false;
-						}
-					}
-					Rect r = GUILayoutUtility.GetLastRect();
-				GUILayout.EndHorizontal();
-				GUILayout.Space(-4);
-
-				r.width = 69;
-				r.x -= 69;
-				r.height = 46;
-				if (!dropdown)
+				for (int i = 0; i < intervalNodes.Count; i++)
 				{
-					if (GUI.Button(r, "", CapComSkins.iconButton))
-					{
-						selectContract(i, multiSelectKeyDown);
+					progressInterval p = intervalNodes[i];
 
-						showAgency = false;
-					}
+					if (p == null)
+						continue;
+
+					if (p.Interval <= 1)
+						continue;
+
+					drawContractTitleBar(p.Descriptor + " Records", selectedProgress == i, i, CapComSkins.worldsFirstFlag);
 				}
-				GUI.DrawTexture(r, selectedContracts.Contains(currentContracts[i]) ? CapComSkins.titleButtonOnLeft : CapComSkins.titleButtonOffLeft);
-				r.x += 10;
-				r.y += 3;
-				r.width = 58;
-				r.height = 40;
-				GUI.DrawTexture(r, currentContracts[i].RootAgent.LogoScaled);
-				r.width = 11;
-				r.height = 40;
-				r.x += 307;
-				GUI.DrawTexture(r, contractPrestigeIcon(currentContracts[i].Root.Prestige));
+
+				if (progressParser.AnyStandard)
+				{
+					drawContractTitleBar("Standard Records", selectedProgress == 5, 5, CapComSkins.worldsFirstFlag);
+				}
+
+				if (progressParser.AnyPOI)
+				{
+					drawContractTitleBar("Point Of Interest Records", selectedProgress == 6, 6, CapComSkins.worldsFirstFlag);
+				}
+
+				for (int i = 0; i < bodyNodes.Count; i++)
+				{
+					progressBodyCollection p = bodyNodes[i];
+
+					if (p == null)
+						continue;
+
+					if (!p.IsReached)
+						continue;
+
+					drawContractTitleBar(p.BodyName + " Records", selectedProgress == (i + 6), (i + 6), CapComSkins.worldsFirstFlag);
+				}
+			}
+			else
+			{
+				for (int i = 0; i < currentContracts.Count; i++)
+				{
+					if (currentContracts[i] == null)
+						continue;
+
+					drawContractTitleBar(currentContracts[i].Title, selectedContracts.Contains(currentContracts[i]), i, currentContracts[i].RootAgent.LogoScaled, true, currentContracts[i].Root.Prestige);
+				}
 			}
 			GUILayout.EndScrollView();
 		}
 
+		private void drawContractTitleBar(string title, bool selected, int index, Texture2D logo, bool contract = false, Contract.ContractPrestige prestige = Contract.ContractPrestige.Trivial)
+		{
+			GUILayout.BeginHorizontal();
+			GUILayout.Space(75);
+			if (dropdown)
+			{
+				GUILayout.Label(title, selected ? CapComSkins.titleButtonActive : CapComSkins.titleButton, GUILayout.Width(260), GUILayout.Height(46));
+			}
+			else
+			{
+				if (GUILayout.Button(title, selected ? CapComSkins.titleButtonActive : CapComSkins.titleButton, GUILayout.Width(260), GUILayout.Height(46)))
+				{
+					if (contract)
+					{
+						selectContract(index, multiSelectKeyDown);
+						showAgency = false;
+					}
+					else
+					{
+						selectProgress(index);
+					}
+				}
+			}
+			Rect r = GUILayoutUtility.GetLastRect();
+			GUILayout.EndHorizontal();
+			GUILayout.Space(-4);
+
+			r.width = 69;
+			r.x -= 69;
+			r.height = 46;
+			if (!dropdown)
+			{
+				if (GUI.Button(r, "", CapComSkins.iconButton))
+				{
+					if (contract)
+					{
+						selectContract(index, multiSelectKeyDown);
+						showAgency = false;
+					}
+					else
+					{
+						selectProgress(index);
+					}
+				}
+			}
+			GUI.DrawTexture(r, selected ? CapComSkins.titleButtonOnLeft : CapComSkins.titleButtonOffLeft);
+			r.x += 10;
+			r.y += 3;
+			r.width = 58;
+			r.height = 40;
+			if (logo != null)
+				GUI.DrawTexture(r, logo);
+			r.width = 11;
+			r.height = 40;
+			r.x += 307;
+			GUI.DrawTexture(r, contractPrestigeIcon(prestige));
+		}
+
 		private void currentContractControls(int id)
 		{
+			if (currentList == 3)
+				return;
+
 			if (currentContract == null)
 				return;
 
@@ -754,7 +855,8 @@ namespace CapCom
 			r.y += 5;
 			r.width = 152;
 			r.height = 95;
-			GUI.DrawTexture(r, currentContract.RootAgent.Logo);
+			if (currentContract.RootAgent.Logo != null)
+				GUI.DrawTexture(r, currentContract.RootAgent.Logo);
 
 			GUILayout.BeginHorizontal();
 				GUILayout.Space(180);
@@ -774,6 +876,28 @@ namespace CapCom
 
 		private void currentContractInfo(int id)
 		{
+			if (currentList == 3)
+			{
+				if (selectedProgress >= 0 && selectedProgress <= 3)
+				{
+					drawIntervalNode(selectedProgress);
+				}
+				else if (selectedProgress == 4)
+				{
+					drawStandardNodes();
+				}
+				else if (selectedProgress == 5)
+				{
+					drawPOINodes();
+				}
+				else if (selectedProgress >= 6)
+				{
+					drawBodyNode(selectedProgress - 6);
+				}
+
+				return;
+			}
+
 			if (currentContract == null)
 				return;
 
@@ -868,6 +992,85 @@ namespace CapCom
 				sizedContent("", "", "- " + currentContract.DecPen.ToString("N0"), TransactionReasons.ContractDecline);
 
 			GUILayout.EndScrollView();
+		}
+
+		private void drawIntervalNode(int i)
+		{
+			progressInterval interval = intervalNodes[i];
+
+			if (interval == null)
+				return;
+
+			if (interval.Interval <= 1)
+				return;
+
+			drawIntervalRecords(interval);
+		}
+
+		private void drawStandardNodes()
+		{
+			for (int i = 0; i < standardNodes.Count; i++)
+			{
+				progressStandard standard = standardNodes[i];
+
+				if (standard == null)
+					continue;
+
+				if (!standard.IsComplete)
+					continue;
+
+				drawStandardRecords(standard);
+			}
+		}
+
+		private void drawPOINodes()
+		{
+			for (int i = 0; i < POInodes.Count; i++)
+			{
+				progressStandard POI = POInodes[i];
+
+				if (POI == null)
+					continue;
+
+				if (!POI.IsComplete)
+					continue;
+
+				drawStandardRecords(POI);
+			}
+		}
+
+		private void drawBodyNode(int i)
+		{
+			progressBodyCollection p = bodyNodes[i];
+
+			if (p == null)
+				return;
+
+			if (!p.IsReached)
+				return;
+
+			for (int j = 0; j < bodySubNodes[i].Count; j++)
+			{
+				progressStandard BodyNode = bodySubNodes[i][j];
+
+				if (BodyNode == null)
+					continue;
+
+				if (!BodyNode.IsComplete)
+					continue;
+
+				drawStandardRecords(BodyNode);
+			}
+		}
+
+		private void drawIntervalRecords(progressInterval p)
+		{
+
+		}
+
+		private void drawStandardRecords(progressStandard p)
+		{
+
 		}
 
 		private void drawParameter(parameterContainer cp)
@@ -1193,6 +1396,11 @@ namespace CapCom
 			showAgency = false;
 		}
 
+		private void selectProgress(int i)
+		{
+			selectedProgress = i;
+		}
+
 		private void sizedContent(string funds, string sci, string rep, TransactionReasons type)
 		{
 			bool b1 = string.IsNullOrEmpty(funds);
@@ -1296,7 +1504,10 @@ namespace CapCom
 
 		private GUIStyle listStyle(int i)
 		{
-			return i == currentList ? CapComSkins.tabButton : CapComSkins.tabButtonInactive;
+			if (i == 3)
+				return CapComSkins.textureButton;
+			else
+				return i == currentList ? CapComSkins.tabButton : CapComSkins.tabButtonInactive;
 		}
 
 		private GUIStyle currencyStyle(Currency t)
