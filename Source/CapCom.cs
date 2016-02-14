@@ -57,13 +57,23 @@ namespace CapCom
 
 		private const string filePath = "Settings";
 
-		private static bool loaded = false;
+		private static bool textureLoaded = false;
+
+		private static bool loaded;
 
 		protected override void Awake()
 		{
-			if (!loaded)
+			if (loaded)
 			{
-				loaded = true;
+				Destroy(gameObject);
+				return;
+			}
+
+			loaded = true;
+
+			if (!textureLoaded)
+			{
+				textureLoaded = true;
 
 				Texture original = null;
 
@@ -164,17 +174,16 @@ namespace CapCom
 					Destroy(toolbar);
 			}
 
-			GameEvents.Contract.onAccepted.Add(onAccepted);
-			GameEvents.Contract.onDeclined.Add(onDeclined);
-			GameEvents.Contract.onFinished.Add(onFinished);
-			GameEvents.Contract.onOffered.Add(onOffered);
 			contractParser.onContractsParsed.Add(onContractsLoaded);
+			contractParser.onContractStateChange.Add(refreshList);
 			progressParser.onProgressParsed.Add(onProgressLoaded);
 			GameEvents.Contract.onContractsListChanged.Add(onListChanged);
 		}
 
 		protected override void OnDestroy()
 		{
+			loaded = false;
+
 			if (appButton != null)
 				Destroy(appButton);
 
@@ -184,11 +193,8 @@ namespace CapCom
 			if (window != null)
 				Destroy(window);
 
-			GameEvents.Contract.onAccepted.Remove(onAccepted);
-			GameEvents.Contract.onDeclined.Remove(onDeclined);
-			GameEvents.Contract.onFinished.Remove(onFinished);
-			GameEvents.Contract.onOffered.Remove(onOffered);
 			contractParser.onContractsParsed.Remove(onContractsLoaded);
+			contractParser.onContractStateChange.Remove(refreshList);
 			progressParser.onProgressParsed.Remove(onProgressLoaded);
 			GameEvents.Contract.onContractsListChanged.Remove(onListChanged);
 
@@ -233,80 +239,6 @@ namespace CapCom
 
 		#region Events
 
-		private void onAccepted(Contract c)
-		{
-			if (c == null)
-			{
-				LogFormatted("Error in loading null accepted contract");
-				return;
-			}
-
-			contractContainer cc = contractParser.getOfferedContract(c.ContractGuid, true);
-
-			if (cc == null)
-				return;
-
-			cc.updateTimeValues();
-
-			refreshList();
-
-			updateWaypoints(cc);
-			updateOrbits(cc);
-		}
-
-		private void onDeclined(Contract c)
-		{
-			if (c == null)
-			{
-				LogFormatted("Error in loading null declined contract");
-				return;
-			}
-
-			contractContainer cc = contractParser.getOfferedContract(c.ContractGuid, true);
-
-			if (cc == null)
-				return;
-
-			refreshList();
-		}
-
-		private void onFinished(Contract c)
-		{
-			if (c == null)
-			{
-				LogFormatted("Error in loading null finished contract");
-				return;
-			}
-
-			contractContainer cc = contractParser.getActiveContract(c.ContractGuid);
-
-			if (cc == null)
-				cc = contractParser.getOfferedContract(c.ContractGuid, true);
-
-			if (cc == null)
-				return;
-
-			cc.updateTimeValues();
-
-			refreshList();
-		}
-
-		private void onOffered(Contract c)
-		{
-			if (c == null)
-			{
-				LogFormatted("Error in loading null offered contract");
-				return;
-			}
-
-			contractContainer cc = new contractContainer(c);
-
-			if (cc == null)
-				return;
-
-			refreshList();
-		}
-
 		private void onContractsLoaded()
 		{
 			StartCoroutine(loadContracts());
@@ -314,12 +246,12 @@ namespace CapCom
 
 		private void onProgressLoaded()
 		{
-
+			StartCoroutine(loadProgress());
 		}
 
 		private void onListChanged()
 		{
-			refreshList();
+			window.refreshContracts(false);
 		}
 
 		#endregion
@@ -352,9 +284,23 @@ namespace CapCom
 			window.updateProgress();
 		}
 
-		private void refreshList()
+		private void refreshList(Contract c)
 		{
 			window.refreshContracts(false);
+
+			if (c == null)
+				return;
+
+			contractContainer cc = contractParser.getActiveContract(c.ContractGuid, true);
+
+			if (cc == null)
+				return;
+
+			if (c.ContractState == Contract.State.Active)
+			{
+				updateWaypoints(cc);
+				updateOrbits(cc);
+			}
 		}
 
 		private void updateOrbits(contractContainer c)
