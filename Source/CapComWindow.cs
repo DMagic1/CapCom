@@ -684,12 +684,12 @@ namespace CapCom
 
 				if (progressParser.AnyStandard)
 				{
-					drawContractTitleBar("Standard Records", selectedProgress == 5, 5, progressAgency.LogoScaled);
+					drawContractTitleBar("Standard Records", selectedProgress == 4, 4, progressAgency.LogoScaled);
 				}
 
 				if (progressParser.AnyPOI)
 				{
-					drawContractTitleBar("Point Of Interest Records", selectedProgress == 6, 6, progressAgency.LogoScaled);
+					drawContractTitleBar("Point Of Interest Records", selectedProgress == 5, 5, progressAgency.LogoScaled);
 				}
 
 				for (int i = 0; i < bodyNodes.Count; i++)
@@ -702,7 +702,7 @@ namespace CapCom
 					if (!p.IsReached)
 						continue;
 
-					drawContractTitleBar(p.Body.theName + " Records", selectedProgress == (i + 6), (i + 6), progressAgency.LogoScaled);
+					drawContractTitleBar(p.Body.bodyName + " Records", selectedProgress == (i + 6), (i + 6), progressAgency.LogoScaled);
 				}
 			}
 			else
@@ -898,8 +898,6 @@ namespace CapCom
 
 			infoScroll = GUILayout.BeginScrollView(infoScroll, GUILayout.Width(500));
 
-			GUILayout.Label("Agency Description:", CapComSkins.headerText);
-
 			if (selectedProgress >= 0 && selectedProgress <= 3)
 			{
 				drawIntervalNode(selectedProgress);
@@ -1028,7 +1026,7 @@ namespace CapCom
 			if (interval.Interval <= 1)
 				return;
 
-			GUILayout.Label(progressTitle(selectedProgress) + " Records:", CapComSkins.headerText, GUILayout.Width(110));
+			GUILayout.Label(progressTitle(selectedProgress) + " Records:", CapComSkins.headerText, GUILayout.Width(200));
 
 			for (int j = 1; j < interval.Interval; j++)
 			{
@@ -1038,7 +1036,7 @@ namespace CapCom
 
 		private void drawStandardNodes()
 		{
-			GUILayout.Label(progressTitle(selectedProgress) + " Records:", CapComSkins.headerText, GUILayout.Width(110));
+			GUILayout.Label(progressTitle(selectedProgress) + " Records:", CapComSkins.headerText, GUILayout.Width(200));
 
 			for (int i = 0; i < standardNodes.Count; i++)
 			{
@@ -1056,7 +1054,7 @@ namespace CapCom
 
 		private void drawPOINodes()
 		{
-			GUILayout.Label(progressTitle(selectedProgress) + " Records:", CapComSkins.headerText, GUILayout.Width(110));
+			GUILayout.Label(progressTitle(selectedProgress) + " Records:", CapComSkins.headerText, GUILayout.Width(200));
 
 			for (int i = 0; i < POInodes.Count; i++)
 			{
@@ -1082,7 +1080,7 @@ namespace CapCom
 			if (!p.IsReached)
 				return;
 
-			GUILayout.Label(p.Body.theName + " Records:", CapComSkins.headerText, GUILayout.Width(110));
+			GUILayout.Label(p.Body.bodyName + " Records:", CapComSkins.headerText, GUILayout.Width(200));
 
 			for (int j = 0; j < bodySubNodes[i].Count; j++)
 			{
