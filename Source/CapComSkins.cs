@@ -120,7 +120,7 @@ namespace CapCom
 		internal static Texture2D progressIconOn = new Texture2D(1, 1);
 		internal static Texture2D progressIconOff = new Texture2D(1, 1);
 
-		internal static Texture2D worldsFirstFlag = new Texture2D(1, 1);
+		internal static Texture2D worldsFirstFlag = new Texture2D(28, 28);
 
 		internal static Texture2D toggleOn = new Texture2D(1,1);
 		internal static Texture2D toggleOff = new Texture2D(1,1);
