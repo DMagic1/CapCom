@@ -291,75 +291,164 @@ namespace CapCom
 			if (c == null)
 				return;
 
-			contractContainer cc = contractParser.getActiveContract(c.ContractGuid, true);
+			if (c.ContractState != Contract.State.Active)
+				return;
+
+			contractContainer cc = contractParser.getActiveContract(c.ContractGuid);
 
 			if (cc == null)
 				return;
 
-			if (c.ContractState == Contract.State.Active)
+			for (int i = 0; i < cc.ParameterCount; i++)
 			{
-				updateWaypoints(cc);
-				updateOrbits(cc);
-			}
-		}
-
-		private void updateOrbits(contractContainer c)
-		{
-			if (!HighLogic.LoadedSceneIsFlight)
-				return;
-
-			for (int i = 0; i < c.ParameterCount; i++)
-			{
-				parameterContainer p = c.getParameter(i);
+				parameterContainer p = cc.getParameterFull(i);
 
 				if (p == null)
 					continue;
 
-				if (p.CParam.GetType() != typeof(SpecificOrbitParameter))
-					continue;
-
-				SpecificOrbitParameter s = (SpecificOrbitParameter)p.CParam;
-
-				MethodInfo orbitSetup = (typeof(SpecificOrbitParameter)).GetMethod("SetupWaypoints", BindingFlags.NonPublic | BindingFlags.Instance);
-
-				if (orbitSetup == null)
-					return;
-
-				try
-				{
-					orbitSetup.Invoke(s, null);
-				}
-				catch (Exception e)
-				{
-					LogFormatted("Error while activating FinePrint Specific Orbit Parameter: {0}", e);
-				}
+				customStartup(p);
 			}
 		}
 
-		private void updateWaypoints(contractContainer c)
+		private void customStartup(parameterContainer p)
 		{
-			if (!HighLogic.LoadedSceneIsFlight)
-				return;
+			Type t = p.CParam.GetType();
+			GameScenes s = HighLogic.LoadedScene;
 
-			if (WaypointManager.Instance() == null)
-				return;
-
-			for (int i = 0; i < c.ParameterCount; i++)
+			try
 			{
-				parameterContainer p = c.getParameter(i);
+				if (t == typeof(ReachDestination) && s == GameScenes.FLIGHT && FlightGlobals.ActiveVessel != null)
+				{
+					if (p.CParam.State == ParameterState.Incomplete && ((ReachDestination)p.CParam).checkVesselDestination(FlightGlobals.ActiveVessel))
+					{
+						MethodInfo m = (typeof(ContractParameter)).GetMethod("SetComplete", BindingFlags.NonPublic | BindingFlags.Instance);
 
-				if (p == null)
-					continue;
+						if (m == null)
+							return;
 
-				if (p.Way == null)
-					continue;
+						m.Invoke(p.CParam, null);
+					}
+					else if (p.CParam.State == ParameterState.Complete && !((ReachDestination)p.CParam).checkVesselDestination(FlightGlobals.ActiveVessel))
+					{
+						MethodInfo m = (typeof(ContractParameter)).GetMethod("SetIncomplete", BindingFlags.NonPublic | BindingFlags.Instance);
 
-				var waypoints = WaypointManager.Instance().AllWaypoints();
+						if (m == null)
+							return;
 
-				if (waypoints.Contains(p.Way))
-					continue;
+						m.Invoke(p.CParam, null);
+					}
+				}
+				else if (t == typeof(ReachSituation) && s == GameScenes.FLIGHT && FlightGlobals.ActiveVessel != null)
+				{
+					if (p.CParam.State == ParameterState.Incomplete && ((ReachSituation)p.CParam).checkVesselSituation(FlightGlobals.ActiveVessel))
+					{
+						MethodInfo m = (typeof(ContractParameter)).GetMethod("SetComplete", BindingFlags.NonPublic | BindingFlags.Instance);
 
-				WaypointManager.AddWaypoint(p.Way);
+						if (m == null)
+							return;
+
+						m.Invoke(p.CParam, null);
+					}
+					else if (p.CParam.State == ParameterState.Complete && !((ReachSituation)p.CParam).checkVesselSituation(FlightGlobals.ActiveVessel))
+					{
+						MethodInfo m = (typeof(ContractParameter)).GetMethod("SetIncomplete", BindingFlags.NonPublic | BindingFlags.Instance);
+
+						if (m == null)
+							return;
+
+						m.Invoke(p.CParam, null);
+					}
+				}
+				else if (t == typeof(SpecificOrbitParameter) && s == GameScenes.FLIGHT)
+				{
+					((SpecificOrbitParameter)p.CParam).SetupWaypoints();
+				}
+				else if (t == typeof(VesselSystemsParameter) && s == GameScenes.FLIGHT)
+				{
+					VesselSystemsParameter sys = (VesselSystemsParameter)p.CParam;
+
+					if (!sys.requireNew)
+						return;
+
+					Vessel v = FlightGlobals.ActiveVessel;
+
+					if (v == null)
+						return;
+
+					if (v.situation != Vessel.Situations.PRELAUNCH)
+						return;
+
+					uint launchID = v.Parts.Min(r => r.launchID);
+
+					sys.launchID = launchID;
+				}
+				else if (t == typeof(WaypointParameter) && s == GameScenes.FLIGHT)
+				{
+					if (p.Way == null)
+						return;
+
+					var waypoints = WaypointManager.Instance().AllWaypoints();
+
+					if (waypoints.Contains(p.Way))
+						return;
+
+					WaypointManager.AddWaypoint(p.Way);
+				}
+				else if (t == typeof(PartTest) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(PartTest)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((PartTest)p.CParam, null);
+
+					if (((PartTest)p.CParam).hauled)
+						return;
+
+					AvailablePart targetPart = ((PartTest)p.CParam).tgtPartInfo;
+
+					if (targetPart == null)
+						return;
+
+					for (int i = 0; i < FlightGlobals.Vessels.Count; i++)
+					{
+						Vessel v = FlightGlobals.Vessels[i];
+
+						if (v == null)
+							continue;
+
+						if (!v.loaded)
+							continue;
+
+						for (int j = 0; j < v.Parts.Count; j++)
+						{
+							Part part = v.Parts[j];
+
+							if (part == null)
+								continue;
+
+							if (part.partInfo != targetPart)
+								continue;
+
+							var mods = part.FindModulesImplementing<ModuleTestSubject>();
+
+							for (int k = 0; k < mods.Count; k++)
+							{
+								ModuleTestSubject test = mods[k];
+
+								if (test == null)
+									continue;
+
+								test.Events["RunTestEvent"].active = true;
+							}
+						}
+					}
+				}
+			}
+			catch (Exception e)
+			{
+				LogFormatted("Error while forcing Contract Parameter activation:\n{0}", e);
 			}
 		}
 
