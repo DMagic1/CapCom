@@ -299,6 +299,9 @@ namespace CapCom
 			if (cc == null)
 				return;
 
+			if (cc.Initialized)
+				return;
+
 			for (int i = 0; i < cc.ParameterCount; i++)
 			{
 				parameterContainer p = cc.getParameterFull(i);
@@ -308,6 +311,8 @@ namespace CapCom
 
 				customStartup(p);
 			}
+
+			cc.Initialized = true;
 		}
 
 		private void customStartup(parameterContainer p)
@@ -367,6 +372,13 @@ namespace CapCom
 				{
 					VesselSystemsParameter sys = (VesselSystemsParameter)p.CParam;
 
+					MethodInfo m = (typeof(VesselSystemsParameter)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke(sys, null);
+
 					if (!sys.requireNew)
 						return;
 
@@ -382,7 +394,26 @@ namespace CapCom
 
 					sys.launchID = launchID;
 				}
-				else if (t == typeof(WaypointParameter) && s == GameScenes.FLIGHT)
+				else if (t == typeof(SurveyWaypointParameter) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(SurveyWaypointParameter)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((SurveyWaypointParameter)p.CParam, null);
+
+					if (p.Way == null)
+						return;
+
+					var waypoints = WaypointManager.Instance().AllWaypoints();
+
+					if (waypoints.Contains(p.Way))
+						return;
+
+					WaypointManager.AddWaypoint(p.Way);
+				}
+				else if (t == typeof(StationaryPointParameter) && s == GameScenes.FLIGHT)
 				{
 					if (p.Way == null)
 						return;
@@ -393,6 +424,96 @@ namespace CapCom
 						return;
 
 					WaypointManager.AddWaypoint(p.Way);
+				}
+				else if (t == typeof(AsteroidParameter) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(AsteroidParameter)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((AsteroidParameter)p.CParam, null);
+				}
+				else if (t == typeof(CrewCapacityParameter) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(CrewCapacityParameter)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((CrewCapacityParameter)p.CParam, null);
+				}
+				else if (t == typeof(CrewTraitParameter) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(CrewTraitParameter)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((CrewTraitParameter)p.CParam, null);
+				}
+				else if (t == typeof(KerbalDestinationParameter) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(KerbalDestinationParameter)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((KerbalDestinationParameter)p.CParam, null);
+				}
+				else if (t == typeof(KerbalTourParameter) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(KerbalTourParameter)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((KerbalTourParameter)p.CParam, null);
+				}
+				else if (t == typeof(LocationAndSituationParameter) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(LocationAndSituationParameter)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((LocationAndSituationParameter)p.CParam, null);
+				}
+				else if (t == typeof(MobileBaseParameter) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(MobileBaseParameter)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((MobileBaseParameter)p.CParam, null);
+				}
+				else if (t == typeof(ProgressTrackingParameter) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(ProgressTrackingParameter)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((ProgressTrackingParameter)p.CParam, null);
+				}
+				else if (t == typeof(ResourceExtractionParameter) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(ResourceExtractionParameter)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((ResourceExtractionParameter)p.CParam, null);
+				}
+				else if (t == typeof(VesselDestinationParameter) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(VesselDestinationParameter)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((VesselDestinationParameter)p.CParam, null);
 				}
 				else if (t == typeof(PartTest) && s == GameScenes.FLIGHT)
 				{
