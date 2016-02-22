@@ -24,17 +24,15 @@ namespace CapCom.Framework
 		{
 			// KSPAddon.Startup values:
 			/*  Instantly = -2,
-				EveryScene,
-				EditorAny = -3,
+				EveryScene = -1,
 				MainMenu = 2,
-				Settings,
+				Settings = 3,
 				SpaceCentre = 5,
 				Credits = 4,
-				EditorVAB = 6,
-				EditorSPH = 9,
+				Editor = 6,
 				Flight = 7,
-				TrackingStation,
-				PSystemSpawn = 10
+				TrackingStation = 8,
+				PSystemSpawn = 9,
 			*/
 
 			None = 0,
@@ -69,6 +67,8 @@ namespace CapCom.Framework
 		// What's improved? The KSPAddon.Startup is now a bitmask so you can
 		// use logical operations to specify which scenes you want your addon
 		// to be loaded in
+
+		private static bool loaded;
 
 
 		// master list to keep track of addons in our assembly
@@ -112,6 +112,11 @@ namespace CapCom.Framework
 
 		void Awake()
 		{
+			if (loaded)
+				Destroy(this);
+
+			loaded = true;
+
 			DontDestroyOnLoad(this);
 
 			// multiple plugins using this source will create their own instances
