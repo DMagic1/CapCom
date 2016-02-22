@@ -176,6 +176,9 @@ namespace CapCom
 					if (currentContract == null)
 						return;
 
+					if (HighLogic.LoadedSceneIsEditor)
+						return;
+
 					if (currentList != 0)
 						return;
 
@@ -184,6 +187,9 @@ namespace CapCom
 				if (Input.GetKeyDown(CapCom.Settings.cancel))
 				{
 					if (currentContract == null)
+						return;
+
+					if (HighLogic.LoadedSceneIsEditor)
 						return;
 
 					if (currentList == 0)
@@ -781,6 +787,9 @@ namespace CapCom
 			if (currentList == 3)
 				return;
 
+			if (HighLogic.LoadedSceneIsEditor)
+				return;
+
 			if (currentContract == null)
 				return;
 
@@ -1160,7 +1169,7 @@ namespace CapCom
 					if (notes)
 					{
 						if (!CapCom.Settings.hideNotes || cp.ShowNote)
-							GUILayout.Label(cp.Notes(), CapComSkins.noteText);
+							GUILayout.Label(cp.Notes(true), CapComSkins.noteText);
 					}
 
 					sizedContent(cp.FundsRewString, cp.SciRewString, cp.RepRewString, TransactionReasons.ContractReward);
