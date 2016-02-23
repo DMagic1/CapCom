@@ -184,8 +184,8 @@ namespace CapCom
 			sortStars = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/SortDifficultyIcon", false);
 			sortPlanet = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/SortPlanetsIcon", false);
 			sortTime = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/SortTimeIcon", false);
-			progressIconOn = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/ProgressOnIcon", false);
-			progressIconOff = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/ProgressOffIcon", false);
+			progressIconOn = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/ProgressIconOn", false);
+			progressIconOff = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/ProgressIconOff", false);
 
 			toggleButtons();
 			atlasStyles();
@@ -479,6 +479,7 @@ namespace CapCom
 			tabButton.fontSize = 14 + fontSize;
 			tabButton.fontStyle = FontStyle.Bold;
 			tabButton.normal.textColor = XKCDColors.White;
+			tabButton.padding = new RectOffset(2, 2, 2, 2);
 
 			tabButtonInactive = new GUIStyle(tabButton);
 			tabButtonInactive.fontSize = 12 + fontSize;
