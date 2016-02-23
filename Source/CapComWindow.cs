@@ -661,8 +661,8 @@ namespace CapCom
 
 					GUILayout.Space(36);
 
-					r.x += r.width + 6;
-					r.y -= 6;
+					r.x += r.width + 4;
+					r.y -= 4;
 					r.width = 32;
 					r.height = 32;
 
