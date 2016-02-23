@@ -657,7 +657,16 @@ namespace CapCom
 						}
 					}
 
-					if (GUILayout.Button(currentList == 3 ? CapComSkins.progressIconOn : CapComSkins.progressIconOff, listStyle(3), GUILayout.Width(32), GUILayout.Height(32)))
+					Rect r = GUILayoutUtility.GetLastRect();
+
+					GUILayout.Space(36);
+
+					r.x += r.width + 6;
+					r.y -= 6;
+					r.width = 32;
+					r.height = 32;
+
+					if (GUI.Button(r, currentList == 3 ? CapComSkins.progressIconOn : CapComSkins.progressIconOff, listStyle(3)))
 					{
 						if (currentList != 3)
 						{
@@ -1131,7 +1140,7 @@ namespace CapCom
 
 		private void drawParameter(parameterContainer cp)
 		{
-			bool notes = !string.IsNullOrEmpty(cp.Notes());
+			bool notes = !string.IsNullOrEmpty(cp.Notes(true));
 
 			GUILayout.BeginHorizontal();
 				if (notes && CapCom.Settings.hideNotes)
@@ -1560,10 +1569,7 @@ namespace CapCom
 
 		private GUIStyle listStyle(int i)
 		{
-			if (i == 3)
-				return CapComSkins.textureButton;
-			else
-				return i == currentList ? CapComSkins.tabButton : CapComSkins.tabButtonInactive;
+			return i == currentList ? CapComSkins.tabButton : CapComSkins.tabButtonInactive;
 		}
 
 		private GUIStyle currencyStyle(Currency t)
