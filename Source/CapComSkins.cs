@@ -50,6 +50,7 @@ namespace CapCom
 		internal static GUIStyle textureButton;
 		internal static GUIStyle tabButton;
 		internal static GUIStyle tabButtonInactive;
+		internal static GUIStyle tabButtonTexture;
 		internal static GUIStyle menuButton;
 		internal static GUIStyle keycodeButton;
 		internal static GUIStyle warningButton;
@@ -116,6 +117,11 @@ namespace CapCom
 		internal static Texture2D sortPlanet = new Texture2D(1,1);
 		internal static Texture2D sortTime = new Texture2D(1,1);
 
+		internal static Texture2D progressIconOn = new Texture2D(1, 1);
+		internal static Texture2D progressIconOff = new Texture2D(1, 1);
+
+		internal static Texture2D worldsFirstFlag = new Texture2D(28, 28);
+
 		internal static Texture2D toggleOn = new Texture2D(1,1);
 		internal static Texture2D toggleOff = new Texture2D(1,1);
 		internal static Texture2D toggleHoverOff = new Texture2D(1,1);
@@ -153,31 +159,33 @@ namespace CapCom
 
 		protected override void OnGUIOnceOnly()
 		{
-			windowTex = GameDatabase.Instance.GetTexture("CapCom/Textures/WindowTex", false);
-			dropDownTex = GameDatabase.Instance.GetTexture("CapCom/Textures/DropDownTex", false);
-			toolbarIcon = GameDatabase.Instance.GetTexture("CapCom/Textures/CapComAppIcon", false);
-			buttonHover = GameDatabase.Instance.GetTexture("CapCom/Textures/ButtonHover", false);
-			fundsGreen = GameDatabase.Instance.GetTexture("CapCom/Textures/FundsGreenIcon", false);
-			repRed = GameDatabase.Instance.GetTexture("CapCom/Textures/RepRedIcon", false);
-			science = GameDatabase.Instance.GetTexture("CapCom/Textures/ScienceIcon", false);
-			orderAsc = GameDatabase.Instance.GetTexture("CapCom/Textures/OrderAsc", false);
-			orderDesc = GameDatabase.Instance.GetTexture("CapCom/Textures/OrderDesc", false);
-			goldStar = GameDatabase.Instance.GetTexture("CapCom/Textures/GoldStar", false);
-			goldStarTwo = GameDatabase.Instance.GetTexture("CapCom/Textures/GoldStarTwo", false);
-			goldStarThree = GameDatabase.Instance.GetTexture("CapCom/Textures/GoldStarThree", false);
-			goldStarVertical = GameDatabase.Instance.GetTexture("CapCom/Textures/GoldStarVertical", false);
-			goldStarTwoVertical = GameDatabase.Instance.GetTexture("CapCom/Textures/GoldStarTwoVertical", false);
-			goldStarThreeVertical = GameDatabase.Instance.GetTexture("CapCom/Textures/GoldStarThreeVertical", false);
-			settingsIcon = GameDatabase.Instance.GetTexture("CapCom/Textures/ToolbarSettingsIcon", false);
-			resizeHandle = GameDatabase.Instance.GetTexture("CapCom/Textures/ResizeIcon", false);
-			checkBox = GameDatabase.Instance.GetTexture("CapCom/Textures/CheckBoxIcon", false);
-			failBox = GameDatabase.Instance.GetTexture("CapCom/Textures/FailBoxIcon", false);
-			emptyBox = GameDatabase.Instance.GetTexture("CapCom/Textures/EmptyBoxIcon", false);
-			notesPlusIcon = GameDatabase.Instance.GetTexture("CapCom/Textures/OpenNotesIcon", false);
-			notesMinusIcon = GameDatabase.Instance.GetTexture("CapCom/Textures/CloseNotesIcon", false);
-			sortStars = GameDatabase.Instance.GetTexture("CapCom/Textures/SortDifficultyIcon", false);
-			sortPlanet = GameDatabase.Instance.GetTexture("CapCom/Textures/SortPlanetsIcon", false);
-			sortTime = GameDatabase.Instance.GetTexture("CapCom/Textures/SortTimeIcon", false);
+			windowTex = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/WindowTex", false);
+			dropDownTex = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/DropDownTex", false);
+			toolbarIcon = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/CapComAppIcon", false);
+			buttonHover = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/ButtonHover", false);
+			fundsGreen = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/FundsGreenIcon", false);
+			repRed = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/RepRedIcon", false);
+			science = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/ScienceIcon", false);
+			orderAsc = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/OrderAsc", false);
+			orderDesc = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/OrderDesc", false);
+			goldStar = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/GoldStar", false);
+			goldStarTwo = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/GoldStarTwo", false);
+			goldStarThree = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/GoldStarThree", false);
+			goldStarVertical = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/GoldStarVertical", false);
+			goldStarTwoVertical = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/GoldStarTwoVertical", false);
+			goldStarThreeVertical = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/GoldStarThreeVertical", false);
+			settingsIcon = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/ToolbarSettingsIcon", false);
+			resizeHandle = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/ResizeIcon", false);
+			checkBox = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/CheckBoxIcon", false);
+			failBox = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/FailBoxIcon", false);
+			emptyBox = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/EmptyBoxIcon", false);
+			notesPlusIcon = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/OpenNotesIcon", false);
+			notesMinusIcon = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/CloseNotesIcon", false);
+			sortStars = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/SortDifficultyIcon", false);
+			sortPlanet = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/SortPlanetsIcon", false);
+			sortTime = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/SortTimeIcon", false);
+			progressIconOn = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/ProgressIconOn", false);
+			progressIconOff = GameDatabase.Instance.GetTexture("DMagicUtilities/CapCom/Textures/ProgressIconOff", false);
 
 			toggleButtons();
 			atlasStyles();
@@ -471,6 +479,7 @@ namespace CapCom
 			tabButton.fontSize = 14 + fontSize;
 			tabButton.fontStyle = FontStyle.Bold;
 			tabButton.normal.textColor = XKCDColors.White;
+			tabButton.padding = new RectOffset(2, 2, 2, 2);
 
 			tabButtonInactive = new GUIStyle(tabButton);
 			tabButtonInactive.fontSize = 12 + fontSize;

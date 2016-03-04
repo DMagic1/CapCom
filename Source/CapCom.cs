@@ -40,6 +40,8 @@ using FinePrint;
 using FinePrint.Contracts.Parameters;
 using FinePrint.Utilities;
 using UnityEngine;
+using ContractParser;
+using ProgressParser;
 
 namespace CapCom
 {
@@ -52,20 +54,26 @@ namespace CapCom
 		private CapComWindow window;
 		private CC_StockToolbar appButton;
 		private CC_Toolbar toolbar;
-		private Dictionary<Guid, CapComContract> activeContracts = new Dictionary<Guid, CapComContract>();
-		private Dictionary<Guid, CapComContract> offeredContracts = new Dictionary<Guid, CapComContract>();
-		private Dictionary<Guid, CapComContract> completedContracts = new Dictionary<Guid, CapComContract>();
-		private Dictionary<Guid, CapComContract> failedContracts = new Dictionary<Guid, CapComContract>();
 
 		private const string filePath = "Settings";
 
-		private static bool loaded = false;
+		private static bool textureLoaded = false;
+
+		private static bool loaded;
 
 		protected override void Awake()
 		{
-			if (!loaded)
+			if (loaded)
 			{
-				loaded = true;
+				Destroy(gameObject);
+				return;
+			}
+
+			loaded = true;
+
+			if (!textureLoaded)
+			{
+				textureLoaded = true;
 
 				Texture original = null;
 
@@ -78,14 +86,13 @@ namespace CapCom
 					}
 				}
 
-				Texture2D missionControlTexture = new Texture2D(original.width, original.height);
-
 				if (original == null)
 				{
 					LogFormatted("Error loading Mission Control Center Texture atlas; some CapCom UI elements will not appear correctly");
-					CapComSkins.texturesFromAtlas(missionControlTexture);
 					return;
 				}
+
+				Texture2D missionControlTexture = new Texture2D(original.width, original.height);
 
 				var rt = RenderTexture.GetTemporary(original.width, original.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB, 1);
 
@@ -167,16 +174,16 @@ namespace CapCom
 					Destroy(toolbar);
 			}
 
-			GameEvents.Contract.onAccepted.Add(onAccepted);
-			GameEvents.Contract.onDeclined.Add(onDeclined);
-			GameEvents.Contract.onFinished.Add(onFinished);
-			GameEvents.Contract.onOffered.Add(onOffered);
-			GameEvents.Contract.onContractsLoaded.Add(onContractsLoaded);
+			contractParser.onContractsParsed.Add(onContractsLoaded);
+			contractParser.onContractStateChange.Add(refreshList);
+			progressParser.onProgressParsed.Add(onProgressLoaded);
 			GameEvents.Contract.onContractsListChanged.Add(onListChanged);
 		}
 
 		protected override void OnDestroy()
 		{
+			loaded = false;
+
 			if (appButton != null)
 				Destroy(appButton);
 
@@ -186,11 +193,9 @@ namespace CapCom
 			if (window != null)
 				Destroy(window);
 
-			GameEvents.Contract.onAccepted.Remove(onAccepted);
-			GameEvents.Contract.onDeclined.Remove(onDeclined);
-			GameEvents.Contract.onFinished.Remove(onFinished);
-			GameEvents.Contract.onOffered.Remove(onOffered);
-			GameEvents.Contract.onContractsLoaded.Remove(onContractsLoaded);
+			contractParser.onContractsParsed.Remove(onContractsLoaded);
+			contractParser.onContractStateChange.Remove(refreshList);
+			progressParser.onProgressParsed.Remove(onProgressLoaded);
 			GameEvents.Contract.onContractsListChanged.Remove(onListChanged);
 
 			instance = null;
@@ -230,265 +235,23 @@ namespace CapCom
 			get { return version; }
 		}
 
-		public CapComContract getActiveContract(Guid id, bool warn = false)
-		{
-			if (activeContracts.ContainsKey(id))
-				return activeContracts[id];
-			else if (warn)
-				LogFormatted("No Active Contract Of ID: [{0}] Found", id);
-
-			return null;
-		}
-
-		public bool addActiveContract(CapComContract c, bool warn = false)
-		{
-			if (!activeContracts.ContainsKey(c.ID))
-			{
-				activeContracts.Add(c.ID, c);
-				return true;
-			}
-			else if (warn)
-				LogFormatted("Active Contract List Already Has Contract [{0} ; ID: {1}]", c.Name, c.ID);
-
-			return false;
-		}
-
-		public bool removeActiveContract(CapComContract c, bool warn = false)
-		{
-			if (activeContracts.ContainsKey(c.ID))
-			{
-				activeContracts.Remove(c.ID);
-				return true;
-			}
-			else if (warn)
-				LogFormatted("Contract Not Found In Active Contract List [{0} ; ID: {1}]", c.Name, c.ID);
-
-			return false;
-		}
-
-		public CapComContract getOfferedContract(Guid id, bool warn = false)
-		{
-			if (offeredContracts.ContainsKey(id))
-				return offeredContracts[id];
-			else if (warn)
-				LogFormatted("No Offered Contract Of ID: [{0}] Found", id);
-
-			return null;
-		}
-
-		public bool addOfferedContract(CapComContract c, bool warn = false)
-		{
-			if (!offeredContracts.ContainsKey(c.ID))
-			{
-				offeredContracts.Add(c.ID, c);
-				return true;
-			}
-			else if (warn)
-				LogFormatted("Offered Contract List Already Has Contract [{0} ; ID: {1}]", c.Name, c.ID);
-
-			return false;
-		}
-
-		public bool removeOfferedContract(CapComContract c, bool warn = false)
-		{
-			if (offeredContracts.ContainsKey(c.ID))
-			{
-				offeredContracts.Remove(c.ID);
-				return true;
-			}
-			else if (warn)
-				LogFormatted("Contract Not Found In Offered Contract List [{0} ; ID: {1}]", c.Name, c.ID);
-
-			return false;
-		}
-
-		public CapComContract getCompletedContract(Guid id, bool warn = false)
-		{
-			if (completedContracts.ContainsKey(id))
-				return completedContracts[id];
-			else if (warn)
-				LogFormatted("No Completed Contract Of ID: [{0}] Found", id);
-
-			return null;
-		}
-
-		public bool addCompletedContract(CapComContract c, bool warn = false)
-		{
-			if (!completedContracts.ContainsKey(c.ID))
-			{
-				completedContracts.Add(c.ID, c);
-				return true;
-			}
-			else if (warn)
-				LogFormatted("Completed Contract List Already Has Contract [{0} ; ID: {1}]", c.Name, c.ID);
-
-			return false;
-		}
-
-		public bool removeCompletedContract(CapComContract c, bool warn = false)
-		{
-			if (completedContracts.ContainsKey(c.ID))
-			{
-				completedContracts.Remove(c.ID);
-				return true;
-			}
-			else if (warn)
-				LogFormatted("Contract Not Found In Completed Contract List [{0} ; ID: {1}]", c.Name, c.ID);
-
-			return false;
-		}
-
-		public CapComContract getFailedContract(Guid id, bool warn = false)
-		{
-			if (failedContracts.ContainsKey(id))
-				return failedContracts[id];
-			else if (warn)
-				LogFormatted("No Failed Contract Of ID: [{0}] Found", id);
-
-			return null;
-		}
-
-		public bool addFailedContract(CapComContract c, bool warn = false)
-		{
-			if (!failedContracts.ContainsKey(c.ID))
-			{
-				failedContracts.Add(c.ID, c);
-				return true;
-			}
-			else if (warn)
-				LogFormatted("Failed Contract List Already Has Contract [{0} ; ID: {1}]", c.Name, c.ID);
-
-			return false;
-		}
-
-		public bool removeFailedContract(CapComContract c, bool warn = false)
-		{
-			if (failedContracts.ContainsKey(c.ID))
-			{
-				failedContracts.Remove(c.ID);
-				return true;
-			}
-			else if (warn)
-				LogFormatted("Contract Not Found In Failed Contract List [{0} ; ID: {1}]", c.Name, c.ID);
-
-			return false;
-		}
-
-		public List<CapComContract> getActiveContracts
-		{
-			get { return activeContracts.Values.ToList(); }
-		}
-
-		public List<CapComContract> getOfferedContracts
-		{
-			get { return offeredContracts.Values.ToList(); }
-		}
-
-		public List<CapComContract> getCompletedContracts
-		{
-			get { return completedContracts.Values.ToList(); }
-		}
-
-		public List<CapComContract> getFailedContracts
-		{
-			get { return failedContracts.Values.ToList(); }
-		}
-
 		#endregion
 
 		#region Events
-
-		private void onAccepted(Contract c)
-		{
-			if (c == null)
-			{
-				LogFormatted("Error in loading null accepted contract");
-				return;
-			}
-
-			CapComContract cc = getOfferedContract(c.ContractGuid, true);
-
-			if (cc == null)
-				return;
-
-			cc.updateTimeValues();
-
-			removeOfferedContract(cc, true);
-
-			addActiveContract(cc, true);
-			refreshList();
-
-			updateWaypoints(cc);
-			updateOrbits(cc);
-		}
-
-		private void onDeclined(Contract c)
-		{
-			if (c == null)
-			{
-				LogFormatted("Error in loading null declined contract");
-				return;
-			}
-
-			CapComContract cc = getOfferedContract(c.ContractGuid, true);
-
-			if (cc == null)
-				return;
-
-			removeOfferedContract(cc, true);
-			refreshList();
-		}
-
-		private void onFinished(Contract c)
-		{
-			if (c == null)
-			{
-				LogFormatted("Error in loading null finished contract");
-				return;
-			}
-
-			CapComContract cc = getActiveContract(c.ContractGuid);
-
-			if (cc == null)
-				cc = getOfferedContract(c.ContractGuid, true);
-
-			if (cc == null)
-				return;
-
-			cc.updateTimeValues();
-
-			removeOfferedContract(cc);
-			removeActiveContract(cc);
-			if (c.ContractState == Contract.State.Completed)
-				addCompletedContract(cc, true);
-			refreshList();
-		}
-
-		private void onOffered(Contract c)
-		{
-			if (c == null)
-			{
-				LogFormatted("Error in loading null offered contract");
-				return;
-			}
-
-			CapComContract cc = new CapComContract(c);
-
-			if (cc == null)
-				return;
-
-			addOfferedContract(cc, true);
-			refreshList();
-		}
 
 		private void onContractsLoaded()
 		{
 			StartCoroutine(loadContracts());
 		}
 
+		private void onProgressLoaded()
+		{
+			StartCoroutine(loadProgress());
+		}
+
 		private void onListChanged()
 		{
-			refreshList();
+			window.refreshContracts(false);
 		}
 
 		#endregion
@@ -499,154 +262,314 @@ namespace CapCom
 		{
 			int i = 0;
 
-			//Agency modifiers don't seem to work unless I wait a few frames before loading contracts
-			while (i < 5)
+			while (!contractParser.Loaded && i < 200)
 			{
 				i++;
 				yield return null;
 			}
 
-			foreach(Contract c in ContractSystem.Instance.Contracts)
-			{
-				if (c == null)
-				{
-					LogFormatted("Error in loading null contract from master list");
-					continue;
-				}
-
-				CapComContract cc = new CapComContract(c);
-
-				if (cc.Root == null)
-				{
-					LogFormatted("Error while loading contract of type {0}; skipping", c.GetType().Name);
-					continue;
-				}
-
-				switch (cc.Root.ContractState)
-				{
-					case Contract.State.Active:
-						addActiveContract(cc);
-						continue;
-					case Contract.State.Offered:
-						addOfferedContract(cc);
-						continue;
-					case Contract.State.Completed:
-						addCompletedContract(cc);
-						continue;
-					case Contract.State.Cancelled:
-					case Contract.State.DeadlineExpired:
-					case Contract.State.Failed:
-						addFailedContract(cc);
-						continue;
-					default:
-						continue;
-				}
-			}
-
-			foreach(Contract c in ContractSystem.Instance.ContractsFinished)
-			{
-				if (c == null)
-				{
-					LogFormatted("Error in loading contract from finished list");
-					continue;
-				}
-
-				CapComContract cc = new CapComContract(c);
-
-				if (cc.Root == null)
-				{
-					LogFormatted("Error while loading finished contract of type {0}; skipping", c.GetType().Name);
-					continue;
-				}
-
-				switch (cc.Root.ContractState)
-				{
-					case Contract.State.Active:
-						addActiveContract(cc);
-						continue;
-					case Contract.State.Offered:
-						addOfferedContract(cc);
-						continue;
-					case Contract.State.Completed:
-						addCompletedContract(cc);
-						continue;
-					case Contract.State.Cancelled:
-					case Contract.State.DeadlineExpired:
-					case Contract.State.Failed:
-						addFailedContract(cc);
-						continue;
-					default:
-						continue;
-				}
-			}
-
-			LogFormatted("CapCom Contracts Loaded...");
-
 			window.refreshContracts(true);
 		}
 
-		private void refreshList()
+		private IEnumerator loadProgress()
+		{
+			int i = 0;
+
+			while (!progressParser.Loaded && i < 200)
+			{
+				i++;
+				yield return null;
+			}
+
+			window.updateProgress();
+		}
+
+		private void refreshList(Contract c)
 		{
 			window.refreshContracts(false);
-		}
 
-		private void updateOrbits(CapComContract c)
-		{
-			if (!HighLogic.LoadedSceneIsFlight)
+			if (c == null)
 				return;
 
-			for (int i = 0; i < c.ParameterCount; i++)
+			if (c.ContractState != Contract.State.Active)
+				return;
+
+			contractContainer cc = contractParser.getActiveContract(c.ContractGuid);
+
+			if (cc == null)
+				return;
+
+			if (cc.Initialized)
+				return;
+
+			for (int i = 0; i < cc.ParameterCount; i++)
 			{
-				CapComParameter p = c.getParameter(i);
+				parameterContainer p = cc.getParameterFull(i);
 
 				if (p == null)
 					continue;
 
-				if (p.Param.GetType() != typeof(SpecificOrbitParameter))
-					continue;
+				customStartup(p);
+			}
 
-				SpecificOrbitParameter s = (SpecificOrbitParameter)p.Param;
+			cc.Initialized = true;
+		}
 
-				MethodInfo orbitSetup = (typeof(SpecificOrbitParameter)).GetMethod("setup", BindingFlags.NonPublic | BindingFlags.Instance);
+		private void customStartup(parameterContainer p)
+		{
+			Type t = p.CParam.GetType();
+			GameScenes s = HighLogic.LoadedScene;
 
-				if (orbitSetup == null)
-					return;
-
-				try
+			try
+			{
+				if (t == typeof(ReachDestination) && s == GameScenes.FLIGHT && FlightGlobals.ActiveVessel != null)
 				{
-					orbitSetup.Invoke(s, null);
+					if (p.CParam.State == ParameterState.Incomplete && ((ReachDestination)p.CParam).checkVesselDestination(FlightGlobals.ActiveVessel))
+					{
+						MethodInfo m = (typeof(ContractParameter)).GetMethod("SetComplete", BindingFlags.NonPublic | BindingFlags.Instance);
+
+						if (m == null)
+							return;
+
+						m.Invoke(p.CParam, null);
+					}
+					else if (p.CParam.State == ParameterState.Complete && !((ReachDestination)p.CParam).checkVesselDestination(FlightGlobals.ActiveVessel))
+					{
+						MethodInfo m = (typeof(ContractParameter)).GetMethod("SetIncomplete", BindingFlags.NonPublic | BindingFlags.Instance);
+
+						if (m == null)
+							return;
+
+						m.Invoke(p.CParam, null);
+					}
 				}
-				catch (Exception e)
+				else if (t == typeof(ReachSituation) && s == GameScenes.FLIGHT && FlightGlobals.ActiveVessel != null)
 				{
-					LogFormatted("Error while activating FinePrint Specific Orbit Parameter: {0}", e);
+					if (p.CParam.State == ParameterState.Incomplete && ((ReachSituation)p.CParam).checkVesselSituation(FlightGlobals.ActiveVessel))
+					{
+						MethodInfo m = (typeof(ContractParameter)).GetMethod("SetComplete", BindingFlags.NonPublic | BindingFlags.Instance);
+
+						if (m == null)
+							return;
+
+						m.Invoke(p.CParam, null);
+					}
+					else if (p.CParam.State == ParameterState.Complete && !((ReachSituation)p.CParam).checkVesselSituation(FlightGlobals.ActiveVessel))
+					{
+						MethodInfo m = (typeof(ContractParameter)).GetMethod("SetIncomplete", BindingFlags.NonPublic | BindingFlags.Instance);
+
+						if (m == null)
+							return;
+
+						m.Invoke(p.CParam, null);
+					}
+				}
+				else if (t == typeof(SpecificOrbitParameter) && s == GameScenes.FLIGHT)
+				{
+					((SpecificOrbitParameter)p.CParam).SetupWaypoints();
+				}
+				else if (t == typeof(VesselSystemsParameter) && s == GameScenes.FLIGHT)
+				{
+					VesselSystemsParameter sys = (VesselSystemsParameter)p.CParam;
+
+					MethodInfo m = (typeof(VesselSystemsParameter)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke(sys, null);
+
+					if (!sys.requireNew)
+						return;
+
+					Vessel v = FlightGlobals.ActiveVessel;
+
+					if (v == null)
+						return;
+
+					if (v.situation != Vessel.Situations.PRELAUNCH)
+						return;
+
+					uint launchID = v.Parts.Min(r => r.launchID);
+
+					sys.launchID = launchID;
+				}
+				else if (t == typeof(SurveyWaypointParameter) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(SurveyWaypointParameter)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((SurveyWaypointParameter)p.CParam, null);
+
+					if (p.Way == null)
+						return;
+
+					var waypoints = WaypointManager.Instance().AllWaypoints();
+
+					if (waypoints.Contains(p.Way))
+						return;
+
+					WaypointManager.AddWaypoint(p.Way);
+				}
+				else if (t == typeof(StationaryPointParameter) && s == GameScenes.FLIGHT)
+				{
+					if (p.Way == null)
+						return;
+
+					var waypoints = WaypointManager.Instance().AllWaypoints();
+
+					if (waypoints.Contains(p.Way))
+						return;
+
+					WaypointManager.AddWaypoint(p.Way);
+				}
+				else if (t == typeof(AsteroidParameter) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(AsteroidParameter)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((AsteroidParameter)p.CParam, null);
+				}
+				else if (t == typeof(CrewCapacityParameter) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(CrewCapacityParameter)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((CrewCapacityParameter)p.CParam, null);
+				}
+				else if (t == typeof(CrewTraitParameter) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(CrewTraitParameter)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((CrewTraitParameter)p.CParam, null);
+				}
+				else if (t == typeof(KerbalDestinationParameter) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(KerbalDestinationParameter)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((KerbalDestinationParameter)p.CParam, null);
+				}
+				else if (t == typeof(KerbalTourParameter) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(KerbalTourParameter)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((KerbalTourParameter)p.CParam, null);
+				}
+				else if (t == typeof(LocationAndSituationParameter) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(LocationAndSituationParameter)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((LocationAndSituationParameter)p.CParam, null);
+				}
+				else if (t == typeof(MobileBaseParameter) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(MobileBaseParameter)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((MobileBaseParameter)p.CParam, null);
+				}
+				else if (t == typeof(ProgressTrackingParameter) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(ProgressTrackingParameter)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((ProgressTrackingParameter)p.CParam, null);
+				}
+				else if (t == typeof(ResourceExtractionParameter) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(ResourceExtractionParameter)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((ResourceExtractionParameter)p.CParam, null);
+				}
+				else if (t == typeof(VesselDestinationParameter) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(VesselDestinationParameter)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((VesselDestinationParameter)p.CParam, null);
+				}
+				else if (t == typeof(PartTest) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(PartTest)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((PartTest)p.CParam, null);
+
+					if (((PartTest)p.CParam).hauled)
+						return;
+
+					AvailablePart targetPart = ((PartTest)p.CParam).tgtPartInfo;
+
+					if (targetPart == null)
+						return;
+
+					for (int i = 0; i < FlightGlobals.Vessels.Count; i++)
+					{
+						Vessel v = FlightGlobals.Vessels[i];
+
+						if (v == null)
+							continue;
+
+						if (!v.loaded)
+							continue;
+
+						for (int j = 0; j < v.Parts.Count; j++)
+						{
+							Part part = v.Parts[j];
+
+							if (part == null)
+								continue;
+
+							if (part.partInfo != targetPart)
+								continue;
+
+							var mods = part.FindModulesImplementing<ModuleTestSubject>();
+
+							for (int k = 0; k < mods.Count; k++)
+							{
+								ModuleTestSubject test = mods[k];
+
+								if (test == null)
+									continue;
+
+								test.Events["RunTestEvent"].active = true;
+							}
+						}
+					}
 				}
 			}
-		}
-
-		private void updateWaypoints(CapComContract c)
-		{
-			if (!HighLogic.LoadedSceneIsFlight)
-				return;
-
-			if (WaypointManager.Instance() == null)
-				return;
-
-			for (int i = 0; i < c.ParameterCount; i++)
+			catch (Exception e)
 			{
-				CapComParameter p = c.getParameter(i);
-
-				if (p == null)
-					continue;
-
-				if (p.Way == null)
-					continue;
-
-				var waypoints = WaypointManager.Instance().AllWaypoints();
-
-				if (waypoints.Contains(p.Way))
-					continue;
-
-				WaypointManager.AddWaypoint(p.Way);
+				LogFormatted("Error while forcing Contract Parameter activation:\n{0}", e);
 			}
 		}
 

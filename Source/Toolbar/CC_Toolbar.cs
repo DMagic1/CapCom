@@ -50,12 +50,12 @@ namespace CapCom.Toolbar
 
 			contractButton = ToolbarManager.Instance.add("CapCom", "CapComToolbarID");
 
-			if (File.Exists(Path.Combine(new DirectoryInfo(KSPUtil.ApplicationRootPath).FullName, "GameData/CapCom/Textures/CapComToolbarIcon.png").Replace("\\", "/")))
-				contractButton.TexturePath = "CapCom/Textures/CapComToolbarIcon";
+			if (File.Exists(Path.Combine(new DirectoryInfo(KSPUtil.ApplicationRootPath).FullName, "GameData/DMagicUtilities/CapCom/Textures/CapComToolbarIcon.png").Replace("\\", "/")))
+				contractButton.TexturePath = "DMagicUtilities/CapCom/Textures/CapComToolbarIcon";
 			else
 				contractButton.TexturePath = "000_Toolbar/resize-cursor";
 
-			contractButton.ToolTip = "Cap Comm";
+			contractButton.ToolTip = "CapCom";
 			contractButton.OnClick += (e) =>
 				{
 					if (CapCom.Instance != null)
