@@ -113,8 +113,8 @@ license][CCLicense]
   * These also reflect any changes made by **strategy modifiers**
   * Contract **decline penalties** are shown for offered contracts
 
-#### 
-![][CC:progress-list
+#### Progress Nodes
+![][CC:progress-list]
 
 ##### Progress Nodes Lists for all completed Worlds First Progress Nodes are shown when the globe icon is selected
 
