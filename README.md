@@ -72,6 +72,7 @@ license][CCLicense]
        * Mission status is updated for each contract
 	   * Cancel active contracts if allowed
   * Review **completed contracts**
+  * Review **progress nodes**
   
 ##### Currently selected contracts are indicated by the green bar on the left
   * By holding the **multi-select key** (left Ctrl by default; can be edited) multiple contracts can be selected or de-selected
@@ -85,6 +86,7 @@ license][CCLicense]
   * The **agency flag** is a button, pressing it opens the agency info screen
   * The **settings menu** can be opened with the gear icon in the upper-right
   * The *X* icon will close the window
+  * The controls are not available while in the editor
 
 ##### By default a **warning popup** is displayed when you decline or cancel a contract; both options can be adjusted in the settings menu.
 ![][CC:contract-warn]  
@@ -110,6 +112,14 @@ license][CCLicense]
 ##### The overall **mission rewards** are displayed at the bottom of the window
   * These also reflect any changes made by **strategy modifiers**
   * Contract **decline penalties** are shown for offered contracts
+
+#### 
+![][CC:progress-list
+
+##### Progress Nodes Lists for all completed Worlds First Progress Nodes are shown when the globe icon is selected
+
+![][CC:progress-rewards]
+##### Rewards and information about each progress node are shown for the selected list
 
 #### Agency Info
 ![][CC:agency]
@@ -155,10 +165,12 @@ license][CCLicense]
 [CC:settings-full]: http://i.imgur.com/KVvXHoZ.png
 [CC:sort-bar]: http://i.imgur.com/KKkif1g.png
 [CC:sort-rewards]: http://i.imgur.com/p1NNhwy.png
-[CC:contract-list]: http://i.imgur.com/4MN9IO9.png
-[CC:contract-header]: http://i.imgur.com/HQh88N1.png
+[CC:contract-list]: http://i.imgur.com/uBw8GHE.png
+[CC:contract-header]: http://i.imgur.com/Gs8BJJa.png
 [CC:contract-info]: http://i.imgur.com/FSbIHBq.png
 [CC:contract-warn]: http://i.imgur.com/MYFREr2.png
+[CC:progress-list]: http://i.imgur.com/5NbkWe5.png
+[CC:progress-rewards]: http://i.imgur.com/WyzE6eD.png
 [CC:rewards]: http://i.imgur.com/rSTlPpQ.png
 [CC:objectives]: http://i.imgur.com/vheC0BB.png
 [CC:agency]: http://i.imgur.com/taMAEqY.png
