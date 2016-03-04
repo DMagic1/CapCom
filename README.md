@@ -161,12 +161,12 @@ license][CCLicense]
 [CKAN:org]: http://ksp-ckan.org/
 [CCLicense]: https://github.com/DMagic1/CapCom/blob/master/LICENSE
 
-[CC:header]: http://i.imgur.com/OUt6H9I.png
+[CC:header]: http://i.imgur.com/Gs8BJJa.png
 [CC:settings-full]: http://i.imgur.com/KVvXHoZ.png
 [CC:sort-bar]: http://i.imgur.com/KKkif1g.png
 [CC:sort-rewards]: http://i.imgur.com/p1NNhwy.png
 [CC:contract-list]: http://i.imgur.com/uBw8GHE.png
-[CC:contract-header]: http://i.imgur.com/Gs8BJJa.png
+[CC:contract-header]: http://i.imgur.com/HQh88N1.png
 [CC:contract-info]: http://i.imgur.com/FSbIHBq.png
 [CC:contract-warn]: http://i.imgur.com/MYFREr2.png
 [CC:progress-list]: http://i.imgur.com/5NbkWe5.png
