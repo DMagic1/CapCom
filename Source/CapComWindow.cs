@@ -103,6 +103,8 @@ namespace CapCom
 
 		protected override void Start()
 		{
+			base.Start();
+
 			WindowRect.x = CapCom.Settings.windowPosX;
 			WindowRect.y = CapCom.Settings.windowPosY;
 			WindowRect.yMax = WindowRect.y + CapCom.Settings.windowHeight;
@@ -113,6 +115,8 @@ namespace CapCom
 
 		protected override void OnDestroy()
 		{
+			base.OnDestroy();
+
 			CapCom.Settings.windowPosX = WindowRect.x;
 			CapCom.Settings.windowPosY = WindowRect.y;
 			CapCom.Settings.Save();

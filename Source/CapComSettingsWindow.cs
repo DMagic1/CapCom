@@ -67,6 +67,8 @@ namespace CapCom
 
 		protected override void Start()
 		{
+			base.Start();
+
 			hideBriefing = CapCom.Settings.hideBriefing;
 			hideNotes = CapCom.Settings.hideNotes;
 			warnDecline = CapCom.Settings.showDeclineWarning;
