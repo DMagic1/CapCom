@@ -366,7 +366,7 @@ namespace CapCom
 				}
 				else if (t == typeof(SpecificOrbitParameter) && s == GameScenes.FLIGHT)
 				{
-					((SpecificOrbitParameter)p.CParam).SetupWaypoints();
+					((SpecificOrbitParameter)p.CParam).SetupRenderer();
 				}
 				else if (t == typeof(VesselSystemsParameter) && s == GameScenes.FLIGHT)
 				{
@@ -406,7 +406,7 @@ namespace CapCom
 					if (p.Way == null)
 						return;
 
-					var waypoints = WaypointManager.Instance().AllWaypoints();
+					var waypoints = WaypointManager.Instance().Waypoints;
 
 					if (waypoints.Contains(p.Way))
 						return;
@@ -418,7 +418,7 @@ namespace CapCom
 					if (p.Way == null)
 						return;
 
-					var waypoints = WaypointManager.Instance().AllWaypoints();
+					var waypoints = WaypointManager.Instance().Waypoints;
 
 					if (waypoints.Contains(p.Way))
 						return;
