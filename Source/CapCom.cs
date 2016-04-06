@@ -42,6 +42,7 @@ using FinePrint.Utilities;
 using UnityEngine;
 using ContractParser;
 using ProgressParser;
+using System.IO;
 
 namespace CapCom
 {
@@ -79,8 +80,9 @@ namespace CapCom
 
 				foreach (Texture2D t in Resources.FindObjectsOfTypeAll<Texture2D>())
 				{
-					if (t.name == "MissionControl")
+					if (t.name == "SpriteAtlasTexture-MissionControl (Group 0)-1024x1024-fmt5")
 					{
+						LogFormatted("Texture Found...");
 						original = t;
 						break;
 					}
