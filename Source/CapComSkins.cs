@@ -295,75 +295,75 @@ namespace CapCom
 
 		internal static void texturesFromAtlas(Texture2D atlas)
 		{
-			var pix = atlas.GetPixels(0, 372, 47, 49);
+			var pix = atlas.GetPixels(204, 586, 44, 44);
 
-			acceptButtonNormal = new Texture2D(47, 49);
+			acceptButtonNormal = new Texture2D(44, 44);
 			acceptButtonNormal.SetPixels(pix);
 			acceptButtonNormal.Apply();
 
-			pix = atlas.GetPixels(49, 372, 47, 49);
+			pix = atlas.GetPixels(379, 462, 44, 44);
 
-			acceptButtonHover = new Texture2D(47, 49);
+			acceptButtonHover = new Texture2D(44, 44);
 			acceptButtonHover.SetPixels(pix);
 			acceptButtonHover.Apply();
 
-			pix = atlas.GetPixels(98, 372, 47, 49);
+			pix = atlas.GetPixels(0, 684, 44, 44);
 
-			acceptButtonActive = new Texture2D(47, 49);
+			acceptButtonActive = new Texture2D(44, 44);
 			acceptButtonActive.SetPixels(pix);
 			acceptButtonActive.Apply();
 
-			pix = atlas.GetPixels(0, 423, 47, 49);
+			pix = atlas.GetPixels(154, 638, 44, 44);
 
-			acceptButtonInactive = new Texture2D(47, 49);
+			acceptButtonInactive = new Texture2D(44, 44);
 			acceptButtonInactive.SetPixels(pix);
 			acceptButtonInactive.Apply();
 
-			pix = atlas.GetPixels(49, 423, 47, 49);
+			pix = atlas.GetPixels(479, 462, 44, 44);
 
-			declineButtonNormal = new Texture2D(47, 49);
+			declineButtonNormal = new Texture2D(44, 44);
 			declineButtonNormal.SetPixels(pix);
 			declineButtonNormal.Apply();
 
-			pix = atlas.GetPixels(98, 423, 47, 49);
+			pix = atlas.GetPixels(50, 736, 44, 44);
 
-			declineButtonHover = new Texture2D(47, 49);
+			declineButtonHover = new Texture2D(44, 44);
 			declineButtonHover.SetPixels(pix);
 			declineButtonHover.Apply();
 
-			pix = atlas.GetPixels(0, 474, 47, 49);
+			pix = atlas.GetPixels(50, 684, 44, 44);
 
-			declineButtonActive = new Texture2D(47, 49);
+			declineButtonActive = new Texture2D(44, 44);
 			declineButtonActive.SetPixels(pix);
 			declineButtonActive.Apply();
 
-			pix = atlas.GetPixels(49, 474, 47, 49);
+			pix = atlas.GetPixels(104, 580, 44, 44);
 
-			declineButtonInactive = new Texture2D(47, 49);
+			declineButtonInactive = new Texture2D(44, 44);
 			declineButtonInactive.SetPixels(pix);
 			declineButtonInactive.Apply();
 
-			pix = atlas.GetPixels(98, 474, 47, 49);
+			pix = atlas.GetPixels(529, 462, 44, 44);
 
-			cancelButtonNormal = new Texture2D(47, 49);
+			cancelButtonNormal = new Texture2D(44, 44);
 			cancelButtonNormal.SetPixels(pix);
 			cancelButtonNormal.Apply();
 
-			pix = atlas.GetPixels(0, 525, 47, 49);
+			pix = atlas.GetPixels(154, 586, 44, 44);
 
-			cancelButtonHover = new Texture2D(47, 49);
+			cancelButtonHover = new Texture2D(44, 44);
 			cancelButtonHover.SetPixels(pix);
 			cancelButtonHover.Apply();
 
-			pix = atlas.GetPixels(49, 525, 47, 49);
+			pix = atlas.GetPixels(379, 514, 44, 44);
 
-			cancelButtonActive = new Texture2D(47, 49);
+			cancelButtonActive = new Texture2D(44, 44);
 			cancelButtonActive.SetPixels(pix);
 			cancelButtonActive.Apply();
 
-			pix = atlas.GetPixels(98, 525, 47, 49);
+			pix = atlas.GetPixels(204, 638, 44, 44);
 
-			cancelButtonInactive = new Texture2D(47, 49);
+			cancelButtonInactive = new Texture2D(44, 44);
 			cancelButtonInactive.SetPixels(pix);
 			cancelButtonInactive.Apply();
 
@@ -379,15 +379,15 @@ namespace CapCom
 			titleButtonOn.SetPixels(pix);
 			titleButtonOn.Apply();
 
-			pix = atlas.GetPixels(0, 268, 77, 51);
+			pix = atlas.GetPixels(0, 625, 77, 52);
 
-			titleButtonOnLeft = new Texture2D(77, 51);
+			titleButtonOnLeft = new Texture2D(77, 52);
 			titleButtonOnLeft.SetPixels(pix);
 			titleButtonOnLeft.Apply();
 
-			pix = atlas.GetPixels(0, 319, 77, 51);
+			pix = atlas.GetPixels(0, 573, 77, 52);
 
-			titleButtonOffLeft = new Texture2D(77, 51);
+			titleButtonOffLeft = new Texture2D(77, 52);
 			titleButtonOffLeft.SetPixels(pix);
 			titleButtonOffLeft.Apply();
 
@@ -409,7 +409,7 @@ namespace CapCom
 			tabButtonHover.SetPixels(pix);
 			tabButtonHover.Apply();
 
-			pix = atlas.GetPixels(0, 155, 172, 113);
+			pix = atlas.GetPixels(0, 460, 172, 113);
 
 			flagTex = new Texture2D(172, 113);
 			flagTex.SetPixels(pix);
