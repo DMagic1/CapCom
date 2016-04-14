@@ -490,6 +490,15 @@ namespace CapCom
 
 					m.Invoke((MobileBaseParameter)p.CParam, null);
 				}
+				else if (t == typeof(PartRequestParameter) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(PartRequestParameter)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((PartRequestParameter)p.CParam, null);
+				}
 				else if (t == typeof(ProgressTrackingParameter) && s == GameScenes.FLIGHT)
 				{
 					MethodInfo m = (typeof(ProgressTrackingParameter)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -516,6 +525,42 @@ namespace CapCom
 						return;
 
 					m.Invoke((VesselDestinationParameter)p.CParam, null);
+				}
+				else if (t == typeof(RecoverKerbal) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(RecoverKerbal)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((RecoverKerbal)p.CParam, null);
+				}
+				else if (t == typeof(RecoverPart) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(RecoverPart)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((RecoverPart)p.CParam, null);
+				}
+				else if (t == typeof(AcquirePart) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(AcquirePart)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((AcquirePart)p.CParam, null);
+				}
+				else if (t == typeof(AcquireCrew) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(AcquireCrew)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((AcquireCrew)p.CParam, null);
 				}
 				else if (t == typeof(PartTest) && s == GameScenes.FLIGHT)
 				{
