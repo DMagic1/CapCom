@@ -41,6 +41,7 @@ namespace CapCom
 		private bool hideBriefing, hideNotes, warnDecline, warnCancel, stockToolbar, tooltips, style;
 		private bool oldToolbar, oldTooltips, oldStyle;
 		private bool dropdown, dup, ddown, dleft, dright, daccept, ddecline, dmulti;
+		public float scale;
 		private KeyCode up, down, left, right, accept, decline, multiSelect;
 		private Rect ddRect = new Rect();
 		private const string lockID = "CapCom_LockID";
@@ -67,12 +68,15 @@ namespace CapCom
 
 		protected override void Start()
 		{
+			base.Start();
+
 			hideBriefing = CapCom.Settings.hideBriefing;
 			hideNotes = CapCom.Settings.hideNotes;
 			warnDecline = CapCom.Settings.showDeclineWarning;
 			warnCancel = CapCom.Settings.showCancelWarning;
 			oldToolbar = stockToolbar = CapCom.Settings.stockToolbar;
 			oldTooltips = tooltips = CapCom.Settings.tooltipsEnabled;
+			scale = CapCom.Settings.windowScale;
 			//oldStyle = style = CapCom.Settings.useKSPStyle;
 			up = CapCom.Settings.scrollUp;
 			down = CapCom.Settings.scrollDown;
@@ -192,6 +196,28 @@ namespace CapCom
 				stockToolbar = GUILayout.Toggle(stockToolbar, "Use Stock App Launcher", GUILayout.Width(160));
 
 			GUILayout.BeginHorizontal();
+			GUILayout.Label("Window Scale: " + CapCom.Settings.windowScale.ToString("P0"), GUILayout.Width(150));
+
+			if (GUILayout.Button("Size +", CapComSkins.keycodeButton, GUILayout.Width(50)))
+			{
+				if (CapCom.Settings.windowScale < 2)
+					CapCom.Settings.windowScale += 0.1f;
+
+				Scale = CapCom.Settings.windowScale;
+				CapCom.Instance.Window.Scale = CapCom.Settings.windowScale;
+			}
+
+			if (GUILayout.Button("Size -", CapComSkins.keycodeButton, GUILayout.Width(50)))
+			{
+				if (CapCom.Settings.windowScale > 0.7f)
+					CapCom.Settings.windowScale -= 0.1f;
+
+				Scale = CapCom.Settings.windowScale;
+				CapCom.Instance.Window.Scale = CapCom.Settings.windowScale;
+			}
+			GUILayout.EndHorizontal();
+
+			GUILayout.BeginHorizontal();
 			GUILayout.Label("Scroll Up:", GUILayout.Width(100));
 			GUILayout.Label(up.ToString(), GUILayout.Width(100));
 			if (!dropdown)
@@ -304,10 +330,10 @@ namespace CapCom
 				hideNotes = CapCom.Settings.hideNotes;
 				warnDecline = CapCom.Settings.showDeclineWarning;
 				warnCancel = CapCom.Settings.showCancelWarning;
+				scale = CapCom.Settings.windowScale;
 				CapCom.Settings.tooltipsEnabled = tooltips;
 				//CapCom.Settings.useKSPStyle = style;
 				CapCom.Settings.stockToolbar = stockToolbar;
-				CapCom.Settings.Save();
 				CapCom.Settings.scrollUp = up;
 				CapCom.Settings.scrollDown = down;
 				CapCom.Settings.listLeft = left;
@@ -315,6 +341,7 @@ namespace CapCom
 				CapCom.Settings.accept = accept;
 				CapCom.Settings.cancel = decline;
 				CapCom.Settings.multiSelect = multiSelect;
+				CapCom.Settings.Save();
 				Visible = false;
 			}
 			GUILayout.FlexibleSpace();
@@ -324,6 +351,9 @@ namespace CapCom
 				CapCom.Settings.hideNotes = hideNotes;
 				CapCom.Settings.showDeclineWarning = warnDecline;
 				CapCom.Settings.showCancelWarning = warnCancel;
+				CapCom.Settings.windowScale = scale;
+				Scale = CapCom.Settings.windowScale;
+				CapCom.Instance.Window.Scale = CapCom.Settings.windowScale;
 				tooltips = CapCom.Settings.tooltipsEnabled;
 				//style = CapCom.Settings.useKSPStyle;
 				up = CapCom.Settings.scrollUp;

@@ -31,6 +31,7 @@ using System.Collections;
 
 using CapCom.Framework;
 using UnityEngine;
+using KSP.UI.Screens;
 
 namespace CapCom.Toolbar
 {

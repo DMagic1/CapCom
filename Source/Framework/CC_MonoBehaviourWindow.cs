@@ -80,6 +80,50 @@ namespace CapCom.Framework
             //base.Awake();
         }
 
+		protected override void Start()
+		{
+			base.Start();
+
+			GameEvents.onShowUI.Add(UIOn);
+			GameEvents.onHideUI.Add(UIOff);
+			GameEvents.onGUIMissionControlSpawn.Add(UIOff);
+			GameEvents.onGUIMissionControlDespawn.Add(UIOff);
+			GameEvents.onGUIRnDComplexSpawn.Add(UIOff);
+			GameEvents.onGUIRnDComplexDespawn.Add(UIOn);
+			GameEvents.onGUIAdministrationFacilitySpawn.Add(UIOff);
+			GameEvents.onGUIAdministrationFacilityDespawn.Add(UIOn);
+			GameEvents.onGUIAstronautComplexSpawn.Add(UIOff);
+			GameEvents.onGUIAstronautComplexDespawn.Add(UIOn);
+		}
+
+		protected override void OnDestroy()
+		{
+			base.OnDestroy();
+
+			GameEvents.onShowUI.Remove(UIOn);
+			GameEvents.onHideUI.Remove(UIOff);
+			GameEvents.onGUIMissionControlSpawn.Remove(UIOff);
+			GameEvents.onGUIMissionControlDespawn.Remove(UIOff);
+			GameEvents.onGUIRnDComplexSpawn.Remove(UIOff);
+			GameEvents.onGUIRnDComplexDespawn.Remove(UIOn);
+			GameEvents.onGUIAdministrationFacilitySpawn.Remove(UIOff);
+			GameEvents.onGUIAdministrationFacilityDespawn.Remove(UIOn);
+			GameEvents.onGUIAstronautComplexSpawn.Remove(UIOff);
+			GameEvents.onGUIAstronautComplexDespawn.Remove(UIOn);
+		}
+
+		private void UIOn()
+		{
+			showUI = true;
+		}
+
+		private void UIOff()
+		{
+			showUI = false;
+		}
+
+		private bool showUI = true;
+
         /// <summary>
         /// WindowID variable - randomly set at window creation
         /// </summary>
@@ -111,6 +155,18 @@ namespace CapCom.Framework
         /// </summary>
         internal Rect DragRect;
 
+		internal float _Scale = 1;
+
+		internal float Scale
+		{
+			get { return _Scale; }
+			set
+			{
+				if (value > 0.5f && value < 2.5f)
+					_Scale = value;
+			}
+		}
+
         /// <summary>
         /// Whether the window can be moved off the visible screen
         /// </summary>
@@ -127,24 +183,26 @@ namespace CapCom.Framework
         internal Boolean Visible
         {
             get { return _Visible; }
-            set
-            {
-                if (_Visible != value)
-                {
-                    if (value)
-                    {
-                        LogFormatted_DebugOnly("Adding Window to PostDrawQueue-{0}", WindowID);
-                        RenderingManager.AddToPostDrawQueue(5, this.DrawGUI);
-                    }
-                    else
-                    {
-                        LogFormatted_DebugOnly("Removing Window from PostDrawQueue", WindowID);
-                        RenderingManager.RemoveFromPostDrawQueue(5, this.DrawGUI);
-                    }
-                }
-                _Visible = value;
-            }
+            set { _Visible = value; }
         }
+		protected override void OnGUIEvery()
+		{
+			base.OnGUIEvery();
+
+			if (!showUI)
+				return;
+
+			if (!_Visible)
+				return;
+
+			Matrix4x4 previousGuiMatrix = GUI.matrix;
+
+			GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(_Scale, _Scale, 1));
+
+			this.DrawGUI();
+
+			GUI.matrix = previousGuiMatrix;
+		}
 
         /// <summary>
         /// This is the Code that draws the window and sets the skin

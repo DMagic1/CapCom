@@ -42,6 +42,7 @@ using FinePrint.Utilities;
 using UnityEngine;
 using ContractParser;
 using ProgressParser;
+using System.IO;
 
 namespace CapCom
 {
@@ -79,8 +80,9 @@ namespace CapCom
 
 				foreach (Texture2D t in Resources.FindObjectsOfTypeAll<Texture2D>())
 				{
-					if (t.name == "MissionControl")
+					if (t.name == "SpriteAtlasTexture-MissionControl (Group 0)-1024x1024-fmt5")
 					{
+						LogFormatted("Texture Found...");
 						original = t;
 						break;
 					}
@@ -366,7 +368,7 @@ namespace CapCom
 				}
 				else if (t == typeof(SpecificOrbitParameter) && s == GameScenes.FLIGHT)
 				{
-					((SpecificOrbitParameter)p.CParam).SetupWaypoints();
+					((SpecificOrbitParameter)p.CParam).SetupRenderer();
 				}
 				else if (t == typeof(VesselSystemsParameter) && s == GameScenes.FLIGHT)
 				{
@@ -406,7 +408,7 @@ namespace CapCom
 					if (p.Way == null)
 						return;
 
-					var waypoints = WaypointManager.Instance().AllWaypoints();
+					var waypoints = WaypointManager.Instance().Waypoints;
 
 					if (waypoints.Contains(p.Way))
 						return;
@@ -418,7 +420,7 @@ namespace CapCom
 					if (p.Way == null)
 						return;
 
-					var waypoints = WaypointManager.Instance().AllWaypoints();
+					var waypoints = WaypointManager.Instance().Waypoints;
 
 					if (waypoints.Contains(p.Way))
 						return;
@@ -488,6 +490,15 @@ namespace CapCom
 
 					m.Invoke((MobileBaseParameter)p.CParam, null);
 				}
+				else if (t == typeof(PartRequestParameter) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(PartRequestParameter)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((PartRequestParameter)p.CParam, null);
+				}
 				else if (t == typeof(ProgressTrackingParameter) && s == GameScenes.FLIGHT)
 				{
 					MethodInfo m = (typeof(ProgressTrackingParameter)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -514,6 +525,42 @@ namespace CapCom
 						return;
 
 					m.Invoke((VesselDestinationParameter)p.CParam, null);
+				}
+				else if (t == typeof(RecoverKerbal) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(RecoverKerbal)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((RecoverKerbal)p.CParam, null);
+				}
+				else if (t == typeof(RecoverPart) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(RecoverPart)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((RecoverPart)p.CParam, null);
+				}
+				else if (t == typeof(AcquirePart) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(AcquirePart)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((AcquirePart)p.CParam, null);
+				}
+				else if (t == typeof(AcquireCrew) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(AcquireCrew)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((AcquireCrew)p.CParam, null);
 				}
 				else if (t == typeof(PartTest) && s == GameScenes.FLIGHT)
 				{

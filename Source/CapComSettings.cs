@@ -45,6 +45,8 @@ namespace CapCom
 		public bool showCancelWarning = true;
 		[Persistent]
 		public bool tooltipsEnabled = true;
+		[Persistent]
+		public float windowScale = 1f;
 		//[Persistent]
 		//public bool useKSPStyle = false;
 		[Persistent]

@@ -103,6 +103,8 @@ namespace CapCom
 
 		protected override void Start()
 		{
+			base.Start();
+
 			WindowRect.x = CapCom.Settings.windowPosX;
 			WindowRect.y = CapCom.Settings.windowPosY;
 			WindowRect.yMax = WindowRect.y + CapCom.Settings.windowHeight;
@@ -113,6 +115,8 @@ namespace CapCom
 
 		protected override void OnDestroy()
 		{
+			base.OnDestroy();
+
 			CapCom.Settings.windowPosX = WindowRect.x;
 			CapCom.Settings.windowPosY = WindowRect.y;
 			CapCom.Settings.Save();
@@ -804,7 +808,7 @@ namespace CapCom
 
 			if (currentContract.Root.ContractState == Contract.State.Offered)
 			{
-				Rect r = new Rect(WindowRect.width - 60, 35, 47, 49);
+				Rect r = new Rect(WindowRect.width - 60, 35, 44, 44);
 
 				bool active = !CapCom.Settings.activeLimit || ContractSystem.Instance.GetActiveContractCount() < maxContracts;
 
@@ -832,7 +836,7 @@ namespace CapCom
 			}
 			else if (currentContract.Root.ContractState == Contract.State.Active)
 			{
-				Rect r = new Rect(WindowRect.width - 60, 100, 47, 49);
+				Rect r = new Rect(WindowRect.width - 60, 100, 44, 44);
 
 				if (GUI.Button(r, new GUIContent("", "Cancel"), CapCom.Settings.forceCancel || selectedContracts.Any(c => c.CanBeCancelled) ? CapComSkins.cancelButton : CapComSkins.cancelButtonGreyed))
 				{
