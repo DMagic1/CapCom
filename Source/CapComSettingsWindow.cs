@@ -38,7 +38,7 @@ namespace CapCom
 	class CapComSettingsWindow : CC_MBW
 	{
 		private bool controlLock;
-		private bool hideBriefing, hideNotes, warnDecline, warnCancel, stockToolbar, tooltips, style;
+		private bool hideBriefing, hideNotes, warnDecline, warnCancel, stockToolbar, tooltips, style, shortcuts;
 		private bool oldToolbar, oldTooltips, oldStyle;
 		private bool dropdown, dup, ddown, dleft, dright, daccept, ddecline, dmulti;
 		public float scale;
@@ -77,6 +77,7 @@ namespace CapCom
 			oldToolbar = stockToolbar = CapCom.Settings.stockToolbar;
 			oldTooltips = tooltips = CapCom.Settings.tooltipsEnabled;
 			scale = CapCom.Settings.windowScale;
+			shortcuts = CapCom.Settings.useShortcuts;
 			//oldStyle = style = CapCom.Settings.useKSPStyle;
 			up = CapCom.Settings.scrollUp;
 			down = CapCom.Settings.scrollDown;
@@ -217,65 +218,70 @@ namespace CapCom
 			}
 			GUILayout.EndHorizontal();
 
-			GUILayout.BeginHorizontal();
-			GUILayout.Label("Scroll Up:", GUILayout.Width(100));
-			GUILayout.Label(up.ToString(), GUILayout.Width(100));
-			if (!dropdown)
-			{
-				if (GUILayout.Button(up.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100)))
-				{
-					dropdown = true;
-					dup = true;
-				}
-			}
-			else
-				GUILayout.Label(up.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100));
-			GUILayout.EndHorizontal();
+			CapCom.Settings.useShortcuts = GUILayout.Toggle(CapCom.Settings.useShortcuts, "Use Keyboard Shortcuts", GUILayout.Width(150));
 
-			GUILayout.BeginHorizontal();
-			GUILayout.Label("Scroll Down:", GUILayout.Width(100));
-			GUILayout.Label(down.ToString(), GUILayout.Width(100));
-			if (!dropdown)
+			if (shortcuts)
 			{
-				if (GUILayout.Button(down.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100)))
+				GUILayout.BeginHorizontal();
+				GUILayout.Label("Scroll Up:", GUILayout.Width(100));
+				GUILayout.Label(up.ToString(), GUILayout.Width(100));
+				if (!dropdown)
 				{
-					dropdown = true;
-					ddown = true;
+					if (GUILayout.Button(up.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100)))
+					{
+						dropdown = true;
+						dup = true;
+					}
 				}
-			}
-			else
-				GUILayout.Label(down.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100));
-			GUILayout.EndHorizontal();
+				else
+					GUILayout.Label(up.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100));
+				GUILayout.EndHorizontal();
 
-			GUILayout.BeginHorizontal();
-			GUILayout.Label("Scroll Left:", GUILayout.Width(100));
-			GUILayout.Label(left.ToString(), GUILayout.Width(100));
-			if (!dropdown)
-			{
-				if (GUILayout.Button(left.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100)))
+				GUILayout.BeginHorizontal();
+				GUILayout.Label("Scroll Down:", GUILayout.Width(100));
+				GUILayout.Label(down.ToString(), GUILayout.Width(100));
+				if (!dropdown)
 				{
-					dropdown = true;
-					dleft = true;
+					if (GUILayout.Button(down.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100)))
+					{
+						dropdown = true;
+						ddown = true;
+					}
 				}
-			}
-			else
-				GUILayout.Label(left.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100));
-			GUILayout.EndHorizontal();
+				else
+					GUILayout.Label(down.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100));
+				GUILayout.EndHorizontal();
 
-			GUILayout.BeginHorizontal();
-			GUILayout.Label("Scroll Right:", GUILayout.Width(100));
-			GUILayout.Label(right.ToString(), GUILayout.Width(100));
-			if (!dropdown)
-			{
-				if (GUILayout.Button(right.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100)))
+				GUILayout.BeginHorizontal();
+				GUILayout.Label("Scroll Left:", GUILayout.Width(100));
+				GUILayout.Label(left.ToString(), GUILayout.Width(100));
+				if (!dropdown)
 				{
-					dropdown = true;
-					dright = true;
+					if (GUILayout.Button(left.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100)))
+					{
+						dropdown = true;
+						dleft = true;
+					}
 				}
+				else
+					GUILayout.Label(left.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100));
+				GUILayout.EndHorizontal();
+
+				GUILayout.BeginHorizontal();
+				GUILayout.Label("Scroll Right:", GUILayout.Width(100));
+				GUILayout.Label(right.ToString(), GUILayout.Width(100));
+				if (!dropdown)
+				{
+					if (GUILayout.Button(right.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100)))
+					{
+						dropdown = true;
+						dright = true;
+					}
+				}
+				else
+					GUILayout.Label(right.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100));
+				GUILayout.EndHorizontal();
 			}
-			else
-				GUILayout.Label(right.ToString(), CapComSkins.keycodeButton, GUILayout.Width(100));
-			GUILayout.EndHorizontal();
 
 			GUILayout.BeginHorizontal();
 			GUILayout.Label("Accept:", GUILayout.Width(100));
@@ -330,6 +336,7 @@ namespace CapCom
 				hideNotes = CapCom.Settings.hideNotes;
 				warnDecline = CapCom.Settings.showDeclineWarning;
 				warnCancel = CapCom.Settings.showCancelWarning;
+				shortcuts = CapCom.Settings.useShortcuts;
 				scale = CapCom.Settings.windowScale;
 				CapCom.Settings.tooltipsEnabled = tooltips;
 				//CapCom.Settings.useKSPStyle = style;
@@ -352,6 +359,7 @@ namespace CapCom
 				CapCom.Settings.showDeclineWarning = warnDecline;
 				CapCom.Settings.showCancelWarning = warnCancel;
 				CapCom.Settings.windowScale = scale;
+				CapCom.Settings.useShortcuts = shortcuts;
 				Scale = CapCom.Settings.windowScale;
 				CapCom.Instance.Window.Scale = CapCom.Settings.windowScale;
 				tooltips = CapCom.Settings.tooltipsEnabled;
