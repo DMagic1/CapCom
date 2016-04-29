@@ -129,6 +129,12 @@ namespace CapCom
 
 		protected override void Update()
 		{
+			if (!Visible)
+				return;
+
+			if (!CapCom.Settings.useShortcuts)
+				return;
+
 			Vector2 mousePos = Input.mousePosition;
 			mousePos.y = Screen.height - mousePos.y;
 			if (WindowRect.Contains(mousePos))
