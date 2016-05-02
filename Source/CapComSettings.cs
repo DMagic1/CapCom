@@ -62,6 +62,8 @@ namespace CapCom
 		[Persistent]
 		public bool useShortcuts = true;
 		[Persistent]
+		public bool acceptDeclineKeys = true;
+		[Persistent]
 		public float windowHeight = 600;
 		[Persistent]
 		public float windowPosX = 50;
