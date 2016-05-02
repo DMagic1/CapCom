@@ -181,6 +181,13 @@ namespace CapCom
 
 					selectContract(0);
 				}
+
+				if (!CapCom.Settings.acceptDeclineKeys)
+					return;
+
+				if (dropdown)
+					return;
+
 				if (Input.GetKeyDown(CapCom.Settings.accept))
 				{
 					if (currentContract == null)
@@ -629,7 +636,17 @@ namespace CapCom
 					GUILayout.Label("Offered", listStyle(0), GUILayout.Width(98), GUILayout.Height(22));
 					GUILayout.Label("Active", listStyle(1), GUILayout.Width(98), GUILayout.Height(22));
 					GUILayout.Label("Completed", listStyle(2), GUILayout.Width(98), GUILayout.Height(22));
-					GUILayout.Label(CapComSkins.progressIconOn, listStyle(3), GUILayout.Width(32), GUILayout.Height(32));
+
+					Rect r = GUILayoutUtility.GetLastRect();
+
+					GUILayout.Space(36);
+
+					r.x += r.width + 4;
+					r.y -= 4;
+					r.width = 32;
+					r.height = 32;
+
+					GUI.Label(r, currentList == 3 ? CapComSkins.progressIconOn : CapComSkins.progressIconOff, listStyle(3));
 
 				}
 				else
