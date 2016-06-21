@@ -985,11 +985,11 @@ namespace CapCom
 			{
 				GUILayout.BeginHorizontal();
 					GUILayout.Label("Offer Expires: ", CapComSkins.headerText, GUILayout.Width(85));
-					GUILayout.Label(KSPUtil.PrintDateDeltaCompact((int)(currentContract.Root.DateExpire - Planetarium.fetch.time), true,	true), CapComSkins.timerText, GUILayout.Width(100));
+					GUILayout.Label(KSPUtil.PrintDateDeltaCompact((int)(currentContract.Root.DateExpire - Planetarium.fetch.time), true, true), CapComSkins.timerText, GUILayout.Width(100));
 					if (currentContract.Root.DateDeadline != 0)
 					{
 						GUILayout.Label("Mission Deadline: ", CapComSkins.headerText, GUILayout.Width(115));
-						GUILayout.Label(KSPUtil.PrintDateDeltaCompact((int)(currentContract.Root.DateDeadline - Planetarium.fetch.time),	true, true), CapComSkins.timerText, GUILayout.Width(140));
+						GUILayout.Label(KSPUtil.PrintDateDeltaCompact((int)(currentContract.Root.DateDeadline - Planetarium.fetch.time), true, true), CapComSkins.timerText, GUILayout.Width(140));
 					}
 					else if (currentContract.Root.TimeDeadline != 0)
 					{

@@ -56,7 +56,7 @@ namespace CapCom
 		private CC_StockToolbar appButton;
 		private CC_Toolbar toolbar;
 
-		private const string filePath = "Settings";
+		private const string filePath = "PluginData/Settings";
 
 		private static bool textureLoaded = false;
 
