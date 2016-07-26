@@ -155,7 +155,7 @@ namespace CapCom.Framework
         /// </summary>
         internal Rect DragRect;
 
-		internal float _Scale = 1;
+		private float _Scale = 1;
 
 		internal float Scale
 		{
@@ -183,8 +183,18 @@ namespace CapCom.Framework
         internal Boolean Visible
         {
             get { return _Visible; }
-            set { _Visible = value; }
+            set
+			{
+				if (value)
+					onVisible();
+				_Visible = value;
+			}
         }
+
+		protected virtual void onVisible()
+		{
+
+		}
 		protected override void OnGUIEvery()
 		{
 			base.OnGUIEvery();
