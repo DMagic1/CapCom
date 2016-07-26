@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CapCom.cs" />
+    <Compile Include="CapComReflection.cs" />
     <Compile Include="CapComSettings.cs" />
     <Compile Include="CapComSettingsWindow.cs" />
     <Compile Include="CapComSkins.cs" />
