@@ -1560,6 +1560,7 @@ namespace CapCom
 				{
 					if (CapComReflection.canAccept(cc.Root))
 					{
+						cc.Root.Accept();
 						if (cc.Root.GetType().Name == "ConfiguredContract")
 						{
 							if (contractParser.getOfferedContract(cc.Root.ContractGuid) == null)
@@ -1570,7 +1571,6 @@ namespace CapCom
 								contractParser.onContractStateChange.Fire(cc.Root);
 							}
 						}
-						cc.Root.Accept();
 					}
 				}
 			}
