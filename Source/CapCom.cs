@@ -58,7 +58,8 @@ namespace CapCom
 
 		private const string filePath = "PluginData/Settings";
 
-		private static bool textureLoaded = false;
+		private static bool textureLoaded;
+		private static bool ccLoaded;
 
 		private static bool loaded;
 
@@ -71,6 +72,13 @@ namespace CapCom
 			}
 
 			loaded = true;
+
+			if (!ccLoaded)
+			{
+				ccLoaded = true;
+
+				CapComReflection.loadMethods();
+			}
 
 			if (!textureLoaded)
 			{
