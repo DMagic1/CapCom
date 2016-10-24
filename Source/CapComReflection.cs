@@ -12,7 +12,6 @@ namespace CapCom
 	{
 		internal static void loadMethods()
 		{
-			ccLoaded = loadCCPendingMethod();
 			ccLoaded = loadCCLimitsMethod();
 			ccLoaded = loadCCAcceptMethod();
 		}
@@ -24,87 +23,44 @@ namespace CapCom
 			get { return ccLoaded; }
 		}
 
-		private const string CCType = "ContractConfigurator.ConfiguredContract";
 		private const string CCTypeCC = "ContractConfigurator.ContractConfigurator";
-		private const string PendingName = "CurrentContracts";
 		private const string CCLimitsName = "ContractLimit";
 		private const string CCAcceptName = "CanAccept";
 
-		private delegate IEnumerable CCPendingContracts();
 		private delegate int CCLimits(Contract.ContractPrestige p);
 		private delegate bool CCAccept(Contract c);
 
-		private static CCPendingContracts _CCPendingContracts;
 		private static CCLimits _CCLimits;
 		private static CCAccept _CCAccept;
 
-		internal static List<Contract> pendingContracts()
-		{
-			IEnumerable generic = _CCPendingContracts();
-			List<Contract> pendingContractList = new List<Contract>();
-
-			foreach (Object obj in generic)
-			{
-				if (obj == null)
-					continue;
-				Contract c = obj as Contract;
-
-				pendingContractList.Add(c);
-			}
-
-			return pendingContractList;
-		}
-
 		internal static int prestigeLimits(Contract.ContractPrestige p)
 		{
+			if (_CCLimits == null)
+				return 100;
+
 			return _CCLimits(p);
 		}
 
 		internal static bool canAccept(Contract c)
 		{
+			if (_CCAccept == null)
+				return true;
+
 			return _CCAccept(c);
-		}
-
-		private static bool loadCCPendingMethod()
-		{
-			try
-			{
-				Type CConfigType = AssemblyLoader.loadedAssemblies.SelectMany(a => a.assembly.GetExportedTypes())
-						.SingleOrDefault(t => t.FullName == CCType);
-
-				if (CConfigType == null)
-				{
-					CC_MBE.LogFormatted("Contract Configurator Type [{0}] Not Found", CCType);
-					return false;
-				}
-
-				PropertyInfo CCPending = CConfigType.GetProperty(PendingName);
-
-				if (CCPending == null)
-				{
-					CC_MBE.LogFormatted("Contract Configurator Property [{0}] Not Loaded", PendingName);
-					return false;
-				}
-
-				_CCPendingContracts = (CCPendingContracts)Delegate.CreateDelegate(typeof(CCPendingContracts), CCPending.GetGetMethod());
-
-				CC_MBE.LogFormatted("Contract Configurator Pending Contracts Method Assigned");
-
-				return _CCPendingContracts != null;
-			}
-			catch (Exception e)
-			{
-				CC_MBE.LogFormatted("Error in loading Contract Configurator methods\n{0}", e);
-				return false;
-			}
 		}
 
 		private static bool loadCCLimitsMethod()
 		{
 			try
 			{
-				Type CConfigType = AssemblyLoader.loadedAssemblies.SelectMany(a => a.assembly.GetExportedTypes())
-						.SingleOrDefault(t => t.FullName == CCTypeCC);
+				Type CConfigType = null;
+				AssemblyLoader.loadedAssemblies.TypeOperation(t =>
+				{
+					if (t.FullName == CCTypeCC)
+					{
+						CConfigType = t;
+					}
+				});
 
 				if (CConfigType == null)
 				{
@@ -137,8 +93,14 @@ namespace CapCom
 		{
 			try
 			{
-				Type CConfigType = AssemblyLoader.loadedAssemblies.SelectMany(a => a.assembly.GetExportedTypes())
-						.SingleOrDefault(t => t.FullName == CCTypeCC);
+				Type CConfigType = null;
+				AssemblyLoader.loadedAssemblies.TypeOperation(t =>
+				{
+					if (t.FullName == CCTypeCC)
+					{
+						CConfigType = t;
+					}
+				});
 
 				if (CConfigType == null)
 				{
