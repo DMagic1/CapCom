@@ -86,6 +86,8 @@ namespace CapCom
 
 		protected override void Awake()
 		{
+			base.Awake();
+
 			WindowRect = new Rect(70, 100, 840, 600);
 			WindowCaption = "CapCom";
 			WindowOptions = new GUILayoutOption[3] { GUILayout.Width(840), GUILayout.Height(300), GUILayout.MaxHeight(Screen.height) };
@@ -147,6 +149,9 @@ namespace CapCom
 
 		protected override void onVisible()
 		{
+			if (!CapComReflection.CCLoaded)
+				return;
+
 			if (CCRefreshSet)
 				return;
 
@@ -279,40 +284,12 @@ namespace CapCom
 			if (CapCom.Instance == null)
 				LogFormatted("CapCom Instance Not Loaded; Something Went Wrong Here...");
 
+			if (CapComReflection.CCLoaded)
+				contractParser.RefreshCCOfferedContracts();
+
 			activeContracts = contractParser.getActiveContracts;
 			offeredContracts = contractParser.getOfferedContracts;
 			completedContracts = contractParser.getCompletedContracts;
-
-			if (CapComReflection.CCLoaded)
-			{
-				List<Contract> ccPending = new List<Contract>();
-
-				ccPending = CapComReflection.pendingContracts();
-
-				if (ccPending != null)
-				{
-					int l = ccPending.Count;
-
-					for (int i = 0; i < l; i++)
-					{
-						Contract c = ccPending[i];
-
-						if (c == null)
-							continue;
-
-						if (c.ContractState == Contract.State.Active || c.ContractState == Contract.State.Completed)
-							continue;
-
-						contractContainer cc = new contractContainer(c);
-
-						if (cc == null)
-							continue;
-
-						if (!offeredContracts.Any(a => a.ID == cc.ID))
-							offeredContracts.Add(cc);
-					}
-				}
-			}
 
 			sortContracts();
 
@@ -578,9 +555,10 @@ namespace CapCom
 
 		private void ccRefresh()
 		{
-			CCOne = getMaxContracts(Contract.ContractPrestige.Trivial);
-			CCTwo = getMaxContracts(Contract.ContractPrestige.Significant);
-			CCThree = getMaxContracts(Contract.ContractPrestige.Exceptional);
+			int max = getMaxContracts();
+			CCOne = Math.Min(getMaxContracts(Contract.ContractPrestige.Trivial), max);
+			CCTwo = Math.Min(getMaxContracts(Contract.ContractPrestige.Significant), max);
+			CCThree = Math.Min(getMaxContracts(Contract.ContractPrestige.Exceptional), max);
 
 			if (ccScenario == null)
 			{
@@ -631,16 +609,17 @@ namespace CapCom
 			string s = "";
 			string c = "";
 
+			maxContracts = getMaxContracts();
+
 			if (CapComReflection.CCLoaded)
 			{
 				r.x = 70;
 				var activeContracts = ContractSystem.Instance.Contracts.Where(a => a.ContractState == Contract.State.Active && !a.AutoAccept);
-				s = string.Format("[{0}/{1}/{2} Max]", CCOne, CCTwo, CCThree);
+				s = string.Format("[{0}/{1}/{2} Max ({3})]", CCOne, CCTwo, CCThree, maxContracts);
 				c = string.Format("{0}/{1}/{2}", activeContracts.Where(a => a.Prestige == Contract.ContractPrestige.Trivial).Count(), activeContracts.Where(a => a.Prestige == Contract.ContractPrestige.Significant).Count(), activeContracts.Where(a => a.Prestige == Contract.ContractPrestige.Exceptional).Count());
 			}
 			else
 			{
-				maxContracts = getMaxContracts();
 				s = maxContracts < 1000000 ? string.Format("[{0} Max]", maxContracts) : "";
 				c = ContractSystem.Instance.GetActiveContractCount().ToString();
 			}
@@ -883,20 +862,17 @@ namespace CapCom
 
 				int b = bodyNodes.Count;
 
-				if (b > 0)
+				for (int i = 0; i < b; i++)
 				{
-					for (int i = 0; i < b; i++)
-					{
-						progressBodyCollection p = bodyNodes[i];
+					progressBodyCollection p = bodyNodes[i];
 
-						if (p == null)
-							continue;
+					if (p == null)
+						continue;
 
-						if (!p.IsReached)
-							continue;
+					if (!p.IsReached)
+						continue;
 
-						drawContractTitleBar(p.Body.bodyName + " Records", selectedProgress == (i + 6), (i + 6), progressAgency.LogoScaled);
-					}
+					drawContractTitleBar(p.Body.bodyName + " Records", selectedProgress == (i + 6), (i + 6), progressAgency.LogoScaled);
 				}
 			}
 			else
@@ -1270,7 +1246,7 @@ namespace CapCom
 				if (!POI.IsComplete)
 					continue;
 
-				drawStandardRecords(POI);
+				drawStandardRecords(POI, POI.BodyName);
 			}
 		}
 
@@ -1288,20 +1264,17 @@ namespace CapCom
 
 			int l = bodySubNodes[i].Count;
 
-			if (l > 0)
+			for (int j = 0; j < l; j++)
 			{
-				for (int j = 0; j < l; j++)
-				{
-					progressStandard BodyNode = bodySubNodes[i][j];
+				progressStandard BodyNode = bodySubNodes[i][j];
 
-					if (BodyNode == null)
-						continue;
+				if (BodyNode == null)
+					continue;
 
-					if (!BodyNode.IsComplete)
-						continue;
+				if (!BodyNode.IsComplete)
+					continue;
 
-					drawStandardRecords(BodyNode, BodyNode.Body.theName);
-				}
+				drawStandardRecords(BodyNode, BodyNode.Body.theName);
 			}
 		}
 
@@ -1554,21 +1527,28 @@ namespace CapCom
 
 		private void acceptContract()
 		{
+			int count = ContractSystem.Instance.GetActiveContractCount();
+			maxContracts = getMaxContracts();
+
 			if (CapComReflection.CCLoaded)
 			{
 				foreach (contractContainer cc in selectedContracts)
 				{
 					if (CapComReflection.canAccept(cc.Root))
 					{
-						cc.Root.Accept();
-						if (cc.Root.GetType().Name == "ConfiguredContract")
+						if (!CapCom.Settings.activeLimit || count < maxContracts)
 						{
-							if (contractParser.getOfferedContract(cc.Root.ContractGuid) == null)
+							cc.Root.Accept();
+							count++;
+							if (cc.Root.GetType().Name == "ConfiguredContract")
 							{
-								offeredContracts.Remove(cc);
-								cc.updateTimeValues();
-								contractParser.addActiveContract(cc, true);
-								contractParser.onContractStateChange.Fire(cc.Root);
+								if (contractParser.getOfferedContract(cc.Root.ContractGuid) == null)
+								{
+									offeredContracts.Remove(cc);
+									cc.updateTimeValues();
+									contractParser.addActiveContract(cc, true);
+									contractParser.onContractStateChange.Fire(cc.Root);
+								}
 							}
 						}
 					}
@@ -1576,9 +1556,6 @@ namespace CapCom
 			}
 			else
 			{
-				int count = ContractSystem.Instance.GetActiveContractCount();
-				maxContracts = getMaxContracts();
-
 				foreach (contractContainer cc in selectedContracts)
 				{
 					if (!CapCom.Settings.activeLimit || count < maxContracts)
