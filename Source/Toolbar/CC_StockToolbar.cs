@@ -35,11 +35,11 @@ using KSP.UI.Screens;
 
 namespace CapCom.Toolbar
 {
-	public class CC_StockToolbar : CC_MBE
+	public class CC_StockToolbar : MonoBehaviour
 	{
 		private ApplicationLauncherButton stockToolbarButton = null;
 
-		protected override void Start()
+		private void Start()
 		{
 			setupToolbar();
 		}
@@ -49,7 +49,7 @@ namespace CapCom.Toolbar
 			StartCoroutine(addButton());
 		}
 
-		protected override void OnDestroy()
+		private void OnDestroy()
 		{
 			GameEvents.onGUIApplicationLauncherUnreadifying.Remove(removeButton);
 
