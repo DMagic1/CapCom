@@ -46,7 +46,7 @@ using System.IO;
 
 namespace CapCom
 {
-	[CC_KSPAddonImproved(CC_KSPAddonImproved.Startup.TimeElapses | CC_KSPAddonImproved.Startup.Editor, false)]
+	[KSPAddon(KSPAddon.Startup.AllGameScenes, false)]
 	public class CapCom : CC_MBE
 	{
 		private static CapCom instance;
@@ -149,7 +149,7 @@ namespace CapCom
 			instance = this;
 
 			if (HighLogic.CurrentGame.Mode != Game.Modes.CAREER)
-				Destroy(this);
+				Destroy(gameObject);
 
 			if (settings == null)
 			{
@@ -174,34 +174,41 @@ namespace CapCom
 				if (toolbar == null)
 					toolbar = gameObject.AddComponent<CC_Toolbar>();
 				if (appButton != null)
+				{
 					Destroy(appButton);
+					appButton = null;
+				}
 			}
 			else
 			{
 				if (appButton == null)
 					appButton = gameObject.AddComponent<CC_StockToolbar>();
 				if (toolbar != null)
+				{
 					Destroy(toolbar);
+					toolbar = null;
+				}
 			}
 
 			contractParser.onContractsParsed.Add(onContractsLoaded);
 			contractParser.onContractStateChange.Add(refreshList);
 			progressParser.onProgressParsed.Add(onProgressLoaded);
 			GameEvents.Contract.onContractsListChanged.Add(onListChanged);
+
 		}
 
 		protected override void OnDestroy()
 		{
 			loaded = false;
 
+			if (window != null)
+				Destroy(window);
+
 			if (appButton != null)
 				Destroy(appButton);
 
 			if (toolbar != null)
 				Destroy(toolbar);
-
-			if (window != null)
-				Destroy(window);
 
 			contractParser.onContractsParsed.Remove(onContractsLoaded);
 			contractParser.onContractStateChange.Remove(refreshList);
@@ -480,6 +487,15 @@ namespace CapCom
 
 					m.Invoke((KerbalTourParameter)p.CParam, null);
 				}
+				else if (t == typeof(KerbalGeeAdventureParameter) && s == GameScenes.FLIGHT)
+				{
+					MethodInfo m = (typeof(KerbalGeeAdventureParameter)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
+
+					if (m == null)
+						return;
+
+					m.Invoke((KerbalGeeAdventureParameter)p.CParam, null);
+				}
 				else if (t == typeof(LocationAndSituationParameter) && s == GameScenes.FLIGHT)
 				{
 					MethodInfo m = (typeof(LocationAndSituationParameter)).GetMethod("OnRegister", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -587,17 +603,14 @@ namespace CapCom
 					if (targetPart == null)
 						return;
 
-					for (int i = 0; i < FlightGlobals.Vessels.Count; i++)
+					for (int i = FlightGlobals.VesselsLoaded.Count - 1; i >= 0; i--)
 					{
-						Vessel v = FlightGlobals.Vessels[i];
+						Vessel v = FlightGlobals.VesselsLoaded[i];
 
 						if (v == null)
 							continue;
 
-						if (!v.loaded)
-							continue;
-
-						for (int j = 0; j < v.Parts.Count; j++)
+						for (int j = v.Parts.Count - 1; j >= 0; j--)
 						{
 							Part part = v.Parts[j];
 

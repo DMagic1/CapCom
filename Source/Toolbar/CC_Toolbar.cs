@@ -35,11 +35,11 @@ using UnityEngine;
 namespace CapCom.Toolbar
 {
 
-	public class CC_Toolbar : CC_MBE
+	public class CC_Toolbar : MonoBehaviour
 	{
 		private IButton contractButton;
 
-		protected override void Start()
+		private void Start()
 		{
 			setupToolbar();
 		}
@@ -65,9 +65,8 @@ namespace CapCom.Toolbar
 				};
 		}
 
-		protected override void OnDestroy()
+		private void OnDestroy()
 		{
-			if (!ToolbarManager.ToolbarAvailable) return;
 			if (contractButton != null)
 				contractButton.Destroy();
 		}

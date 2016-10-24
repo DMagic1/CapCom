@@ -36,26 +36,26 @@ namespace CapCom.Framework
     /// </example>
     public abstract class CC_MBE : MonoBehaviour
     {
-        #region Constructor
-        ///// <summary>
-        ///// This is marked private so you have to use the Factory Method to create any new instance. The Factory Method will add the new instance to a gameObject which is a requirement for Unity events to occur on the object
-        ///// </summary>
-        //private MonoBehaviourExtended()
-        //{
+		//#region Constructor
+		/////// <summary>
+		/////// This is marked private so you have to use the Factory Method to create any new instance. The Factory Method will add the new instance to a gameObject which is a requirement for Unity events to occur on the object
+		/////// </summary>
+		////private MonoBehaviourExtended()
+		////{
 
-        //}
+		////}
 
-        //internal static MonoBehaviourExtended CreateComponent(GameObject AttachTo)
-        //{
-        //    MonoBehaviourExtended monoReturn;
-        //    monoReturn = AttachTo.AddComponent<MonoBehaviourExtended>();
-        //    return monoReturn;
-        //}
-        static CC_MBE()
-        {
-            UnityEngine.Random.seed = (int)(DateTime.Now - DateTime.Now.Date).TotalSeconds;
-        }
-        #endregion
+		////internal static MonoBehaviourExtended CreateComponent(GameObject AttachTo)
+		////{
+		////    MonoBehaviourExtended monoReturn;
+		////    monoReturn = AttachTo.AddComponent<MonoBehaviourExtended>();
+		////    return monoReturn;
+		////}
+		//static CC_MBE()
+		//{
+		//	UnityEngine.Random.seed = (int)(DateTime.Now - DateTime.Now.Date).TotalSeconds;
+		//}
+		//#endregion
 
         internal T AddComponent<T>() where T : UnityEngine.Component
         {
@@ -254,6 +254,8 @@ namespace CapCom.Framework
         //See this for info on order of execuction
         //  http://docs.unity3d.com/Documentation/Manual/ExecutionOrder.html
 
+		private static bool _seedGenerated;
+
         /// <summary>
         /// Unity Help: Awake is called when the script instance is being loaded.
         ///
@@ -263,6 +265,13 @@ namespace CapCom.Framework
         protected virtual void Awake()
         {
             LogFormatted_DebugOnly("New MBExtended Awakened");
+
+			if (!_seedGenerated)
+			{
+				UnityEngine.Random.InitState((int)(DateTime.Now - DateTime.Now.Date).TotalSeconds);
+
+				_seedGenerated = true;
+			}
         }
 
         /// <summary>

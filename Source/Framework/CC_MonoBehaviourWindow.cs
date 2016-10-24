@@ -28,64 +28,85 @@ namespace CapCom.Framework
     /// </summary>
     public abstract class CC_MBW : CC_MBE
     {
-        #region "Constructors"
-        internal CC_MBW()
-            : base()
-        {
-            //do the assembly name add so we get different windowIDs for multiple plugins
-            this.WindowID = UnityEngine.Random.Range(1000, 2000000) + _AssemblyName.GetHashCode();
-            this._Visible = false;
-            LogFormatted_DebugOnly("WindowID:{0}", WindowID);
+		//#region "Constructors"
+		//internal CC_MBW()
+		//	: base()
+		//{
+		//	//do the assembly name add so we get different windowIDs for multiple plugins
+		//	this.WindowID = UnityEngine.Random.Range(1000, 2000000) + _AssemblyName.GetHashCode();
+		//	this._Visible = false;
+		//	LogFormatted_DebugOnly("WindowID:{0}", WindowID);
 
-            //and look for any customattributes
-            WindowInitialsAttribute[] attrs = (WindowInitialsAttribute[])Attribute.GetCustomAttributes(this.GetType(), typeof(WindowInitialsAttribute));
-            foreach (WindowInitialsAttribute attr in attrs)
-            {
-                Visible = attr.Visible;
-                DragEnabled = attr.DragEnabled;
-                ClampToScreen = attr.ClampToScreen;
-                TooltipsEnabled = attr.TooltipsEnabled;
-                WindowCaption = attr.Caption;
-            }
-        }
-        ///CANT USE THE ONES BELOW HERE AS WE NEED TO INSTANTIATE THE WINDOW USING AddComponent()
-        //internal MonoBehaviourWindow(String Caption)
-        //    : this()
-        //{
-        //    this.WindowCaption = Caption;
-        //}
-        //internal MonoBehaviourWindow(String Caption, Rect Position)
-        //    : this(Caption)
-        //{
-        //    this.WindowRect = Position;
-        //}
+		//	//and look for any customattributes
+		//	WindowInitialsAttribute[] attrs = (WindowInitialsAttribute[])Attribute.GetCustomAttributes(this.GetType(), typeof(WindowInitialsAttribute));
+		//	foreach (WindowInitialsAttribute attr in attrs)
+		//	{
+		//		Visible = attr.Visible;
+		//		DragEnabled = attr.DragEnabled;
+		//		ClampToScreen = attr.ClampToScreen;
+		//		TooltipsEnabled = attr.TooltipsEnabled;
+		//		WindowCaption = attr.Caption;
+		//	}
+		//}
+		/////CANT USE THE ONES BELOW HERE AS WE NEED TO INSTANTIATE THE WINDOW USING AddComponent()
+		////internal MonoBehaviourWindow(String Caption)
+		////    : this()
+		////{
+		////    this.WindowCaption = Caption;
+		////}
+		////internal MonoBehaviourWindow(String Caption, Rect Position)
+		////    : this(Caption)
+		////{
+		////    this.WindowRect = Position;
+		////}
 
-        //TODO: Look at using this
-        //  http://answers.unity3d.com/questions/445444/add-component-in-one-line-with-parameters.html
+		////TODO: Look at using this
+		////  http://answers.unity3d.com/questions/445444/add-component-in-one-line-with-parameters.html
 
-        //internal static MonoBehaviourWindow CreateComponent(GameObject AttachTo)
-        //{
-        //    MonoBehaviourWindow monoReturn;
-        //    monoReturn = AttachTo.AddComponent<MonoBehaviourWindow>();
-        //    return monoReturn;
-        //}
+		////internal static MonoBehaviourWindow CreateComponent(GameObject AttachTo)
+		////{
+		////    MonoBehaviourWindow monoReturn;
+		////    monoReturn = AttachTo.AddComponent<MonoBehaviourWindow>();
+		////    return monoReturn;
+		////}
 
-        #endregion
+		//#endregion
 
 		protected override void Awake()
         {
             //just some debugging stuff here
             LogFormatted_DebugOnly("New MBWindow Awakened");
 
-            //base.Awake();
+            base.Awake();
+
+			//do the assembly name add so we get different windowIDs for multiple plugins
+			this.WindowID = UnityEngine.Random.Range(1000, 2000000) + _AssemblyName.GetHashCode();
+			this._Visible = false;
+			LogFormatted_DebugOnly("WindowID:{0}", WindowID);
+
+			//and look for any customattributes
+			WindowInitialsAttribute[] attrs = (WindowInitialsAttribute[])Attribute.GetCustomAttributes(this.GetType(), typeof(WindowInitialsAttribute));
+			foreach (WindowInitialsAttribute attr in attrs)
+			{
+				Visible = attr.Visible;
+				DragEnabled = attr.DragEnabled;
+				ClampToScreen = attr.ClampToScreen;
+				TooltipsEnabled = attr.TooltipsEnabled;
+				WindowCaption = attr.Caption;
+			}
+
+			ClampToScreenOffset = new RectOffset(0, 0, 0, 0);
+			_TooltipPosition = new Rect();
+			TooltipMouseOffset = new Vector2d();
         }
 
 		protected override void Start()
 		{
 			base.Start();
 
-			GameEvents.onShowUI.Add(UIOn);
-			GameEvents.onHideUI.Add(UIOff);
+			GameEvents.onGameSceneLoadRequested.Add(SceneChange);
+			GameEvents.onShowUI.Add(UIShow);
+			GameEvents.onHideUI.Add(UIHide);
 			GameEvents.onGUIMissionControlSpawn.Add(UIOff);
 			GameEvents.onGUIMissionControlDespawn.Add(UIOn);
 			GameEvents.onGUIRnDComplexSpawn.Add(UIOff);
@@ -100,8 +121,9 @@ namespace CapCom.Framework
 		{
 			base.OnDestroy();
 
-			GameEvents.onShowUI.Remove(UIOn);
-			GameEvents.onHideUI.Remove(UIOff);
+			GameEvents.onGameSceneLoadRequested.Remove(SceneChange);
+			GameEvents.onShowUI.Remove(UIShow);
+			GameEvents.onHideUI.Remove(UIHide);
 			GameEvents.onGUIMissionControlSpawn.Remove(UIOff);
 			GameEvents.onGUIMissionControlDespawn.Remove(UIOn);
 			GameEvents.onGUIRnDComplexSpawn.Remove(UIOff);
@@ -112,6 +134,11 @@ namespace CapCom.Framework
 			GameEvents.onGUIAstronautComplexDespawn.Remove(UIOn);
 		}
 
+		private void SceneChange(GameScenes scene)
+		{
+			showUI = false;
+		}
+
 		private void UIOn()
 		{
 			showUI = true;
@@ -120,6 +147,18 @@ namespace CapCom.Framework
 		private void UIOff()
 		{
 			showUI = false;
+		}
+
+		private void UIShow()
+		{
+			if (HighLogic.LoadedSceneIsFlight)
+				showUI = true;
+		}
+
+		private void UIHide()
+		{
+			if (HighLogic.LoadedSceneIsFlight)
+				showUI = false;
 		}
 
 		private bool showUI = true;
@@ -174,7 +213,7 @@ namespace CapCom.Framework
         /// <summary>
         /// How close to the edges it can get if clamping is enabled - this can be negative if you want to allow it to go off screen by a certain amount
         /// </summary>
-        internal RectOffset ClampToScreenOffset = new RectOffset(0, 0, 0, 0);
+        internal RectOffset ClampToScreenOffset;
 
         private Boolean _Visible;
         /// <summary>
@@ -311,12 +350,12 @@ namespace CapCom.Framework
         /// Whereis the tooltip positioned
         /// </summary>
         internal Rect TooltipPosition { get { return _TooltipPosition; } }
-        private Rect _TooltipPosition = new Rect();
+        private Rect _TooltipPosition;
 
         /// <summary>
         /// An offset from the mouse position to put the top left of the tooltip. Use this to get the tooltip out from under the cursor
         /// </summary>
-        internal Vector2d TooltipMouseOffset = new Vector2d();
+        internal Vector2d TooltipMouseOffset;
 
         /// <summary>
         /// Whether the Tooltip should stay where first drawn or follow the mouse

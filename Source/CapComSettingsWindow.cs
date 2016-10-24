@@ -48,6 +48,8 @@ namespace CapCom
 
 		protected override void Awake()
 		{
+			base.Awake();
+
 			if (CapCom.Instance != null)
 			{
 				Rect r = CapCom.Instance.Window.WindowRect;
@@ -200,19 +202,19 @@ namespace CapCom
 			GUILayout.BeginHorizontal();
 			GUILayout.Label("Window Scale: " + CapCom.Settings.windowScale.ToString("P0"), GUILayout.Width(150));
 
-			if (GUILayout.Button("Size +", CapComSkins.keycodeButton, GUILayout.Width(50)))
+			if (GUILayout.Button("Size -", CapComSkins.keycodeButton, GUILayout.Width(50)))
 			{
-				if (CapCom.Settings.windowScale < 2)
-					CapCom.Settings.windowScale += 0.1f;
+				if (CapCom.Settings.windowScale > 0.7f)
+					CapCom.Settings.windowScale -= 0.1f;
 
 				Scale = CapCom.Settings.windowScale;
 				CapCom.Instance.Window.Scale = CapCom.Settings.windowScale;
 			}
 
-			if (GUILayout.Button("Size -", CapComSkins.keycodeButton, GUILayout.Width(50)))
+			if (GUILayout.Button("Size +", CapComSkins.keycodeButton, GUILayout.Width(50)))
 			{
-				if (CapCom.Settings.windowScale > 0.7f)
-					CapCom.Settings.windowScale -= 0.1f;
+				if (CapCom.Settings.windowScale < 2)
+					CapCom.Settings.windowScale += 0.1f;
 
 				Scale = CapCom.Settings.windowScale;
 				CapCom.Instance.Window.Scale = CapCom.Settings.windowScale;
@@ -400,6 +402,7 @@ namespace CapCom
 					if (CapCom.Instance.Toolbar != null)
 					{
 						Destroy(CapCom.Instance.Toolbar);
+						CapCom.Instance.Toolbar = null;
 					}
 				}
 				else
@@ -408,6 +411,7 @@ namespace CapCom
 					if (CapCom.Instance.StockToolbar != null)
 					{
 						Destroy(CapCom.Instance.StockToolbar);
+						CapCom.Instance.StockToolbar = null;
 					}
 				}
 			}
