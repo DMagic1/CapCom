@@ -31,6 +31,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using CapCom.Framework;
+using KSP.Localization;
 using Contracts;
 using Contracts.Agents;
 using UnityEngine;
@@ -48,6 +49,8 @@ namespace CapCom
 		private List<List<progressStandard>> bodySubNodes = new List<List<progressStandard>>();
 		private int selectedProgress;
 		private Agent progressAgency;
+
+		private string[] intervalProgressTitles = new string[4] { "Altitude", "Speed", "Distance", "Depth" };
 
 		private List<contractContainer> activeContracts = new List<contractContainer>();
 		private List<contractContainer> offeredContracts = new List<contractContainer>();
@@ -847,7 +850,7 @@ namespace CapCom
 					if (p.Interval <= 1)
 						continue;
 
-					drawContractTitleBar(p.Descriptor + " Records", selectedProgress == i, i, progressAgency.LogoScaled);
+					drawContractTitleBar(intervalProgressTitles[i] + " Records", selectedProgress == i, i, progressAgency.LogoScaled);
 				}
 
 				if (progressParser.AnyStandard)
@@ -1283,13 +1286,13 @@ namespace CapCom
 				if (!BodyNode.IsComplete)
 					continue;
 
-				drawStandardRecords(BodyNode, BodyNode.Body.displayName);
+				drawStandardRecords(BodyNode, BodyNode.Body.displayName.LocalizeBodyName());
 			}
 		}
 
 		private void drawIntervalRecords(progressInterval p, int index)
 		{
-			GUILayout.Label(string.Format(p.Descriptor + " Record {0}: {1}", index, p.getRecord(index)), CapComSkins.parameterText);
+			GUILayout.Label(Localizer.Format(p.Descriptor, p.getRecord(index)), CapComSkins.parameterText);
 
 			GUILayout.Label("Rewards: ", CapComSkins.headerText, GUILayout.Width(80));
 
@@ -1298,12 +1301,12 @@ namespace CapCom
 
 		private void drawStandardRecords(progressStandard p, string s = "")
 		{
-			GUILayout.Label(string.Format(p.Descriptor, s), CapComSkins.parameterText);
+			GUILayout.Label(Localizer.Format(p.Descriptor, s), CapComSkins.parameterText);
 
 			if (!string.IsNullOrEmpty(p.Note))
 			{
 				GUILayout.Space(-7);
-				GUILayout.Label(string.Format(p.Note, p.NoteReference, p.KSPDateString), CapComSkins.noteText);
+				GUILayout.Label(Localizer.Format(p.Note, p.NoteReference, p.KSPDateString), CapComSkins.noteText);
 			}
 
 			GUILayout.Label("Rewards: ", CapComSkins.headerText, GUILayout.Width(80));
@@ -1861,7 +1864,7 @@ namespace CapCom
 					if (p == null)
 						return "";
 
-					return p.Body.displayName + " Progress";
+					return p.Body.displayName.LocalizeBodyName() + " Progress";
 			}
 		}
 
