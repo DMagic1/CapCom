@@ -83,47 +83,88 @@ namespace CapCom
 			if (!textureLoaded)
 			{
 				textureLoaded = true;
-
-				Texture original = null;
-
+                
 				foreach (Texture2D t in Resources.FindObjectsOfTypeAll<Texture2D>())
 				{
-					if (t.name == "SpriteAtlasTexture-MissionControl (Group 0)-1024x1024-fmt5")
-					{
-						LogFormatted("Texture Found...");
-						original = t;
-						break;
-					}
-				}
+                    if (t.name == "missc_btn_acceptcontract_normal")
+                        CapComSkins.acceptButtonNormal = t;
+                    else if (t.name == "missc_btn_acceptcontract_over")
+                        CapComSkins.acceptButtonHover = t;
+                    else if (t.name == "missc_btn_acceptcontract_disabled")
+                        CapComSkins.acceptButtonInactive = t;
+                    else if (t.name == "missc_btn_acceptcontract_active")
+                        CapComSkins.acceptButtonActive = t;
+                    else if (t.name == "missc_btn_cancelcontract_normal")
+                        CapComSkins.cancelButtonNormal = t;
+                    else if (t.name == "missc_btn_cancelcontract_over")
+                        CapComSkins.cancelButtonHover = t;
+                    else if (t.name == "missc_btn_cancelcontract_disabled")
+                        CapComSkins.cancelButtonInactive = t;
+                    else if (t.name == "missc_btn_cancelcontract_active")
+                        CapComSkins.cancelButtonActive = t;
+                    else if (t.name == "missc_btn_declinecontract_normal")
+                        CapComSkins.declineButtonNormal = t;
+                    else if (t.name == "missc_btn_declinecontract_over")
+                        CapComSkins.declineButtonHover = t;
+                    else if (t.name == "missc_btn_declinecontract_disabled")
+                        CapComSkins.declineButtonInactive = t;
+                    else if (t.name == "missc_btn_declinecontract_active")
+                        CapComSkins.declineButtonActive = t;
+                    else if (t.name == "missc_listitem_true")
+                    {
+                        Texture2D newT = new Texture2D(77, 50);
 
-				if (original == null)
-				{
-					LogFormatted("Error loading Mission Control Center Texture atlas; some CapCom UI elements will not appear correctly");
-					return;
-				}
+                        var rt = RenderTexture.GetTemporary(t.width, t.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB, 1);
 
-				Texture2D missionControlTexture = new Texture2D(original.width, original.height);
+                        Graphics.Blit(t, rt);
 
-				var rt = RenderTexture.GetTemporary(original.width, original.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB, 1);
+                        RenderTexture.active = rt;
 
-				Graphics.Blit(original, rt);
+                        newT.ReadPixels(new Rect(0, 0, t.width, t.height), 0, 0);
 
-				RenderTexture.active = rt;
+                        RenderTexture.active = null;
+                        RenderTexture.ReleaseTemporary(rt);
 
-				missionControlTexture.ReadPixels(new Rect(0, 0, original.width, original.height), 0, 0);
+                        rt = null;
 
-				RenderTexture.active = null;
-				RenderTexture.ReleaseTemporary(rt);
+                        newT.Apply();
 
-				rt = null;
+                        var pix = newT.GetPixels(0, 0, 77, 50);
 
-				original = null;
+                        CapComSkins.titleButtonOnLeft = new Texture2D(77, 50);
+                        CapComSkins.titleButtonOnLeft.SetPixels(pix);
+                        CapComSkins.titleButtonOnLeft.Apply();
+                    }
+                    else if (t.name == "missc_listitem_false")
+                    {
+                        Texture2D newT = new Texture2D(77, 50);
 
-				missionControlTexture.Apply();
+                        var rt = RenderTexture.GetTemporary(t.width, t.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB, 1);
 
-				CapComSkins.texturesFromAtlas(missionControlTexture);
+                        Graphics.Blit(t, rt);
 
-				Destroy(missionControlTexture);
+                        RenderTexture.active = rt;
+
+                        newT.ReadPixels(new Rect(0, 0, t.width, t.height), 0, 0);
+
+                        RenderTexture.active = null;
+                        RenderTexture.ReleaseTemporary(rt);
+
+                        rt = null;
+
+                        newT.Apply();
+
+                        var pix = newT.GetPixels(0, 0, 77, 50);
+
+                        CapComSkins.titleButtonOffLeft = new Texture2D(77, 50);
+                        CapComSkins.titleButtonOffLeft.SetPixels(pix);
+                        CapComSkins.titleButtonOffLeft.Apply();
+                    }
+                    else if (t.name == "missc_logo_bg")
+                        CapComSkins.flagTex = t;
+                }
+
+                CapComSkins.atlasStyles();                
 			}
 
 			CapComSkins.currentFlag = GameDatabase.Instance.GetTexture(HighLogic.CurrentGame.flagURL, false);
@@ -143,8 +184,8 @@ namespace CapCom
 				default: version = ainfoV.InformationalVersion; break;
 			}
 		}
-
-		protected override void Start()
+        
+        protected override void Start()
 		{
 			instance = this;
 

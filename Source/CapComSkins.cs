@@ -418,7 +418,7 @@ namespace CapCom
 			atlasStyles();
 		}
 
-		private static void atlasStyles()
+		public static void atlasStyles()
 		{
 			acceptButton = new GUIStyle(CC_SkinsLibrary.DefUnitySkin.button);
 			acceptButton.padding = new RectOffset(0, 0, 0, 0);
