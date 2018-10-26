@@ -28,7 +28,6 @@ THE SOFTWARE.
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using CapCom.Framework;
@@ -38,11 +37,9 @@ using Contracts.Parameters;
 using Contracts.Agents;
 using FinePrint;
 using FinePrint.Contracts.Parameters;
-using FinePrint.Utilities;
 using UnityEngine;
 using ContractParser;
 using ProgressParser;
-using System.IO;
 
 namespace CapCom
 {
