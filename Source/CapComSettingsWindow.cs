@@ -26,8 +26,6 @@ THE SOFTWARE.
 */
 #endregion
 
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using CapCom.Framework;
 using CapCom.Toolbar;
@@ -358,7 +356,8 @@ namespace CapCom
 				CapCom.Settings.cancel = decline;
 				CapCom.Settings.multiSelect = multiSelect;
 				CapCom.Settings.Save();
-				Visible = false;
+                unlockControls();
+                Visible = false;
 			}
 			GUILayout.FlexibleSpace();
 			if (GUILayout.Button("Cancel", CapComSkins.warningButton, GUILayout.Width(60)))
@@ -383,7 +382,8 @@ namespace CapCom
 				multiSelect = CapCom.Settings.multiSelect;
 
 				stockToolbar = CapCom.Settings.stockToolbar;
-				Visible = false;
+                unlockControls();
+                Visible = false;
 			}
 			GUILayout.FlexibleSpace();
 			GUILayout.EndHorizontal();
