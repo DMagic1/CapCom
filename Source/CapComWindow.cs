@@ -511,7 +511,7 @@ namespace CapCom
 
 		protected override void DrawWindowPost(int id)
 		{
-			if (dropdown && Event.current.type == EventType.mouseDown && !ddRect.Contains(Event.current.mousePosition))
+			if (dropdown && Event.current.type == EventType.MouseDown && !ddRect.Contains(Event.current.mousePosition))
 			{
 				dropdown = false;
 			}
@@ -1440,7 +1440,7 @@ namespace CapCom
 			Rect r = new Rect(WindowRect.width - 24, WindowRect.height - 24, 22, 22);
 			GUI.DrawTexture(r, CapComSkins.resizeHandle);
 
-			if (Event.current.type == EventType.mouseDown && Event.current.button == 0)
+			if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
 			{
 				if (r.Contains(Event.current.mousePosition))
 				{

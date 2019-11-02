@@ -440,7 +440,7 @@ namespace CapCom
 			//	CapCom.Instance.Window.WindowStyle = CapComSkins.newWindowStyle;
 			//}
 
-			if (dropdown && Event.current.type == EventType.mouseDown && !ddRect.Contains(Event.current.mousePosition))
+			if (dropdown && Event.current.type == EventType.MouseDown && !ddRect.Contains(Event.current.mousePosition))
 			{
 				resetKey();
 				dropdown = false;
