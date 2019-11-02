@@ -1,7 +1,7 @@
 {
      "NAME":"CapCom Mission Control On The Go",
 	 "URL":"https://raw.githubusercontent.com/DMagic1/CapCom/master/GameData/DMagicUtilities/CapCom/CapCom.version",
-	 "DOWNLOAD":"http://spacedock.info/mod/131/CapCom%20-%20Mission%20Control%20On%20The%20Go/download/2.10",
+	 "DOWNLOAD":"http://spacedock.info/mod/131/CapCom%20-%20Mission%20Control%20On%20The%20Go/download/2.11",
      "GITHUB":{
          "USERNAME":"DMagic1",
          "REPOSITORY":"CapCom",
@@ -11,21 +11,21 @@
          "MAJOR":1,
          "MINOR":0,
          "PATCH":2,
-         "BUILD":10
+         "BUILD":11
      },
      "KSP_VERSION":{
          "MAJOR":1,
-         "MINOR":5,
+         "MINOR":8,
          "PATCH":1
      },
      "KSP_VERSION_MIN":{
          "MAJOR":1,
-         "MINOR":4,
-         "PATCH":4
+         "MINOR":8,
+         "PATCH":1
      },
      "KSP_VERSION_MAX":{
          "MAJOR":1,
-         "MINOR":6,
+         "MINOR":8,
          "PATCH":8
      }
  } 
